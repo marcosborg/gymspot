@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', 'WebsiteController@index');
+Route::get('jfyd64onNtoEQrqr1Vmg', 'WebsiteController@index');
 
 Route::get('/home', function () {
     if (session('status')) {
