@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="assets/website/plugins/magnific-popup/dist/magnific-popup.css">
     <link rel="stylesheet" href="assets/website/plugins/slick-carousel/slick/slick.css">
     <link rel="stylesheet" href="assets/website/plugins/slick-carousel/slick/slick-theme.css">
-    <link rel="stylesheet" href="assets/website/css/style.css">
+    <link rel="stylesheet" href="assets/website/css/style.css?v={{ rand() }}">
 
 </head>
 
