@@ -30,8 +30,6 @@
 
         @yield('content')
 
-        
-
         <!-- Section Footer Start -->
         <x-footer></x-footer>
 

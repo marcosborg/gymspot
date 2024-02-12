@@ -7,6 +7,7 @@
 
 /*=== MEDIA QUERY ===*/
 @import url("https://fonts.googleapis.com/css?family=Barlow+Condensed:400,500,600,700|Montserrat|Poppins:400,500,600,700");
+
 body {
   line-height: 1.8;
   font-family: "Montserrat", sans-serif;
@@ -15,40 +16,57 @@ body {
   color: rgba(0, 0, 0, 0.6);
 }
 
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
   font-family: "Barlow Condensed", sans-serif;
   font-weight: 700;
   color: #232323;
   letter-spacing: 0.5px;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font-size: 48px;
   text-transform: uppercase;
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-size: 38px;
   text-transform: uppercase;
 }
 
-h3, .h3 {
+h3,
+.h3 {
   font-size: 28px;
   line-height: 38px;
   text-transform: uppercase;
 }
 
-h4, .h4 {
+h4,
+.h4 {
   font-size: 22px;
   line-height: 30px;
 }
 
-h5, .h5 {
+h5,
+.h5 {
   font-size: 18px;
   line-height: 24px;
 }
 
-h6, .h6 {
+h6,
+.h6 {
   font-size: 16px;
   text-transform: uppercase;
   font-weight: 400;
@@ -62,7 +80,8 @@ h6, .h6 {
   font-family: "Montserrat", sans-serif;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
 }
@@ -71,13 +90,20 @@ html, body {
   background: rgb(245, 99, 75);
 }
 
-input[type=email], input[type=password], input[type=text], input[type=tel] {
+input[type=email],
+input[type=password],
+input[type=text],
+input[type=tel] {
   box-shadow: none;
   height: 50px;
   outline: none;
   font-size: 14px;
 }
-input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, input[type=tel]:focus {
+
+input[type=email]:focus,
+input[type=password]:focus,
+input[type=text]:focus,
+input[type=tel]:focus {
   box-shadow: none;
   border: 1px solid rgb(245, 99, 75);
 }
@@ -86,6 +112,7 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   box-shadow: none;
   border-radius: 0;
 }
+
 .form-control:focus {
   box-shadow: none;
   border: 1px solid rgb(245, 99, 75);
@@ -103,12 +130,17 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   border: 1px solid transparent;
 }
 
-.btn-main, .btn-small, .btn-transparent {
-  background: linear-gradient(90deg, rgb(245, 99, 75) 0%, #fe9418 100%);
+.btn-main,
+.btn-small,
+.btn-transparent {
+  background: linear-gradient(90deg, rgba(249, 237, 35, 1) 0%, rgba(249, 237, 35, 1) 5%, rgba(200, 43, 73, 1) 36%, rgba(200, 43, 73, 1) 68%, rgba(128, 46, 145, 1) 100%);
   color: #fff;
 }
-.btn-main:hover, .btn-small:hover, .btn-transparent:hover {
-  background: linear-gradient(90deg, #fe9418 0%, rgb(245, 99, 75) 100%);
+
+.btn-main:hover,
+.btn-small:hover,
+.btn-transparent:hover {
+  background: linear-gradient(270deg, rgba(249, 237, 35, 1) 0%, rgba(249, 237, 35, 1) 5%, rgba(200, 43, 73, 1) 36%, rgba(200, 43, 73, 1) 68%, rgba(128, 46, 145, 1) 100%);
   color: #fff !important;
   transform: translateY(-5px);
 }
@@ -118,6 +150,7 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   background: transparent;
   color: #fff;
 }
+
 .btn-solid-border:hover {
   border: 2px solid rgb(245, 99, 75);
   background: rgb(245, 99, 75);
@@ -128,6 +161,7 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   background: #fff;
   color: #232323;
 }
+
 .btn-white:hover {
   border: 1px solid rgb(245, 99, 75);
   background: rgb(245, 99, 75);
@@ -139,6 +173,7 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   padding: 0;
   color: rgb(245, 99, 75);
 }
+
 .btn-transparent:hover {
   background: transparent;
   color: rgb(245, 99, 75);
@@ -147,6 +182,7 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
 .btn-large {
   padding: 20px 45px;
 }
+
 .btn-large.btn-icon i {
   font-size: 16px;
   vertical-align: middle;
@@ -166,7 +202,9 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   border-radius: 50px;
 }
 
-.btn.active:focus, .btn:active:focus, .btn:focus {
+.btn.active:focus,
+.btn:active:focus,
+.btn:focus {
   outline: 0;
 }
 
@@ -191,10 +229,12 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
 .section-title {
   margin-bottom: 70px;
 }
+
 .section-title .title {
   font-size: 50px;
   line-height: 50px;
 }
+
 .section-title p {
   color: #666;
   font-family: "Montserrat", sans-serif;
@@ -204,10 +244,13 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   padding: 155px 0 100px;
 }
 
-.overly, .bg-4 {
+.overly,
+.bg-4 {
   position: relative;
 }
-.overly:before, .bg-4:before {
+
+.overly:before,
+.bg-4:before {
   content: "";
   position: absolute;
   left: 0;
@@ -220,10 +263,19 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   opacity: 0.8;
 }
 
-.overly-2, .textimonial, .cta, .slider, .page-title {
+.overly-2,
+.textimonial,
+.cta,
+.slider,
+.page-title {
   position: relative;
 }
-.overly-2:before, .textimonial:before, .cta:before, .slider:before, .page-title:before {
+
+.overly-2:before,
+.textimonial:before,
+.cta:before,
+.slider:before,
+.page-title:before {
   content: "";
   position: absolute;
   left: 0;
@@ -236,7 +288,8 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
   opacity: 0.8;
 }
 
-#success, #error {
+#success,
+#error {
   display: none;
 }
 
@@ -270,7 +323,8 @@ a {
   transition: all 0.35s ease;
 }
 
-a:hover, a:focus {
+a:hover,
+a:focus {
   color: rgb(245, 99, 75) !important;
   text-decoration: none !important;
   outline: 0;
@@ -291,6 +345,7 @@ a:hover, a:focus {
 .navbar-nav li {
   padding: 0px 10px;
 }
+
 .navbar-nav .nav-link {
   font-family: "Montserrat", sans-serif;
   color: #fff;
@@ -299,7 +354,9 @@ a:hover, a:focus {
   letter-spacing: 1px;
   transition: all 0.25s ease;
 }
-.navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
   color: rgb(245, 99, 75);
 }
 
@@ -307,6 +364,7 @@ a:hover, a:focus {
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   font-size: 14px;
 }
+
 .top-header ul li {
   padding: 0px 25px;
   border-left: 1px solid #dedede;
@@ -380,10 +438,12 @@ ul.dropdown-menu li {
   background-size: cover;
   padding: 180px 0px;
 }
+
 .slider h1 {
   font-size: 95px;
   line-height: 95px;
 }
+
 .slider span.subhead {
   color: #fff;
   letter-spacing: 5px;
@@ -423,6 +483,7 @@ ul.dropdown-menu li {
 .why .card {
   transition: all 0.4s ease 0s;
 }
+
 .why .card:hover {
   background: #181a23;
 }
@@ -435,6 +496,7 @@ ul.dropdown-menu li {
 .hover-style-1 {
   position: relative;
 }
+
 .hover-style-1:before {
   position: absolute;
   content: "";
@@ -446,13 +508,20 @@ ul.dropdown-menu li {
   background: linear-gradient(90deg, rgb(245, 99, 75) 0%, #fe9418 100%);
   border-color: rgb(245, 99, 75);
 }
-.hover-style-1 h3, .hover-style-1 p, .hover-style-1 a, .hover-style-1 i, .hover-style-1 h4 {
+
+.hover-style-1 h3,
+.hover-style-1 p,
+.hover-style-1 a,
+.hover-style-1 i,
+.hover-style-1 h4 {
   position: relative;
   transition: all 600ms ease;
 }
+
 .hover-style-1:hover:before {
   height: 100%;
 }
+
 .hover-style-1:hover a {
   color: rgba(255, 255, 255, 0.8) !important;
 }
@@ -484,6 +553,7 @@ ul.dropdown-menu li {
 .team-content-overlay li a {
   color: #fff;
 }
+
 .team-content-overlay li a:hover {
   background: rgb(245, 99, 75);
 }
@@ -526,6 +596,7 @@ ul.dropdown-menu li {
 .team-wrap .card-subtitle {
   position: relative;
 }
+
 .team-wrap .card-subtitle:after {
   content: "";
   position: absolute;
@@ -535,6 +606,7 @@ ul.dropdown-menu li {
   border-top: 4px solid #ddd;
   margin-top: 20px;
 }
+
 .team-wrap ul li a {
   width: 40px;
   height: 40px;
@@ -544,6 +616,7 @@ ul.dropdown-menu li {
   text-align: center;
   padding-top: 6px;
 }
+
 .team-wrap ul li a:hover {
   background: rgb(245, 99, 75);
   border-color: rgb(245, 99, 75);
@@ -579,7 +652,8 @@ ul.dropdown-menu li {
   font-size: 10px;
 }
 
-.slick-slide:focus, .slick-slide a {
+.slick-slide:focus,
+.slick-slide a {
   outline: none;
 }
 
@@ -590,16 +664,20 @@ ul.dropdown-menu li {
 .pricing .card-body ul li {
   font-size: 15px;
 }
+
 .pricing h3 {
   padding-left: 20px;
 }
+
 .pricing h3 sup {
   top: 20px;
   left: 0px;
 }
+
 .pricing h3 sub {
   font-size: 13px;
 }
+
 .pricing .btn-solid-border:hover {
   color: #fff !important;
 }
@@ -616,6 +694,7 @@ ul.dropdown-menu li {
 .blog .card a h4 {
   font-weight: 700;
 }
+
 .blog .card a h4:hover {
   color: rgb(245, 99, 75);
 }
@@ -656,20 +735,25 @@ ul.dropdown-menu li {
 .pagination {
   border: 0px;
 }
+
 .pagination li a {
   color: #232323;
 }
+
 .pagination .page-item.active .page-link {
   background-color: rgb(245, 99, 75);
   border-color: rgb(245, 99, 75);
   color: #fff !important;
 }
+
 .pagination .page-item:last-child .page-link {
   border-radius: 0px;
 }
+
 .pagination .page-item:first-child .page-link {
   border-radius: 0px;
 }
+
 .pagination .page-link {
   background: transparent;
   padding: 15px 20px;
@@ -701,6 +785,7 @@ ul.dropdown-menu li {
   padding-top: 90px;
   padding-bottom: 45px;
 }
+
 .footer p {
   color: #fff;
   opacity: 0.8;
@@ -716,6 +801,7 @@ ul.dropdown-menu li {
   opacity: 0.8;
   font-size: 14px;
 }
+
 .footer-menu li a:hover {
   color: rgb(245, 99, 75);
   opacity: 1;
@@ -748,56 +834,75 @@ ul.dropdown-menu li {
     width: 100%;
     text-align: center;
   }
+
   .navbar-nav li {
     padding: 0px;
   }
 }
+
 @media (max-width: 480px) {
   .slider h1 {
     font-size: 40px;
     line-height: 48px;
   }
+
   .text-lg {
     font-size: 28px;
     line-height: 38px;
   }
+
   .lead {
     font-size: 1rem;
   }
+
   .media {
     display: block;
   }
+
   .media-body {
     margin-top: 20px;
   }
+
   .number {
     font-size: 50px;
     line-height: 65px;
   }
+
   .dropdown-menu {
     display: none;
     text-align: center;
   }
+
   .navbar-nav li {
     padding: 0px;
   }
 }
+
 @media (max-width: 768px) {
   .media {
     display: block;
   }
+
   .media-body {
     margin-top: 20px;
   }
+
   .services .media img {
     width: 100% !important;
   }
+
   .dropdown-menu {
     display: none;
     text-align: center;
   }
+
   .navbar-nav li {
     padding: 0px;
   }
 }
+
 /*# sourceMappingURL=style.css.map */
+
+.logo {
+  width: 120px;
+}

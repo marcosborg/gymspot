@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navigation fixed-top" id="navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.html">
-            <h2 class="text-white text-capitalize"></i>Gym<span class="text-color">Fit</span></h2>
+            <img src="assets/website/images/logo-dark.png" alt="gymspot" class="logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsid"
             aria-controls="navbarsid" aria-expanded="false" aria-label="Toggle navigation">
