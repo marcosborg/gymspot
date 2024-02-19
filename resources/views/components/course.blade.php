@@ -64,13 +64,6 @@
             </div>
 
         </div>
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="mt-5 text-center">
-                    <a href="course.html" class="btn btn-main">See all our Courses</a>
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 <!-- Section Course ENd -->

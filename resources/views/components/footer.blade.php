@@ -50,17 +50,15 @@
 
         <div class="row align-items-center mt-5 px-3 bg-black mx-1">
             <div class="col-lg-4">
-                <p class="text-white mt-3">Gymfit © 2019 , Theme By <a href="https://themefisher.com/"
-                        class="text-color">Themefisher.com</a></p>
+                <p class="text-white mt-3">Gymfit © {{ date('Y') }} , Developed by <a href="https://netlook.pt"
+                        class="text-color">Netlook.pt</a></p>
             </div>
             <div class="col-lg-6 ml-auto text-right">
                 <ul class="list-inline mb-0 footer-socials">
-                    <li class="list-inline-item"><a href="https://www.facebook.com/themefisher"><i
+                    <li class="list-inline-item"><a href="#"><i
                                 class="ti-facebook"></i></a></li>
-                    <li class="list-inline-item"><a href="https://twitter.com/themefisher"><i
+                    <li class="list-inline-item"><a href="#"><i
                                 class="ti-twitter"></i></a></li>
-                    <li class="list-inline-item"><a href="https://github.com/themefisher/"><i class="ti-github"></i></a>
-                    </li>
                 </ul>
             </div>
         </div>
