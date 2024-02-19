@@ -203,6 +203,96 @@
                 </a>
             </li>
         @endcan
+        @can('slider_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.sliders.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/sliders") || request()->is("admin/sliders/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-bullhorn c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.slider.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('step_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.steps.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/steps") || request()->is("admin/steps/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-shoe-prints c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.step.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('about_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.abouts.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/abouts") || request()->is("admin/abouts/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-building c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.about.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('call_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.calls.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/calls") || request()->is("admin/calls/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-bullhorn c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.call.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('service_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.services.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/services") || request()->is("admin/services/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-concierge-bell c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.service.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('gallery_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.galleries.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/galleries") || request()->is("admin/galleries/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-images c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.gallery.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('testimonial_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.testimonials.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/testimonials") || request()->is("admin/testimonials/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-cogs c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.testimonial.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('location_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.locations.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/locations") || request()->is("admin/locations/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-map-marker c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.location.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('menu_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.menus.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/menus") || request()->is("admin/menus/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-bars c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.menu.title') }}
+                </a>
+            </li>
+        @endcan
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">

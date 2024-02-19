@@ -46,4 +46,36 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Slot
     Route::apiResource('slots', 'SlotApiController');
+
+    // Slider
+    Route::post('sliders/media', 'SliderApiController@storeMedia')->name('sliders.storeMedia');
+    Route::apiResource('sliders', 'SliderApiController');
+
+    // Steps
+    Route::apiResource('steps', 'StepsApiController');
+
+    // About
+    Route::post('abouts/media', 'AboutApiController@storeMedia')->name('abouts.storeMedia');
+    Route::apiResource('abouts', 'AboutApiController');
+
+    // Call
+    Route::post('calls/media', 'CallApiController@storeMedia')->name('calls.storeMedia');
+    Route::apiResource('calls', 'CallApiController');
+
+    // Service
+    Route::apiResource('services', 'ServiceApiController');
+
+    // Gallery
+    Route::post('galleries/media', 'GalleryApiController@storeMedia')->name('galleries.storeMedia');
+    Route::apiResource('galleries', 'GalleryApiController');
+
+    // Testimonial
+    Route::apiResource('testimonials', 'TestimonialApiController');
+
+    // Location
+    Route::post('locations/media', 'LocationApiController@storeMedia')->name('locations.storeMedia');
+    Route::apiResource('locations', 'LocationApiController');
+
+    // Menu
+    Route::apiResource('menus', 'MenuApiController');
 });

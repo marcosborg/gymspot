@@ -79,6 +79,52 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('slots/destroy', 'SlotController@massDestroy')->name('slots.massDestroy');
     Route::resource('slots', 'SlotController');
 
+    // Slider
+    Route::delete('sliders/destroy', 'SliderController@massDestroy')->name('sliders.massDestroy');
+    Route::post('sliders/media', 'SliderController@storeMedia')->name('sliders.storeMedia');
+    Route::post('sliders/ckmedia', 'SliderController@storeCKEditorImages')->name('sliders.storeCKEditorImages');
+    Route::resource('sliders', 'SliderController');
+
+    // Steps
+    Route::delete('steps/destroy', 'StepsController@massDestroy')->name('steps.massDestroy');
+    Route::resource('steps', 'StepsController');
+
+    // About
+    Route::delete('abouts/destroy', 'AboutController@massDestroy')->name('abouts.massDestroy');
+    Route::post('abouts/media', 'AboutController@storeMedia')->name('abouts.storeMedia');
+    Route::post('abouts/ckmedia', 'AboutController@storeCKEditorImages')->name('abouts.storeCKEditorImages');
+    Route::resource('abouts', 'AboutController');
+
+    // Call
+    Route::delete('calls/destroy', 'CallController@massDestroy')->name('calls.massDestroy');
+    Route::post('calls/media', 'CallController@storeMedia')->name('calls.storeMedia');
+    Route::post('calls/ckmedia', 'CallController@storeCKEditorImages')->name('calls.storeCKEditorImages');
+    Route::resource('calls', 'CallController');
+
+    // Service
+    Route::delete('services/destroy', 'ServiceController@massDestroy')->name('services.massDestroy');
+    Route::resource('services', 'ServiceController');
+
+    // Gallery
+    Route::delete('galleries/destroy', 'GalleryController@massDestroy')->name('galleries.massDestroy');
+    Route::post('galleries/media', 'GalleryController@storeMedia')->name('galleries.storeMedia');
+    Route::post('galleries/ckmedia', 'GalleryController@storeCKEditorImages')->name('galleries.storeCKEditorImages');
+    Route::resource('galleries', 'GalleryController');
+
+    // Testimonial
+    Route::delete('testimonials/destroy', 'TestimonialController@massDestroy')->name('testimonials.massDestroy');
+    Route::resource('testimonials', 'TestimonialController');
+
+    // Location
+    Route::delete('locations/destroy', 'LocationController@massDestroy')->name('locations.massDestroy');
+    Route::post('locations/media', 'LocationController@storeMedia')->name('locations.storeMedia');
+    Route::post('locations/ckmedia', 'LocationController@storeCKEditorImages')->name('locations.storeCKEditorImages');
+    Route::resource('locations', 'LocationController');
+
+    // Menu
+    Route::delete('menus/destroy', 'MenuController@massDestroy')->name('menus.massDestroy');
+    Route::resource('menus', 'MenuController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

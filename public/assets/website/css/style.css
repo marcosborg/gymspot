@@ -1,12 +1,12 @@
-/**
- * WEBSITE: https://themefisher.com
- * TWITTER: https://twitter.com/themefisher
- * FACEBOOK: https://www.facebook.com/themefisher
- * GITHUB: https://github.com/themefisher/
- */
-
 /*=== MEDIA QUERY ===*/
 @import url("https://fonts.googleapis.com/css?family=Barlow+Condensed:400,500,600,700|Montserrat|Poppins:400,500,600,700");
+@font-face {
+  font-family: 'Adobe Gothic Std B';
+  src: url('/assets/website/fonts/adobe-gothic-std-b.otf') format('otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   line-height: 1.8;
   font-family: "Montserrat", sans-serif;
@@ -19,7 +19,6 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   font-family: "Barlow Condensed", sans-serif;
   font-weight: 700;
   color: #232323;
-  letter-spacing: 0.5px;
 }
 
 h1, .h1 {
