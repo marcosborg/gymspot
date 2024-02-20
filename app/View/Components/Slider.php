@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class Slider extends Component
 {
+
+    private $sliders;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->sliders = \App\Models\Slider::all();
     }
 
     /**
@@ -21,6 +24,8 @@ class Slider extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.slider');
+        return view('components.slider')->with([
+            'sliders' => $this->sliders
+        ]);
     }
 }

@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="assets/website/plugins/slick-carousel/slick/slick-theme.css">
     <link rel="stylesheet" href="assets/website/css/style.css?v={{ rand() }}">
 
+    @yield('styles')
+
 </head>
 
 <body>
@@ -45,6 +47,8 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu5nZKbeK-WHQ70oqOWo-_4VmwOwKP9YQ"></script>
     <script src="assets/website/plugins/google-map/gmap.js"></script>
     <script src="assets/website/js/script.js"></script>
+
+    @yield('scripts')
 
 </body>
 

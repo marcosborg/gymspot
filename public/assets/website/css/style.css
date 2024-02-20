@@ -375,9 +375,10 @@ ul.dropdown-menu li {
 }
 
 .slider {
-  background: url("../images/bg/bg-7.jpg") no-repeat 0% 30%;
+  background-color: #000;
   background-size: cover;
   padding: 180px 0px;
+  height: 80vh;
 }
 .slider h1 {
   font-size: 95px;
@@ -407,7 +408,7 @@ ul.dropdown-menu li {
 }
 
 .mt-80px {
-  margin-top: -80px;
+  margin-top: 80px;
 }
 
 .number {
