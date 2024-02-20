@@ -18,6 +18,3 @@
     </div>
 </section>
 <!-- Section Intro End -->
-<script>
-    console.log({!! $steps !!})
-</script>

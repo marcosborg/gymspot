@@ -411,6 +411,10 @@ ul.dropdown-menu li {
   margin-top: 80px;
 }
 
+section.section.about {
+  background: #eeeeee;
+}
+
 .number {
   opacity: 0.1;
   font-size: 130px;

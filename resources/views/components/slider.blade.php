@@ -76,6 +76,3 @@
     <!-- If we need scrollbar -->
     <div class="swiper-scrollbar"></div>
 </div>
-<script>
-    console.log({!! $sliders !!})
-</script>
