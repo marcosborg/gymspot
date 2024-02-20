@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class Intro extends Component
 {
+
+    private $steps;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->steps = \App\Models\Step::all();
     }
 
     /**
@@ -21,6 +24,6 @@ class Intro extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.intro');
+        return view('components.intro')->with('steps', $this->steps);
     }
 }

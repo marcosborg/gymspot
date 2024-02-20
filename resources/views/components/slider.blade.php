@@ -6,6 +6,12 @@
         height: 80vh;
         background: #000;
     }
+    .swiper-button-next, .swiper-button-prev {
+        color: #ffffff;
+    }
+    .swiper-pagination-bullet {
+        background: #ffffff;
+    }
 </style>
 @endsection
 @section('scripts')
@@ -14,6 +20,8 @@
     const swiper = new Swiper('.swiper', {
         // Optional parameters
         loop: true,
+        autoplay: true,
+        speed: 400,
         spaceBetween: 5,
         effect: "fade",
         // If we need pagination
