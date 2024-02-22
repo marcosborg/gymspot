@@ -37,8 +37,8 @@
                 <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
             </ul>
             <div class="my-md-0 ml-lg-4 mt-4 mt-lg-0 ml-auto text-lg-right mb-3 mb-lg-0">
-                <a href="tel:+23-345-67890">
-                    <h3 class="text-color mb-0"><i class="ti-mobile mr-2"></i>+23-563-5688</h3>
+                <a href="tel:+351965624584">
+                    <h3 class="text-color mb-0"><i class="ti-mobile mr-2"></i>+351 965 624 584</h3>
                 </a>
             </div>
         </div>
