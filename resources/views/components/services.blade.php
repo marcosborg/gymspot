@@ -12,48 +12,15 @@
         </div>
 
         <div class="row no-gutters">
+            @foreach ($services as $service)
             <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="text-center  px-4 py-5 hover-style-1">
-                    <i class="icofont-gym-alt-2 text-lg text-color"></i>
-                    <h4 class="mt-3 mb-4 text-uppercase">WEIGHT LIFTING</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, molestias.</p>
+                    <i class="{{ $service->icon }} text-lg text-color"></i>
+                    <h4 class="mt-3 mb-4 text-uppercase">{{ $service->title }}</h4>
+                    <p>{{ $service->text }}</p>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="text-center  px-4 py-5 hover-style-1">
-                    <i class="icofont-cycling-alt text-lg text-color"></i>
-                    <h4 class="mt-3 mb-4 text-uppercase">Cycling</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, molestias.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="text-center  px-4 py-5 hover-style-1">
-                    <i class="icofont-gym-alt-3 text-lg text-color"></i>
-                    <h4 class="mt-3 mb-4 text-uppercase">YOGA MEDIDATION</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, molestias.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="text-center  px-4 py-5 hover-style-1">
-                    <i class="icofont-muscle text-lg text-color"></i>
-                    <h4 class="mt-3 mb-4 text-uppercase">Building body</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, molestias.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="text-center  px-4 py-5 hover-style-1">
-                    <i class="icofont-dumbbell text-lg text-color"></i>
-                    <h4 class="mt-3 mb-4 text-uppercase">Fitness Track</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, molestias.</p>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6">
-                <div class="text-center  px-4 py-5 hover-style-1">
-                    <i class="icofont-gym text-lg text-color"></i>
-                    <h4 class="mt-3 mb-4 text-uppercase">Fitness</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, molestias.</p>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>

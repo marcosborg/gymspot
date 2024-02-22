@@ -8,12 +8,14 @@ use Illuminate\View\Component;
 
 class About extends Component
 {
+
+    private $abouts;
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->abouts = \App\Models\About::all();
     }
 
     /**
@@ -21,6 +23,6 @@ class About extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.about');
+        return view('components.about')->with('abouts', $this->abouts);
     }
 }

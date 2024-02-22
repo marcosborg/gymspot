@@ -1,3 +1,4 @@
+@if ($galleries)
 <!-- Section Gallery Start -->
 <section class="gallery">
     <div class="container">
@@ -13,48 +14,16 @@
     </div>
     <div class="container-fluid p-0">
         <div class="row no-gutters portfolio-gallery">
+            @foreach ($galleries as $gallery)
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-01.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-01.jpg" alt="" class="img-fluid">
+                <a href="{{ $gallery->image->getUrl() }}" class="popup-gallery">
+                    <img src="{{ $gallery->image->getUrl() }}" alt="" class="img-fluid">
                 </a>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-02.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-02.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-03.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-03.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-04.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-04.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-05.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-05.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-06.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-06.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-07.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-07.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <a href="assets/website/images/gallery/gallery-08.jpg" class="popup-gallery">
-                    <img src="assets/website/images/gallery/gallery-08.jpg" alt="" class="img-fluid">
-                </a>
-            </div>
+            @endforeach
         </div>
     </div>
 </section>
 
 <!-- Section Gallery END -->
+@endif

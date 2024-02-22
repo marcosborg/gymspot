@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class Services extends Component
 {
+
+    private $services;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->services = \App\Models\Service::all();
     }
 
     /**
@@ -21,6 +24,6 @@ class Services extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.services');
+        return view('components.services')->with('services', $this->services);
     }
 }

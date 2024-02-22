@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class Call extends Component
 {
+
+    private $calls;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->calls = \App\Models\Call::all();
     }
 
     /**
@@ -21,6 +24,6 @@ class Call extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.call');
+        return view('components.call')->with('calls', $this->calls);
     }
 }
