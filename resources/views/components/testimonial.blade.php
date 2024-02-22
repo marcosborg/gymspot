@@ -1,4 +1,4 @@
-@if ($testimonials)
+@if ($testimonials->count() > 0)
 <!-- Section Testimonial Start -->
 <section class="section textimonial position-relative bg-3">
     <div class="container">

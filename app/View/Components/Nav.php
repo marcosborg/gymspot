@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class Nav extends Component
 {
+
+    private $menus;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->menus = \App\Models\Menu::all();
     }
 
     /**
@@ -21,6 +24,6 @@ class Nav extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.nav');
+        return view('components.nav')->with('menus', $this->menus);
     }
 }

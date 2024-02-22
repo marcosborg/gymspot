@@ -416,6 +416,10 @@ section.section.about {
   margin-top: 80px;
 }
 
+.services {
+  background-color: #eeeeee;
+}
+
 .number {
   opacity: 0.1;
   font-size: 130px;

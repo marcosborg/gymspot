@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class Course extends Component
 {
+
+    private $locations;
+
     /**
      * Create a new component instance.
      */
     public function __construct()
     {
-        //
+        $this->locations = \App\Models\Location::all();
     }
 
     /**
@@ -21,6 +24,6 @@ class Course extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.course');
+        return view('components.course')->with('locations', $this->locations);
     }
 }

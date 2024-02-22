@@ -11,9 +11,7 @@
             <div class="col-lg-6">
                 <div class="pl-3 mt-5 mt-lg-0">
                     <h2 class="mt-1 mb-3">{{ $about->title }}</h2>
-
-                    <p class="mb-4">{{ $about->text }}</p>
-
+                    <p class="mb-4 text-justify">{{ $about->text }}</p>
                     <a href="/{{ $about->link }}" class="btn btn-main">{{ $about->button }}<i
                             class="fa fa-angle-right ml-2"></i></a>
                 </div>

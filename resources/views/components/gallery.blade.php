@@ -1,4 +1,4 @@
-@if ($galleries)
+@if ($galleries->count() > 0)
 <!-- Section Gallery Start -->
 <section class="gallery">
     <div class="container">
@@ -6,8 +6,8 @@
             <div class="col-lg-8 text-center">
                 <div class="section-title">
                     <div class="divider mb-3"></div>
-                    <h2>Our gallery</h2>
-                    <p>We offer more than 35 group exercis, aerobic classes each week.</p>
+                    <h2>Os nossos espaços</h2>
+                    <p>Venha conhecer tudo o que temos para oferecer.</p>
                 </div>
             </div>
         </div>
@@ -24,6 +24,5 @@
         </div>
     </div>
 </section>
-
 <!-- Section Gallery END -->
 @endif
