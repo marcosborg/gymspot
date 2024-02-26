@@ -6,9 +6,12 @@
         height: 80vh;
         background: #000;
     }
-    .swiper-button-next, .swiper-button-prev {
+
+    .swiper-button-next,
+    .swiper-button-prev {
         color: #ffffff;
     }
+
     .swiper-pagination-bullet {
         background: #ffffff;
     }
@@ -56,9 +59,12 @@
                             <h1 class="text-uppercase text-white mb-5">{{ $slider->title }}<br><span
                                     class="text-color">{{
                                     $slider->subtitle }}</span></h1>
+                            <div>
+                                <a href="/{{ $slider->link }}" class="btn btn-main ">{{ $slider->button }} <i
+                                        class="ti-angle-right ml-3"></i></a>
+                                <img src="/assets/website/images/logos-stores.png" width="450" class="pl-5 img-responsive float-right">
+                            </div>
 
-                            <a href="/{{ $slider->link }}" class="btn btn-main ">{{ $slider->button }} <i
-                                    class="ti-angle-right ml-3"></i></a>
                         </div>
                     </div>
                 </div>
