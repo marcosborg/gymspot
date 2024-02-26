@@ -3,11 +3,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
-                <h2 class="text-white mb-4">GymFit</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus illo ad quo sunt
-                    maiores, sint nostrum omnis eaque cumque dolorum.</p>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                <img src="assets/website/images/logo-dark-v2.png" alt="gymspot" class="logo mb-4">
+                <p>No Gym Spot, desfrute de ginásios privados únicos abertos 24/7, para treinar à sua maneira, quando
+                    quiser. </p>
+                <p>Priorizamos privacidade e comodidade, promovendo um estilo de vida ativo e saudável.</p>
+                <p>Experimente um treino personalizado e acessível em vários locais.</p>
             </div>
 
 
@@ -39,11 +39,10 @@
             </div>
             <div class="col-lg-3 col-md-5">
                 <div class="footer-widget">
-                    <h4 class="mb-4 text-white letter-spacing text-uppercase">Home location</h4>
-                    <p>Washington 6036 Richmond
-                        hwy., Alexandria, VA USA 22303 </p>
-                    <span class="text-white">+1 (409) 987–5874</span>
-                    <span class="text-white">info@demolink.org</span>
+                    <h4 class="mb-4 text-white letter-spacing text-uppercase">Sede</h4>
+                    <p>Lisboa | Porto</p>
+                    <span class="text-white">+351 965 624 584</span>
+                    <span class="text-white">pm@gymspot.pt</span>
                 </div>
             </div>
         </div>
@@ -55,10 +54,8 @@
             </div>
             <div class="col-lg-6 ml-auto text-right">
                 <ul class="list-inline mb-0 footer-socials">
-                    <li class="list-inline-item"><a href="#"><i
-                                class="ti-facebook"></i></a></li>
-                    <li class="list-inline-item"><a href="#"><i
-                                class="ti-twitter"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="ti-facebook"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="ti-twitter"></i></a></li>
                 </ul>
             </div>
         </div>
