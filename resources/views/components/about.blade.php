@@ -1,3 +1,4 @@
+<div id="about"></div>
 @foreach ($abouts as $about)
 <!-- Section About start -->
 <section class="section about">

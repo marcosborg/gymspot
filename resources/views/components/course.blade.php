@@ -1,3 +1,4 @@
+<div id="course"></div>
 <!-- Section Course Start -->
 <section class="section course bg-gray">
     <div class="container">

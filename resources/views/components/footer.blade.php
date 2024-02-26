@@ -12,6 +12,7 @@
 
 
             <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
+                <!--
                 <div class="footer-widget recent-blog">
                     <h4 class="mb-4 text-white letter-spacing text-uppercase">Recents Posts</h4>
                     <div>
@@ -24,8 +25,10 @@
                     </div>
 
                 </div>
+            -->
             </div>
             <div class="col-lg-2 col-md-5 mb-5 mb-lg-0">
+                <!--
                 <div class="footer-widget">
                     <h4 class="mb-4 text-white letter-spacing text-uppercase">Quick Links</h4>
                     <ul class="list-unstyled footer-menu lh-40 mb-0">
@@ -36,6 +39,7 @@
                         <li><a href="contact.html"><i class="ti-angle-double-right mr-2"></i>Contact us</a></li>
                     </ul>
                 </div>
+            -->
             </div>
             <div class="col-lg-3 col-md-5">
                 <div class="footer-widget">
@@ -49,7 +53,7 @@
 
         <div class="row align-items-center mt-5 px-3 bg-black mx-1">
             <div class="col-lg-4">
-                <p class="text-white mt-3">Gymfit © {{ date('Y') }} , Developed by <a href="https://netlook.pt"
+                <p class="text-white mt-3">GymSpot © {{ date('Y') }} , Developed by <a href="https://netlook.pt"
                         class="text-color">Netlook.pt</a></p>
             </div>
             <div class="col-lg-6 ml-auto text-right">
