@@ -7,7 +7,8 @@
                 <div class="text-center">
                     <h2 class="text-lg mt-4 mb-3 text-white">{{ $call->title }}</h2>
                     <span class="h3 letter-spacing text-white">{{ $call->subtitle }}</span><br>
-                    <a href="{{ $call->link }}" class="btn btn-main text-white mt-4">{{ $call->button }}</a>
+                    <a href="{{ $call->link }}" class="btn btn-main text-white mt-4">{{ $call->button }}</a><br>
+                    <img src="/assets/website/images/logos-stores.png" width="450" class="mt-4 img-responsive">
                 </div>
             </div>
         </div>
