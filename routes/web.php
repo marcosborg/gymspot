@@ -2,6 +2,8 @@
 
 Route::get('/', 'WebsiteController@index');
 
+Route::get('/cms/{content_page_id}/{slug}', 'WebsiteController@contentPage');
+
 Route::get('/home', function () {
     if (session('status')) {
         return redirect()->route('admin.home')->with('status', session('status'));

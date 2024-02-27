@@ -28,16 +28,10 @@
                         {{ trans('cruds.contentPage.fields.title') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contentPage.fields.category') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.contentPage.fields.tag') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.contentPage.fields.excerpt') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.contentPage.fields.featured_image') }}
+                    </th>
+                    <th>
+                        URL
                     </th>
                     <th>
                         &nbsp;
@@ -53,26 +47,8 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
-                        <select class="search">
-                            <option value>{{ trans('global.all') }}</option>
-                            @foreach($content_categories as $key => $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
                     </td>
-                    <td>
-                        <select class="search">
-                            <option value>{{ trans('global.all') }}</option>
-                            @foreach($content_tags as $key => $item)
-                                <option value="{{ $item->name }}">{{ $item->name }}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
-                    </td>
-                    <td>
-                    </td>
+                    <td></td>
                     <td>
                     </td>
                 </tr>
@@ -130,10 +106,8 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'title', name: 'title' },
-{ data: 'category', name: 'categories.name' },
-{ data: 'tag', name: 'tags.name' },
-{ data: 'excerpt', name: 'excerpt' },
 { data: 'featured_image', name: 'featured_image', sortable: false, searchable: false },
+{data: 'url', name: 'url'},
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

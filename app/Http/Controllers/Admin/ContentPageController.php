@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class ContentPageController extends Controller
 {
@@ -52,24 +53,9 @@ class ContentPageController extends Controller
             $table->editColumn('title', function ($row) {
                 return $row->title ? $row->title : '';
             });
-            $table->editColumn('category', function ($row) {
-                $labels = [];
-                foreach ($row->categories as $category) {
-                    $labels[] = sprintf('<span class="label label-info label-many">%s</span>', $category->name);
-                }
-
-                return implode(' ', $labels);
-            });
-            $table->editColumn('tag', function ($row) {
-                $labels = [];
-                foreach ($row->tags as $tag) {
-                    $labels[] = sprintf('<span class="label label-info label-many">%s</span>', $tag->name);
-                }
-
-                return implode(' ', $labels);
-            });
-            $table->editColumn('excerpt', function ($row) {
-                return $row->excerpt ? $row->excerpt : '';
+            
+            $table->editColumn('url', function ($row) {
+                return url('/') . '/cms/' . $row->id . '/' . Str::slug($row->title, '-');
             });
             $table->editColumn('featured_image', function ($row) {
                 if ($photo = $row->featured_image) {
@@ -83,15 +69,12 @@ class ContentPageController extends Controller
                 return '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'category', 'tag', 'featured_image']);
+            $table->rawColumns(['actions', 'placeholder', 'featured_image']);
 
             return $table->make(true);
         }
 
-        $content_categories = ContentCategory::get();
-        $content_tags       = ContentTag::get();
-
-        return view('admin.contentPages.index', compact('content_categories', 'content_tags'));
+        return view('admin.contentPages.index');
     }
 
     public function create()

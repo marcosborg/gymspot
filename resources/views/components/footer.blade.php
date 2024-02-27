@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-5 mb-lg-0">
-                <img src="assets/website/images/logo-dark-v2.png" alt="gymspot" class="logo mb-4">
+                <img src="/assets/website/images/logo-dark-v2.png" alt="gymspot" class="logo mb-4">
                 <p>No Gym Spot, desfrute de ginásios privados únicos abertos 24/7, para treinar à sua maneira, quando
                     quiser. </p>
                 <p>Priorizamos privacidade e comodidade, promovendo um estilo de vida ativo e saudável.</p>
