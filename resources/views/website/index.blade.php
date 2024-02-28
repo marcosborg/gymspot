@@ -13,6 +13,7 @@ Home
 <x-about></x-about>
 <x-call></x-call>
 <x-services></x-services>
+<x-faqs></x-faqs>
 <x-gallery></x-gallery>
 <x-testimonial></x-testimonial>
 <x-course></x-course>

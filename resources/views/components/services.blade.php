@@ -1,6 +1,6 @@
 <div id="services"></div>
 <!-- Section Services Start -->
-<section class="section services mb-5">
+<section class="section mb-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
