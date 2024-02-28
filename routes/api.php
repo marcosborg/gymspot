@@ -83,7 +83,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
     
     // Slider
-    Route::post('sliders/media', 'SliderApiController@storeMedia')->name('sliders.storeMedia');
     Route::apiResource('sliders', 'SliderApiController');
+
+    // Steps
+    Route::apiResource('steps', 'StepsApiController');
 
 });

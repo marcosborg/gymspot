@@ -16,7 +16,7 @@ class Nav extends Component
      */
     public function __construct()
     {
-        $this->menus = \App\Models\Menu::all();
+        $this->menus = \App\Models\Menu::orderBy('position', 'asc')->get();
     }
 
     /**
