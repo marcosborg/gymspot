@@ -107,7 +107,7 @@
 { data: 'id', name: 'id' },
 { data: 'title', name: 'title' },
 { data: 'featured_image', name: 'featured_image', sortable: false, searchable: false },
-{data: 'url', name: 'url'},
+{data: 'url', name: 'url', sortable: false, searchable: false},
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
