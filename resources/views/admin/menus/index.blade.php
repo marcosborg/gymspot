@@ -28,6 +28,9 @@
                         {{ trans('cruds.menu.fields.name') }}
                     </th>
                     <th>
+                        {{ trans('cruds.menu.fields.content_page') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.menu.fields.link') }}
                     </th>
                     <th>
@@ -45,6 +48,14 @@
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($content_pages as $key => $item)
+                                <option value="{{ $item->title }}">{{ $item->title }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -109,6 +120,7 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'name', name: 'name' },
+{ data: 'content_page_title', name: 'content_page.title' },
 { data: 'link', name: 'link' },
 { data: 'position', name: 'position' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }

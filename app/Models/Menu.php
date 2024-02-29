@@ -21,6 +21,7 @@ class Menu extends Model
 
     protected $fillable = [
         'name',
+        'content_page_id',
         'link',
         'position',
         'created_at',
@@ -31,5 +32,10 @@ class Menu extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function content_page()
+    {
+        return $this->belongsTo(ContentPage::class, 'content_page_id');
     }
 }

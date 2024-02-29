@@ -33,6 +33,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.menu.fields.content_page') }}
+                        </th>
+                        <td>
+                            {{ $menu->content_page->title ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.menu.fields.link') }}
                         </th>
                         <td>

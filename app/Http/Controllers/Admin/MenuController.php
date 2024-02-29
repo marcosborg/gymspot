@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyMenuRequest;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
+use App\Models\ContentPage;
 use App\Models\Menu;
 use Gate;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class MenuController extends Controller
         abort_if(Gate::denies('menu_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Menu::query()->select(sprintf('%s.*', (new Menu)->table));
+            $query = Menu::with(['content_page'])->select(sprintf('%s.*', (new Menu)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -46,6 +47,10 @@ class MenuController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             });
+            $table->addColumn('content_page_title', function ($row) {
+                return $row->content_page ? $row->content_page->title : '';
+            });
+
             $table->editColumn('link', function ($row) {
                 return $row->link ? $row->link : '';
             });
@@ -53,19 +58,23 @@ class MenuController extends Controller
                 return $row->position ? $row->position : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder']);
+            $table->rawColumns(['actions', 'placeholder', 'content_page']);
 
             return $table->make(true);
         }
 
-        return view('admin.menus.index');
+        $content_pages = ContentPage::get();
+
+        return view('admin.menus.index', compact('content_pages'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('menu_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.menus.create');
+        $content_pages = ContentPage::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.menus.create', compact('content_pages'));
     }
 
     public function store(StoreMenuRequest $request)
@@ -79,7 +88,11 @@ class MenuController extends Controller
     {
         abort_if(Gate::denies('menu_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.menus.edit', compact('menu'));
+        $content_pages = ContentPage::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $menu->load('content_page');
+
+        return view('admin.menus.edit', compact('content_pages', 'menu'));
     }
 
     public function update(UpdateMenuRequest $request, Menu $menu)
@@ -92,6 +105,8 @@ class MenuController extends Controller
     public function show(Menu $menu)
     {
         abort_if(Gate::denies('menu_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+
+        $menu->load('content_page');
 
         return view('admin.menus.show', compact('menu'));
     }

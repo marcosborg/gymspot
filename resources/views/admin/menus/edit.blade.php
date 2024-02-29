@@ -21,6 +21,20 @@
                 <span class="help-block">{{ trans('cruds.menu.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="content_page_id">{{ trans('cruds.menu.fields.content_page') }}</label>
+                <select class="form-control select2 {{ $errors->has('content_page') ? 'is-invalid' : '' }}" name="content_page_id" id="content_page_id">
+                    @foreach($content_pages as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('content_page_id') ? old('content_page_id') : $menu->content_page->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('content_page'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('content_page') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.menu.fields.content_page_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="link">{{ trans('cruds.menu.fields.link') }}</label>
                 <input class="form-control {{ $errors->has('link') ? 'is-invalid' : '' }}" type="text" name="link" id="link" value="{{ old('link', $menu->link) }}">
                 @if($errors->has('link'))
