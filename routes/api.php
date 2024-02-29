@@ -88,4 +88,10 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     // Steps
     Route::apiResource('steps', 'StepsApiController');
 
+    // Menu
+    Route::apiResource('menus', 'MenuApiController');
+
+    // Content Page
+    Route::post('get-cms-by-name', 'ContentPageApiController@getCmsByName');
+
 });

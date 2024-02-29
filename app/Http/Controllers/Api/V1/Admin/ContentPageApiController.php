@@ -73,4 +73,9 @@ class ContentPageApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function getCmsByName(Request $request)
+    {
+        return ContentPage::where('title', $request->title)->first();
+    }
 }
