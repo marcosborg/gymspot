@@ -26,3 +26,4 @@
     </div>
 </nav>
 <!-- Header Close -->
+<script>console.log({!! $menus !!})</script>
