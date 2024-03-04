@@ -15,7 +15,6 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
 
 class ContentPageController extends Controller
 {
@@ -53,9 +52,24 @@ class ContentPageController extends Controller
             $table->editColumn('title', function ($row) {
                 return $row->title ? $row->title : '';
             });
-            
-            $table->editColumn('url', function ($row) {
-                return url('/') . '/cms/' . $row->id . '/' . Str::slug($row->title, '-');
+            $table->editColumn('category', function ($row) {
+                $labels = [];
+                foreach ($row->categories as $category) {
+                    $labels[] = sprintf('<span class="label label-info label-many">%s</span>', $category->name);
+                }
+
+                return implode(' ', $labels);
+            });
+            $table->editColumn('tag', function ($row) {
+                $labels = [];
+                foreach ($row->tags as $tag) {
+                    $labels[] = sprintf('<span class="label label-info label-many">%s</span>', $tag->name);
+                }
+
+                return implode(' ', $labels);
+            });
+            $table->editColumn('excerpt', function ($row) {
+                return $row->excerpt ? $row->excerpt : '';
             });
             $table->editColumn('featured_image', function ($row) {
                 if ($photo = $row->featured_image) {
@@ -68,8 +82,32 @@ class ContentPageController extends Controller
 
                 return '';
             });
+            $table->editColumn('slider', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->slider ? 'checked' : null) . '>';
+            });
+            $table->editColumn('steps', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->steps ? 'checked' : null) . '>';
+            });
+            $table->editColumn('about', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->about ? 'checked' : null) . '>';
+            });
+            $table->editColumn('call', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->call ? 'checked' : null) . '>';
+            });
+            $table->editColumn('services', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->services ? 'checked' : null) . '>';
+            });
+            $table->editColumn('gallery', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->gallery ? 'checked' : null) . '>';
+            });
+            $table->editColumn('testimonial', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->testimonial ? 'checked' : null) . '>';
+            });
+            $table->editColumn('location', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->location ? 'checked' : null) . '>';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'featured_image']);
+            $table->rawColumns(['actions', 'placeholder', 'featured_image', 'slider', 'steps', 'about', 'call', 'services', 'gallery', 'testimonial', 'location']);
 
             return $table->make(true);
         }

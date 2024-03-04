@@ -79,6 +79,70 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.slider') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->slider ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.steps') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->steps ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.about') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->about ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.call') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->call ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.services') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->services ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.gallery') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->gallery ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.testimonial') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->testimonial ? 'checked' : '' }}>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.location') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->location ? 'checked' : '' }}>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

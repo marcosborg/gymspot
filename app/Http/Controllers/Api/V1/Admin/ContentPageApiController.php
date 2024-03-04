@@ -39,9 +39,7 @@ class ContentPageApiController extends Controller
 
     public function show(ContentPage $contentPage)
     {
-        abort_if(Gate::denies('content_page_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        return new ContentPageResource($contentPage->load(['categories', 'tags']));
+        return new ContentPageResource($contentPage);
     }
 
     public function update(UpdateContentPageRequest $request, ContentPage $contentPage)
@@ -74,8 +72,4 @@ class ContentPageApiController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function getCmsByName(Request $request)
-    {
-        return ContentPage::where('title', $request->title)->first();
-    }
 }

@@ -28,10 +28,34 @@
                         {{ trans('cruds.contentPage.fields.title') }}
                     </th>
                     <th>
+                        {{ trans('cruds.contentPage.fields.excerpt') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.contentPage.fields.featured_image') }}
                     </th>
                     <th>
-                        URL
+                        {{ trans('cruds.contentPage.fields.slider') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.steps') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.about') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.call') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.services') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.gallery') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.testimonial') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.contentPage.fields.location') }}
                     </th>
                     <th>
                         &nbsp;
@@ -47,8 +71,26 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
-                    <td></td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
                     <td>
                     </td>
                 </tr>
@@ -106,8 +148,16 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'title', name: 'title' },
+{ data: 'excerpt', name: 'excerpt' },
 { data: 'featured_image', name: 'featured_image', sortable: false, searchable: false },
-{data: 'url', name: 'url', sortable: false, searchable: false},
+{ data: 'slider', name: 'slider' },
+{ data: 'steps', name: 'steps' },
+{ data: 'about', name: 'about' },
+{ data: 'call', name: 'call' },
+{ data: 'services', name: 'services' },
+{ data: 'gallery', name: 'gallery' },
+{ data: 'testimonial', name: 'testimonial' },
+{ data: 'location', name: 'location' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

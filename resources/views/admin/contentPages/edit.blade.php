@@ -88,6 +88,110 @@
                 <span class="help-block">{{ trans('cruds.contentPage.fields.featured_image_helper') }}</span>
             </div>
             <div class="form-group">
+                <div class="form-check {{ $errors->has('slider') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="slider" value="0">
+                    <input class="form-check-input" type="checkbox" name="slider" id="slider" value="1" {{ $contentPage->slider || old('slider', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="slider">{{ trans('cruds.contentPage.fields.slider') }}</label>
+                </div>
+                @if($errors->has('slider'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('slider') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.slider_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('steps') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="steps" value="0">
+                    <input class="form-check-input" type="checkbox" name="steps" id="steps" value="1" {{ $contentPage->steps || old('steps', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="steps">{{ trans('cruds.contentPage.fields.steps') }}</label>
+                </div>
+                @if($errors->has('steps'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('steps') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.steps_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('about') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="about" value="0">
+                    <input class="form-check-input" type="checkbox" name="about" id="about" value="1" {{ $contentPage->about || old('about', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="about">{{ trans('cruds.contentPage.fields.about') }}</label>
+                </div>
+                @if($errors->has('about'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('about') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.about_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('call') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="call" value="0">
+                    <input class="form-check-input" type="checkbox" name="call" id="call" value="1" {{ $contentPage->call || old('call', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="call">{{ trans('cruds.contentPage.fields.call') }}</label>
+                </div>
+                @if($errors->has('call'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('call') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.call_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('services') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="services" value="0">
+                    <input class="form-check-input" type="checkbox" name="services" id="services" value="1" {{ $contentPage->services || old('services', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="services">{{ trans('cruds.contentPage.fields.services') }}</label>
+                </div>
+                @if($errors->has('services'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('services') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.services_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('gallery') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="gallery" value="0">
+                    <input class="form-check-input" type="checkbox" name="gallery" id="gallery" value="1" {{ $contentPage->gallery || old('gallery', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="gallery">{{ trans('cruds.contentPage.fields.gallery') }}</label>
+                </div>
+                @if($errors->has('gallery'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('gallery') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.gallery_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('testimonial') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="testimonial" value="0">
+                    <input class="form-check-input" type="checkbox" name="testimonial" id="testimonial" value="1" {{ $contentPage->testimonial || old('testimonial', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="testimonial">{{ trans('cruds.contentPage.fields.testimonial') }}</label>
+                </div>
+                @if($errors->has('testimonial'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('testimonial') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.testimonial_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('location') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="location" value="0">
+                    <input class="form-check-input" type="checkbox" name="location" id="location" value="1" {{ $contentPage->location || old('location', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="location">{{ trans('cruds.contentPage.fields.location') }}</label>
+                </div>
+                @if($errors->has('location'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('location') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.location_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

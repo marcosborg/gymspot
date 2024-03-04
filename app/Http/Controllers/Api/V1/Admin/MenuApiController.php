@@ -15,7 +15,7 @@ class MenuApiController extends Controller
 {
     public function index()
     {
-        return new MenuResource(Menu::orderBy('position')->get());
+        return new MenuResource(Menu::orderBy('position')->get()->load('content_page'));
     }
 
 }
