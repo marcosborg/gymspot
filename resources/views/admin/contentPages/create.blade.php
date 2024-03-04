@@ -191,6 +191,19 @@
                 <span class="help-block">{{ trans('cruds.contentPage.fields.location_helper') }}</span>
             </div>
             <div class="form-group">
+                <div class="form-check {{ $errors->has('faqs') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="faqs" value="0">
+                    <input class="form-check-input" type="checkbox" name="faqs" id="faqs" value="1" {{ old('faqs', 0) == 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="faqs">{{ trans('cruds.contentPage.fields.faqs') }}</label>
+                </div>
+                @if($errors->has('faqs'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('faqs') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.contentPage.fields.faqs_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

@@ -151,6 +151,8 @@ return [
             'testimonial_helper'    => ' ',
             'location'              => 'Location',
             'location_helper'       => ' ',
+            'faqs'                  => 'Faqs',
+            'faqs_helper'           => ' ',
         ],
     ],
     'faqManagement' => [

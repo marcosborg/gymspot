@@ -106,8 +106,11 @@ class ContentPageController extends Controller
             $table->editColumn('location', function ($row) {
                 return '<input type="checkbox" disabled ' . ($row->location ? 'checked' : null) . '>';
             });
+            $table->editColumn('faqs', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->faqs ? 'checked' : null) . '>';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'featured_image', 'slider', 'steps', 'about', 'call', 'services', 'gallery', 'testimonial', 'location']);
+            $table->rawColumns(['actions', 'placeholder', 'featured_image', 'slider', 'steps', 'about', 'call', 'services', 'gallery', 'testimonial', 'location', 'faqs']);
 
             return $table->make(true);
         }

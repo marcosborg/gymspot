@@ -143,6 +143,14 @@
                             <input type="checkbox" disabled="disabled" {{ $contentPage->location ? 'checked' : '' }}>
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.contentPage.fields.faqs') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $contentPage->faqs ? 'checked' : '' }}>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

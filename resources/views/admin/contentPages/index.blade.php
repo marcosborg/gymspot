@@ -28,9 +28,6 @@
                         {{ trans('cruds.contentPage.fields.title') }}
                     </th>
                     <th>
-                        {{ trans('cruds.contentPage.fields.excerpt') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.contentPage.fields.featured_image') }}
                     </th>
                     <th>
@@ -58,6 +55,9 @@
                         {{ trans('cruds.contentPage.fields.location') }}
                     </th>
                     <th>
+                        {{ trans('cruds.contentPage.fields.faqs') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -71,7 +71,6 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
                     </td>
@@ -148,7 +147,6 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'title', name: 'title' },
-{ data: 'excerpt', name: 'excerpt' },
 { data: 'featured_image', name: 'featured_image', sortable: false, searchable: false },
 { data: 'slider', name: 'slider' },
 { data: 'steps', name: 'steps' },
@@ -158,6 +156,7 @@
 { data: 'gallery', name: 'gallery' },
 { data: 'testimonial', name: 'testimonial' },
 { data: 'location', name: 'location' },
+{ data: 'faqs', name: 'faqs' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
