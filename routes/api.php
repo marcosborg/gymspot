@@ -81,7 +81,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
-    
+
     // Slider
     Route::apiResource('sliders', 'SliderApiController');
 
@@ -94,4 +94,15 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     // Content Page
     Route::apiResource('content-pages', 'ContentPageApiController');
 
+    // About
+    Route::apiResource('abouts', 'AboutApiController');
+
+    // Service
+    Route::apiResource('services', 'ServiceApiController');
+
+    // Gallery
+    Route::apiResource('galleries', 'GalleryApiController');
+
+    // Location
+    Route::apiResource('locations', 'LocationApiController');
 });
