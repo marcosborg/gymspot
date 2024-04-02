@@ -105,4 +105,7 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
     // Location
     Route::apiResource('locations', 'LocationApiController');
+
+    // Faq Question
+    Route::apiResource('faq-questions', 'FaqQuestionApiController');
 });

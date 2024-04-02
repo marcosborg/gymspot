@@ -15,7 +15,7 @@ class FaqQuestionApiController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('faq_question_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('faq_question_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new FaqQuestionResource(FaqQuestion::with(['category'])->get());
     }
