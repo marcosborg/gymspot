@@ -23,7 +23,7 @@ class LocationApiController extends Controller
 
     public function show(Location $location)
     {
-        return new LocationResource($location);
+        return new LocationResource($location->load('spots.country'));
     }
 
 }

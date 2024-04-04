@@ -56,4 +56,9 @@ class Location extends Model implements HasMedia
 
         return $file;
     }
+
+    public function spots()
+    {
+        return $this->hasMany(Spot::class);
+    }
 }

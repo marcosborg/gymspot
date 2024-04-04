@@ -18,8 +18,6 @@ class SpotApiController extends Controller
 
     public function index()
     {
-        abort_if(Gate::denies('spot_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         return new SpotResource(Spot::with(['location', 'country'])->get());
     }
 
@@ -38,8 +36,6 @@ class SpotApiController extends Controller
 
     public function show(Spot $spot)
     {
-        abort_if(Gate::denies('spot_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         return new SpotResource($spot->load(['location', 'country']));
     }
 

@@ -109,6 +109,9 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     // Faq Question
     Route::apiResource('faq-questions', 'FaqQuestionApiController');
 
+    // Spot
+    Route::apiResource('spots', 'SpotApiController');
+
     Route::prefix('calendar')->group(function(){
         Route::get('month/{year?}/{month?}', 'CalendarController@month');
     });
