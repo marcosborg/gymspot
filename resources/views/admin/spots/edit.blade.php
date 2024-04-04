@@ -51,8 +51,12 @@
                 <span class="help-block">{{ trans('cruds.spot.fields.zip_helper') }}</span>
             </div>
             <div class="form-group">
-                <label for="location">{{ trans('cruds.spot.fields.location') }}</label>
-                <input class="form-control {{ $errors->has('location') ? 'is-invalid' : '' }}" type="text" name="location" id="location" value="{{ old('location', $spot->location) }}">
+                <label class="required" for="location_id">{{ trans('cruds.spot.fields.location') }}</label>
+                <select class="form-control select2 {{ $errors->has('location') ? 'is-invalid' : '' }}" name="location_id" id="location_id" required>
+                    @foreach($locations as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('location_id') ? old('location_id') : $spot->location->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
                 @if($errors->has('location'))
                     <div class="invalid-feedback">
                         {{ $errors->first('location') }}

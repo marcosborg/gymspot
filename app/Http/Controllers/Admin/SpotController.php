@@ -8,6 +8,7 @@ use App\Http\Requests\MassDestroySpotRequest;
 use App\Http\Requests\StoreSpotRequest;
 use App\Http\Requests\UpdateSpotRequest;
 use App\Models\Country;
+use App\Models\Location;
 use App\Models\Spot;
 use Gate;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class SpotController extends Controller
         abort_if(Gate::denies('spot_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Spot::with(['country'])->select(sprintf('%s.*', (new Spot)->table));
+            $query = Spot::with(['location', 'country'])->select(sprintf('%s.*', (new Spot)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -57,9 +58,10 @@ class SpotController extends Controller
             $table->editColumn('zip', function ($row) {
                 return $row->zip ? $row->zip : '';
             });
-            $table->editColumn('location', function ($row) {
-                return $row->location ? $row->location : '';
+            $table->addColumn('location_title', function ($row) {
+                return $row->location ? $row->location->title : '';
             });
+
             $table->addColumn('country_name', function ($row) {
                 return $row->country ? $row->country->name : '';
             });
@@ -82,23 +84,26 @@ class SpotController extends Controller
                 return implode(' ', $links);
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'country', 'photos']);
+            $table->rawColumns(['actions', 'placeholder', 'location', 'country', 'photos']);
 
             return $table->make(true);
         }
 
+        $locations = Location::get();
         $countries = Country::get();
 
-        return view('admin.spots.index', compact('countries'));
+        return view('admin.spots.index', compact('locations', 'countries'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('spot_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $locations = Location::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.spots.create', compact('countries'));
+        return view('admin.spots.create', compact('countries', 'locations'));
     }
 
     public function store(StoreSpotRequest $request)
@@ -120,11 +125,13 @@ class SpotController extends Controller
     {
         abort_if(Gate::denies('spot_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
+        $locations = Location::pluck('title', 'id')->prepend(trans('global.pleaseSelect'), '');
+
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $spot->load('country');
+        $spot->load('location', 'country');
 
-        return view('admin.spots.edit', compact('countries', 'spot'));
+        return view('admin.spots.edit', compact('countries', 'locations', 'spot'));
     }
 
     public function update(UpdateSpotRequest $request, Spot $spot)
@@ -152,7 +159,7 @@ class SpotController extends Controller
     {
         abort_if(Gate::denies('spot_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $spot->load('country');
+        $spot->load('location', 'country');
 
         return view('admin.spots.show', compact('spot'));
     }

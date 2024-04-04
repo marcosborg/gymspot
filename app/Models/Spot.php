@@ -31,7 +31,7 @@ class Spot extends Model implements HasMedia
         'description',
         'address',
         'zip',
-        'location',
+        'location_id',
         'country_id',
         'email',
         'phone',
@@ -49,6 +49,11 @@ class Spot extends Model implements HasMedia
     {
         $this->addMediaConversion('thumb')->fit('crop', 50, 50);
         $this->addMediaConversion('preview')->fit('crop', 120, 120);
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
     public function country()

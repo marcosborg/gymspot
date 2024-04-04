@@ -29,9 +29,9 @@ class StoreSpotRequest extends FormRequest
                 'string',
                 'nullable',
             ],
-            'location' => [
-                'string',
-                'nullable',
+            'location_id' => [
+                'required',
+                'integer',
             ],
             'email' => [
                 'string',

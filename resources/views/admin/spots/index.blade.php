@@ -68,7 +68,12 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($locations as $key => $item)
+                                <option value="{{ $item->title }}">{{ $item->title }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                         <select class="search">
@@ -145,7 +150,7 @@
 { data: 'name', name: 'name' },
 { data: 'address', name: 'address' },
 { data: 'zip', name: 'zip' },
-{ data: 'location', name: 'location' },
+{ data: 'location_title', name: 'location.title' },
 { data: 'country_name', name: 'country.name' },
 { data: 'email', name: 'email' },
 { data: 'phone', name: 'phone' },

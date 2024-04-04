@@ -60,7 +60,7 @@
                             {{ trans('cruds.spot.fields.location') }}
                         </th>
                         <td>
-                            {{ $spot->location }}
+                            {{ $spot->location->title ?? '' }}
                         </td>
                     </tr>
                     <tr>

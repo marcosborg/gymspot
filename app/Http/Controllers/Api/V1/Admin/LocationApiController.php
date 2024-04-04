@@ -21,4 +21,9 @@ class LocationApiController extends Controller
         return new LocationResource(Location::all());
     }
 
+    public function show(Location $location)
+    {
+        return new LocationResource($location);
+    }
+
 }
