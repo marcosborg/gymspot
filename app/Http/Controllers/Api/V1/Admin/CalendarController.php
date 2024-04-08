@@ -24,6 +24,8 @@ class CalendarController extends Controller
         $firstDayOfMonth = $now->copy()->startOfMonth();
         $lastDayOfMonth = $now->copy()->endOfMonth();
 
+        $today = Carbon::now(); // Obtenha a data atual
+
         $previousMonthDate = $now->copy()->subMonth();
         $previousMonthLink = $previousMonthDate->format('Y/m');
 
@@ -41,9 +43,20 @@ class CalendarController extends Controller
         $daysWithWeekday = [];
 
         for ($date = $firstDayOfMonth; $date->lte($lastDayOfMonth); $date->addDay()) {
-            $status = $date->month === $currentMonth ? 'active' : 'inactive';
+            // Altere a lógica de definição de status aqui
+            if ($date->toDateString() === $today->toDateString()) {
+                $status = 'active'; // Dia corrente
+            } elseif ($date->lt($today)) {
+                $status = 'inactive'; // Dia anterior ao atual
+            } else {
+                // Para dias dentro do mês corrente que são posteriores ao dia atual,
+                // você pode definir o status conforme necessário. Exemplo:
+                $status = $date->month === $currentMonth ? 'active' : 'inactive';
+            }
+
             $daysWithWeekday[] = [
                 'month' => $date->format('m'),
+                'year' => $date->format('Y'),
                 'dayNumber' => $date->day,
                 'weekDay' => $date->isoFormat('dddd'),
                 'status' => $status
@@ -61,6 +74,8 @@ class CalendarController extends Controller
 
         return $month;
     }
+
+
 
 
 }
