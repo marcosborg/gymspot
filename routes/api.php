@@ -114,5 +114,6 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
     Route::prefix('calendar')->group(function(){
         Route::get('month/{year?}/{month?}', 'CalendarController@month');
+        Route::post('day', 'CalendarController@day');
     });
 });

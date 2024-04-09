@@ -72,7 +72,52 @@ class CalendarController extends Controller
         return $month;
     }
 
+    public function day(Request $request)
+    {
+        $year = $request->year;
+        $currentMonth = $request->currentMonth;
+        $dayNumber = $request->dayNumber;
 
+        Carbon::setLocale('pt_PT');
+        $date = Carbon::createFromDate($year, $currentMonth, $dayNumber);
+        $startOfWeek = $date->startOfWeek(Carbon::MONDAY);
+
+        $weekDays = [];
+
+        for ($i = 0; $i < 7; $i++) {
+            $day = $startOfWeek->copy()->addDays($i);
+            $slots = $this->generateDaySlots($day);
+
+            $weekDays[] = [
+                'date' => $day->toDateString(),
+                'dayOfWeek' => $day->dayOfWeekIso,
+                'status' => $day->isSameDay($date) ? 'selected' : '',
+                'slots' => $slots
+            ];
+        }
+
+        return $weekDays;
+    }
+
+    private function generateDaySlots(Carbon $day)
+    {
+        $slots = [];
+        
+        $startSlot = $day->copy()->startOfDay();
+
+        for ($slot = 0; $slot < 48; $slot++) {
+            $endSlot = $startSlot->copy()->addMinutes(30);
+
+            $slots[] = [
+                'start' => $startSlot->format('H:i'),
+                'end' => $endSlot->format('H:i'),
+            ];
+
+            $startSlot->addMinutes(30);
+        }
+
+        return $slots;
+    }
 
 
 }
