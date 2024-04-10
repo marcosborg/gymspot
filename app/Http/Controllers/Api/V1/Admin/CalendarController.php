@@ -79,8 +79,8 @@ class CalendarController extends Controller
         $dayNumber = $request->dayNumber;
 
         Carbon::setLocale('pt_PT');
-        $date = Carbon::createFromDate($year, $currentMonth, $dayNumber);
-        $startOfWeek = $date->startOfWeek(Carbon::MONDAY);
+        $inputDate = Carbon::createFromDate($year, $currentMonth, $dayNumber)->startOfDay(); // Garante que a comparação seja apenas pela data
+        $startOfWeek = $inputDate->copy()->startOfWeek(Carbon::MONDAY);
 
         $weekDays = [];
 
@@ -91,7 +91,7 @@ class CalendarController extends Controller
             $weekDays[] = [
                 'date' => $day->toDateString(),
                 'dayOfWeek' => $day->dayOfWeekIso,
-                'status' => $day->isSameDay($date) ? 'selected' : '',
+                'status' => $day->isSameDay($inputDate) ? 'selected' : '', // Usa inputDate para a comparação
                 'slots' => $slots
             ];
         }
@@ -99,10 +99,11 @@ class CalendarController extends Controller
         return $weekDays;
     }
 
+
     private function generateDaySlots(Carbon $day)
     {
         $slots = [];
-        
+
         $startSlot = $day->copy()->startOfDay();
 
         for ($slot = 0; $slot < 48; $slot++) {
