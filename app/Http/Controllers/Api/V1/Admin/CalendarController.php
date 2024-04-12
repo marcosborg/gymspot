@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \Carbon\Carbon;
+use \App\Models\Spot;
 
 class CalendarController extends Controller
 {
@@ -74,30 +75,43 @@ class CalendarController extends Controller
 
     public function day(Request $request)
     {
+        $spot_id = $request->spot_id;
         $year = $request->year;
         $currentMonth = $request->currentMonth;
         $dayNumber = $request->dayNumber;
 
+        $spot = Spot::find($spot_id)->load('location');
+
         Carbon::setLocale('pt_PT');
-        $inputDate = Carbon::createFromDate($year, $currentMonth, $dayNumber)->startOfDay(); // Garante que a comparação seja apenas pela data
-        $startOfWeek = $inputDate->copy()->startOfWeek(Carbon::MONDAY);
 
-        $weekDays = [];
+        $inputDate = Carbon::createFromDate($year, $currentMonth, $dayNumber)->startOfDay();
 
-        for ($i = 0; $i < 7; $i++) {
-            $day = $startOfWeek->copy()->addDays($i);
-            $slots = $this->generateDaySlots($day);
+        $slots = $this->generateDaySlots($inputDate);
 
-            $weekDays[] = [
-                'date' => $day->toDateString(),
-                'dayOfWeek' => $day->dayOfWeekIso,
-                'status' => $day->isSameDay($inputDate) ? 'selected' : '', // Usa inputDate para a comparação
-                'slots' => $slots
-            ];
-        }
+        // Calculando o próximo dia
+        $nextDay = $inputDate->copy()->addDay();
+        $pastDay = $inputDate->copy()->subDay();
 
-        return $weekDays;
+        $day = [
+            'spot' => $spot,
+            'day' => $inputDate->format('Y-m-d'),
+            'dayWeek' => $inputDate->translatedFormat('l'),
+            'slots' => $slots,
+            'nextDay' => [
+                'year' => $nextDay->year,
+                'currentMonth' => $nextDay->month,
+                'dayNumber' => $nextDay->day
+            ],
+            'pastDay' => [
+                'year' => $pastDay->year,
+                'currentMonth' => $pastDay->month,
+                'dayNumber' => $pastDay->day
+            ],
+        ];
+
+        return $day;
     }
+
 
 
     private function generateDaySlots(Carbon $day)
