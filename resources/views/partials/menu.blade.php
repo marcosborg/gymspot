@@ -293,6 +293,16 @@
                 </a>
             </li>
         @endcan
+        @can('personal_trainer_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.personal-trainers.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/personal-trainers") || request()->is("admin/personal-trainers/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-dumbbell c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.personalTrainer.title') }}
+                </a>
+            </li>
+        @endcan
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">

@@ -126,6 +126,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('menus/destroy', 'MenuController@massDestroy')->name('menus.massDestroy');
     Route::resource('menus', 'MenuController');
 
+    // Personal Trainer
+    Route::delete('personal-trainers/destroy', 'PersonalTrainerController@massDestroy')->name('personal-trainers.massDestroy');
+    Route::post('personal-trainers/media', 'PersonalTrainerController@storeMedia')->name('personal-trainers.storeMedia');
+    Route::post('personal-trainers/ckmedia', 'PersonalTrainerController@storeCKEditorImages')->name('personal-trainers.storeCKEditorImages');
+    Route::resource('personal-trainers', 'PersonalTrainerController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
