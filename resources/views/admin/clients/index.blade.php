@@ -49,6 +49,12 @@
                         {{ trans('cruds.client.fields.photo') }}
                     </th>
                     <th>
+                        {{ trans('cruds.client.fields.user') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.email') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -83,6 +89,16 @@
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($users as $key => $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                     </td>
@@ -150,6 +166,8 @@
 { data: 'phone', name: 'phone' },
 { data: 'vat', name: 'vat' },
 { data: 'photo', name: 'photo', sortable: false, searchable: false },
+{ data: 'user_name', name: 'user.name' },
+{ data: 'user.email', name: 'user.email' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

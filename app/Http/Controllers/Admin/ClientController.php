@@ -9,6 +9,7 @@ use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 use App\Models\Country;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -24,7 +25,7 @@ class ClientController extends Controller
         abort_if(Gate::denies('client_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Client::with(['country'])->select(sprintf('%s.*', (new Client)->table));
+            $query = Client::with(['country', 'user'])->select(sprintf('%s.*', (new Client)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -81,15 +82,23 @@ class ClientController extends Controller
 
                 return '';
             });
+            $table->addColumn('user_name', function ($row) {
+                return $row->user ? $row->user->name : '';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'country', 'photo']);
+            $table->editColumn('user.email', function ($row) {
+                return $row->user ? (is_string($row->user) ? $row->user : $row->user->email) : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'country', 'photo', 'user']);
 
             return $table->make(true);
         }
 
         $countries = Country::get();
+        $users     = User::get();
 
-        return view('admin.clients.index', compact('countries'));
+        return view('admin.clients.index', compact('countries', 'users'));
     }
 
     public function create()
@@ -98,7 +107,9 @@ class ClientController extends Controller
 
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clients.create', compact('countries'));
+        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.clients.create', compact('countries', 'users'));
     }
 
     public function store(StoreClientRequest $request)
@@ -122,9 +133,11 @@ class ClientController extends Controller
 
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $client->load('country');
+        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.clients.edit', compact('client', 'countries'));
+        $client->load('country', 'user');
+
+        return view('admin.clients.edit', compact('client', 'countries', 'users'));
     }
 
     public function update(UpdateClientRequest $request, Client $client)
@@ -149,7 +162,7 @@ class ClientController extends Controller
     {
         abort_if(Gate::denies('client_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $client->load('country');
+        $client->load('country', 'user');
 
         return view('admin.clients.show', compact('client'));
     }

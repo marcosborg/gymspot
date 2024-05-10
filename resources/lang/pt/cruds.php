@@ -227,6 +227,8 @@ return [
             'photo_helper'      => ' ',
             'vat'               => 'Vat',
             'vat_helper'        => ' ',
+            'user'              => 'User',
+            'user_helper'       => ' ',
         ],
     ],
     'country' => [
