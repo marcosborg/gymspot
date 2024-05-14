@@ -18,7 +18,14 @@ class SpotApiController extends Controller
 
     public function index()
     {
-        return new SpotResource(Spot::with(['location', 'country'])->get());
+        if (request()->query('limit')) {
+            $limit = request()->query('limit');
+            $spots = new SpotResource(Spot::with(['location', 'country'])->inRandomOrder()->limit($limit)->get());
+        } else {
+            $spots = new SpotResource(Spot::with(['location', 'country'])->inRandomOrder()->get());
+        }
+
+        return $spots;
     }
 
     public function store(StoreSpotRequest $request)
@@ -45,14 +52,14 @@ class SpotApiController extends Controller
 
         if (count($spot->photos) > 0) {
             foreach ($spot->photos as $media) {
-                if (! in_array($media->file_name, $request->input('photos', []))) {
+                if (!in_array($media->file_name, $request->input('photos', []))) {
                     $media->delete();
                 }
             }
         }
         $media = $spot->photos->pluck('file_name')->toArray();
         foreach ($request->input('photos', []) as $file) {
-            if (count($media) === 0 || ! in_array($file, $media)) {
+            if (count($media) === 0 || !in_array($file, $media)) {
                 $spot->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
             }
         }

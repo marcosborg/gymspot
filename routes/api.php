@@ -120,4 +120,8 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
         Route::get('month/{year?}/{month?}', 'CalendarController@month');
         Route::post('day', 'CalendarController@day');
     });
+
+    // Personal Trainer
+    Route::post('personal-trainers/media', 'PersonalTrainerApiController@storeMedia')->name('personal-trainers.storeMedia');
+    Route::apiResource('personal-trainers', 'PersonalTrainerApiController');
 });

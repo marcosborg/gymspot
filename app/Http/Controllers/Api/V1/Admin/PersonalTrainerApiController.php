@@ -18,9 +18,17 @@ class PersonalTrainerApiController extends Controller
 
     public function index()
     {
-        abort_if(Gate::denies('personal_trainer_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PersonalTrainerResource(PersonalTrainer::with(['spots'])->get());
+        if(request()->query('limit')){
+            $limit = request()->query('limit');
+            $personal_trainers = new PersonalTrainerResource(PersonalTrainer::with(['spots'])->inRandomOrder()->limit($limit)->get());
+        } else {
+            $personal_trainers = new PersonalTrainerResource(PersonalTrainer::with(['spots'])->inRandomOrder()->get());
+        }
+
+        
+
+        return $personal_trainers;
     }
 
     public function store(StorePersonalTrainerRequest $request)
@@ -38,7 +46,7 @@ class PersonalTrainerApiController extends Controller
 
     public function show(PersonalTrainer $personalTrainer)
     {
-        abort_if(Gate::denies('personal_trainer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('personal_trainer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new PersonalTrainerResource($personalTrainer->load(['spots']));
     }
