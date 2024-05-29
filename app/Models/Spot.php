@@ -33,6 +33,8 @@ class Spot extends Model implements HasMedia
         'zip',
         'location_id',
         'country_id',
+        'price',
+        'capacity',
         'email',
         'phone',
         'created_at',

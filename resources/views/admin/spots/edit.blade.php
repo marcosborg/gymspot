@@ -79,6 +79,26 @@
                 <span class="help-block">{{ trans('cruds.spot.fields.country_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="price">{{ trans('cruds.spot.fields.price') }}</label>
+                <input class="form-control {{ $errors->has('price') ? 'is-invalid' : '' }}" type="number" name="price" id="price" value="{{ old('price', $spot->price) }}" step="0.01" required>
+                @if($errors->has('price'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('price') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.spot.fields.price_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="capacity">{{ trans('cruds.spot.fields.capacity') }}</label>
+                <input class="form-control {{ $errors->has('capacity') ? 'is-invalid' : '' }}" type="number" name="capacity" id="capacity" value="{{ old('capacity', $spot->capacity) }}" step="1" required>
+                @if($errors->has('capacity'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('capacity') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.spot.fields.capacity_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="email">{{ trans('cruds.spot.fields.email') }}</label>
                 <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="text" name="email" id="email" value="{{ old('email', $spot->email) }}">
                 @if($errors->has('email'))

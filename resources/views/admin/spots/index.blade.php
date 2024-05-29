@@ -40,6 +40,12 @@
                         {{ trans('cruds.spot.fields.country') }}
                     </th>
                     <th>
+                        {{ trans('cruds.spot.fields.price') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.spot.fields.capacity') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.spot.fields.email') }}
                     </th>
                     <th>
@@ -82,6 +88,12 @@
                                 <option value="{{ $item->name }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -152,6 +164,8 @@
 { data: 'zip', name: 'zip' },
 { data: 'location_title', name: 'location.title' },
 { data: 'country_name', name: 'country.name' },
+{ data: 'price', name: 'price' },
+{ data: 'capacity', name: 'capacity' },
 { data: 'email', name: 'email' },
 { data: 'phone', name: 'phone' },
 { data: 'photos', name: 'photos', sortable: false, searchable: false },

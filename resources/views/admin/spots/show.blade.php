@@ -73,6 +73,22 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.spot.fields.price') }}
+                        </th>
+                        <td>
+                            {{ $spot->price }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.spot.fields.capacity') }}
+                        </th>
+                        <td>
+                            {{ $spot->capacity }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.spot.fields.email') }}
                         </th>
                         <td>

@@ -33,6 +33,15 @@ class UpdateSpotRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'price' => [
+                'required',
+            ],
+            'capacity' => [
+                'required',
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
             'email' => [
                 'string',
                 'nullable',

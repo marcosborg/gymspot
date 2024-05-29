@@ -66,6 +66,13 @@ class SpotController extends Controller
                 return $row->country ? $row->country->name : '';
             });
 
+            $table->editColumn('price', function ($row) {
+                return $row->price ? $row->price : '';
+            });
+            $table->editColumn('capacity', function ($row) {
+                return $row->capacity ? $row->capacity : '';
+            });
+
             $table->editColumn('email', function ($row) {
                 return $row->email ? $row->email : '';
             });

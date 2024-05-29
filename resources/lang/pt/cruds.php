@@ -325,6 +325,10 @@ return [
             'deleted_at_helper'  => ' ',
             'location'           => 'Location',
             'location_helper'    => ' ',
+            'price'              => 'Price',
+            'price_helper'       => '(30 minutos)',
+            'capacity'           => 'Capacity',
+            'capacity_helper'    => '(utilizadores em simultâneo)',
         ],
     ],
     'slot' => [
