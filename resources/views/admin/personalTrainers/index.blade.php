@@ -52,6 +52,12 @@
                         {{ trans('cruds.personalTrainer.fields.spots') }}
                     </th>
                     <th>
+                        {{ trans('cruds.personalTrainer.fields.price') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.personalTrainer.fields.professional_certificate') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -117,6 +123,8 @@
 { data: 'tiktok', name: 'tiktok' },
 { data: 'photos', name: 'photos', sortable: false, searchable: false },
 { data: 'spots', name: 'spots.name' },
+{ data: 'price', name: 'price' },
+{ data: 'professional_certificate', name: 'professional_certificate' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

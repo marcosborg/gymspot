@@ -577,6 +577,10 @@ return [
             'updated_at_helper'  => ' ',
             'deleted_at'         => 'Deleted at',
             'deleted_at_helper'  => ' ',
+            'price'                           => 'Price',
+            'price_helper'                    => '(preço horário)',
+            'professional_certificate'        => 'Professional certificate',
+            'professional_certificate_helper' => ' ',
         ],
     ],
 

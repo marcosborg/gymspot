@@ -50,6 +50,13 @@ class StorePersonalTrainerRequest extends FormRequest
             'spots' => [
                 'array',
             ],
+            'price' => [
+                'required',
+            ],
+            'professional_certificate' => [
+                'string',
+                'required',
+            ],
         ];
     }
 }

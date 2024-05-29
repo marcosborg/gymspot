@@ -35,6 +35,8 @@ class PersonalTrainer extends Model implements HasMedia
         'linkedin',
         'tiktok',
         'description',
+        'price',
+        'professional_certificate',
         'created_at',
         'updated_at',
         'deleted_at',

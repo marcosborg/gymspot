@@ -89,6 +89,13 @@ class PersonalTrainerController extends Controller
                 return implode(' ', $labels);
             });
 
+            $table->editColumn('price', function ($row) {
+                return $row->price ? $row->price : '';
+            });
+            $table->editColumn('professional_certificate', function ($row) {
+                return $row->professional_certificate ? $row->professional_certificate : '';
+            });
+
             $table->rawColumns(['actions', 'placeholder', 'photos', 'spots']);
 
             return $table->make(true);
