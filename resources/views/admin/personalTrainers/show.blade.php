@@ -109,6 +109,30 @@
                             @endforeach
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.personalTrainer.fields.price') }}
+                        </th>
+                        <td>
+                            {{ $personalTrainer->price }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.personalTrainer.fields.professional_certificate') }}
+                        </th>
+                        <td>
+                            {{ $personalTrainer->professional_certificate }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.personalTrainer.fields.expiration') }}
+                        </th>
+                        <td>
+                            {{ $personalTrainer->expiration }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

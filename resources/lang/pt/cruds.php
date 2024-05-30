@@ -581,6 +581,8 @@ return [
             'price_helper'                    => '(preço horário)',
             'professional_certificate'        => 'Professional certificate',
             'professional_certificate_helper' => ' ',
+            'expiration'                      => 'Expiration',
+            'expiration_helper'               => ' ',
         ],
     ],
 

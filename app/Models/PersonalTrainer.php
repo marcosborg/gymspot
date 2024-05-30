@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,7 @@ class PersonalTrainer extends Model implements HasMedia
         'description',
         'price',
         'professional_certificate',
+        'expiration',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -68,5 +70,10 @@ class PersonalTrainer extends Model implements HasMedia
     public function spots()
     {
         return $this->belongsToMany(Spot::class);
+    }
+
+    public function setExpirationAttribute($value)
+    {
+        $this->attributes['expiration'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
     }
 }

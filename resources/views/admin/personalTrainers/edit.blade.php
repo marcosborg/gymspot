@@ -140,6 +140,16 @@
                 <span class="help-block">{{ trans('cruds.personalTrainer.fields.professional_certificate_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="expiration">{{ trans('cruds.personalTrainer.fields.expiration') }}</label>
+                <input class="form-control date {{ $errors->has('expiration') ? 'is-invalid' : '' }}" type="text" name="expiration" id="expiration" value="{{ old('expiration', $personalTrainer->expiration) }}" required>
+                @if($errors->has('expiration'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('expiration') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.personalTrainer.fields.expiration_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

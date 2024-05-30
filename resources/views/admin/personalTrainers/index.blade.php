@@ -58,6 +58,9 @@
                         {{ trans('cruds.personalTrainer.fields.professional_certificate') }}
                     </th>
                     <th>
+                        {{ trans('cruds.personalTrainer.fields.expiration') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -125,6 +128,7 @@
 { data: 'spots', name: 'spots.name' },
 { data: 'price', name: 'price' },
 { data: 'professional_certificate', name: 'professional_certificate' },
+{ data: 'expiration', name: 'expiration' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

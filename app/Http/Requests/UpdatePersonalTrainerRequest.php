@@ -57,6 +57,10 @@ class UpdatePersonalTrainerRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'expiration' => [
+                'required',
+                'date_format:' . config('panel.date_format'),
+            ],
         ];
     }
 }
