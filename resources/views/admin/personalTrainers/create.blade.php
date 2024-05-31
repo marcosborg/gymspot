@@ -129,6 +129,21 @@
                 <span class="help-block">{{ trans('cruds.personalTrainer.fields.price_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required">{{ trans('cruds.personalTrainer.fields.certificate_type') }}</label>
+                @foreach(App\Models\PersonalTrainer::CERTIFICATE_TYPE_RADIO as $key => $label)
+                    <div class="form-check {{ $errors->has('certificate_type') ? 'is-invalid' : '' }}">
+                        <input class="form-check-input" type="radio" id="certificate_type_{{ $key }}" name="certificate_type" value="{{ $key }}" {{ old('certificate_type', 'tef') === (string) $key ? 'checked' : '' }} required>
+                        <label class="form-check-label" for="certificate_type_{{ $key }}">{{ $label }}</label>
+                    </div>
+                @endforeach
+                @if($errors->has('certificate_type'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('certificate_type') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.personalTrainer.fields.certificate_type_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="professional_certificate">{{ trans('cruds.personalTrainer.fields.professional_certificate') }}</label>
                 <input class="form-control {{ $errors->has('professional_certificate') ? 'is-invalid' : '' }}" type="text" name="professional_certificate" id="professional_certificate" value="{{ old('professional_certificate', '') }}" required>
                 @if($errors->has('professional_certificate'))

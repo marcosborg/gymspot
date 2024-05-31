@@ -27,6 +27,12 @@ class PersonalTrainer extends Model implements HasMedia
         'deleted_at',
     ];
 
+    public const CERTIFICATE_TYPE_RADIO = [
+        'tef'   => 'TEF - Técnico de exercício físico',
+        'dt'    => 'DT - DIretor técnico',
+        'other' => 'Outro',
+    ];
+
     protected $fillable = [
         'name',
         'email',
@@ -37,6 +43,7 @@ class PersonalTrainer extends Model implements HasMedia
         'tiktok',
         'description',
         'price',
+        'certificate_type',
         'professional_certificate',
         'expiration',
         'created_at',

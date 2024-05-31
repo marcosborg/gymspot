@@ -92,6 +92,10 @@ class PersonalTrainerController extends Controller
             $table->editColumn('price', function ($row) {
                 return $row->price ? $row->price : '';
             });
+
+            $table->editColumn('certificate_type', function ($row) {
+                return $row->certificate_type ? PersonalTrainer::CERTIFICATE_TYPE_RADIO[$row->certificate_type] : '';
+            });
             $table->editColumn('professional_certificate', function ($row) {
                 return $row->professional_certificate ? $row->professional_certificate : '';
             });

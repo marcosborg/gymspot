@@ -55,6 +55,9 @@
                         {{ trans('cruds.personalTrainer.fields.price') }}
                     </th>
                     <th>
+                        {{ trans('cruds.personalTrainer.fields.certificate_type') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.personalTrainer.fields.professional_certificate') }}
                     </th>
                     <th>
@@ -127,6 +130,7 @@
 { data: 'photos', name: 'photos', sortable: false, searchable: false },
 { data: 'spots', name: 'spots.name' },
 { data: 'price', name: 'price' },
+{ data: 'certificate_type', name: 'certificate_type' },
 { data: 'professional_certificate', name: 'professional_certificate' },
 { data: 'expiration', name: 'expiration' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }

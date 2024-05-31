@@ -583,6 +583,8 @@ return [
             'professional_certificate_helper' => ' ',
             'expiration'                      => 'Expiration',
             'expiration_helper'               => ' ',
+            'certificate_type'                => 'Certificate Type',
+            'certificate_type_helper'         => ' ',
         ],
     ],
 

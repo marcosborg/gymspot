@@ -53,6 +53,9 @@ class StorePersonalTrainerRequest extends FormRequest
             'price' => [
                 'required',
             ],
+            'certificate_type' => [
+                'required',
+            ],
             'professional_certificate' => [
                 'string',
                 'required',
