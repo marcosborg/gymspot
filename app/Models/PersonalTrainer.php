@@ -28,8 +28,8 @@ class PersonalTrainer extends Model implements HasMedia
     ];
 
     public const CERTIFICATE_TYPE_RADIO = [
-        'tef'   => 'TEF - Técnico de exercício físico',
-        'dt'    => 'DT - DIretor técnico',
+        'tef'   => 'TEF - Técnico de Exercício Físico',
+        'dt'    => 'DT - Diretor Técnico',
         'other' => 'Outro',
     ];
 
