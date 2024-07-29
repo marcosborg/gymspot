@@ -129,6 +129,24 @@
                 <span class="help-block">{{ trans('cruds.spot.fields.photos_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="items">{{ trans('cruds.spot.fields.item') }}</label>
+                <div style="padding-bottom: 4px">
+                    <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
+                    <span class="btn btn-info btn-xs deselect-all" style="border-radius: 0">{{ trans('global.deselect_all') }}</span>
+                </div>
+                <select class="form-control select2 {{ $errors->has('items') ? 'is-invalid' : '' }}" name="items[]" id="items" multiple>
+                    @foreach($items as $id => $item)
+                        <option value="{{ $id }}" {{ in_array($id, old('items', [])) ? 'selected' : '' }}>{{ $item }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('items'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('items') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.spot.fields.item_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

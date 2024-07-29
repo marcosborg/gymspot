@@ -10,14 +10,14 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Spot extends Model implements HasMedia
+class Item extends Model implements HasMedia
 {
     use SoftDeletes, InteractsWithMedia, HasFactory;
 
-    public $table = 'spots';
+    public $table = 'items';
 
     protected $appends = [
-        'photos',
+        'icon',
     ];
 
     protected $dates = [
@@ -28,15 +28,6 @@ class Spot extends Model implements HasMedia
 
     protected $fillable = [
         'name',
-        'description',
-        'address',
-        'zip',
-        'location_id',
-        'country_id',
-        'price',
-        'capacity',
-        'email',
-        'phone',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -53,30 +44,15 @@ class Spot extends Model implements HasMedia
         $this->addMediaConversion('preview')->fit('crop', 120, 120);
     }
 
-    public function location()
+    public function getIconAttribute()
     {
-        return $this->belongsTo(Location::class, 'location_id');
-    }
+        $file = $this->getMedia('icon')->last();
+        if ($file) {
+            $file->url       = $file->getUrl();
+            $file->thumbnail = $file->getUrl('thumb');
+            $file->preview   = $file->getUrl('preview');
+        }
 
-    public function country()
-    {
-        return $this->belongsTo(Country::class, 'country_id');
-    }
-
-    public function getPhotosAttribute()
-    {
-        $files = $this->getMedia('photos');
-        $files->each(function ($item) {
-            $item->url       = $item->getUrl();
-            $item->thumbnail = $item->getUrl('thumb');
-            $item->preview   = $item->getUrl('preview');
-        });
-
-        return $files;
-    }
-
-    public function items()
-    {
-        return $this->belongsToMany(Item::class);
+        return $file;
     }
 }

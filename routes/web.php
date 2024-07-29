@@ -132,6 +132,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('personal-trainers/ckmedia', 'PersonalTrainerController@storeCKEditorImages')->name('personal-trainers.storeCKEditorImages');
     Route::resource('personal-trainers', 'PersonalTrainerController');
 
+    // Items
+    Route::delete('items/destroy', 'ItemsController@massDestroy')->name('items.massDestroy');
+    Route::post('items/media', 'ItemsController@storeMedia')->name('items.storeMedia');
+    Route::post('items/ckmedia', 'ItemsController@storeCKEditorImages')->name('items.storeCKEditorImages');
+    Route::resource('items', 'ItemsController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

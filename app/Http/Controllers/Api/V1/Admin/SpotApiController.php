@@ -31,7 +31,7 @@ class SpotApiController extends Controller
     public function store(StoreSpotRequest $request)
     {
         $spot = Spot::create($request->all());
-
+        $spot->items()->sync($request->input('items', []));
         foreach ($request->input('photos', []) as $file) {
             $spot->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
         }
@@ -43,13 +43,13 @@ class SpotApiController extends Controller
 
     public function show(Spot $spot)
     {
-        return new SpotResource($spot->load(['location', 'country']));
+        return new SpotResource($spot->load(['location', 'country', 'items']));
     }
 
     public function update(UpdateSpotRequest $request, Spot $spot)
     {
         $spot->update($request->all());
-
+        $spot->items()->sync($request->input('items', []));
         if (count($spot->photos) > 0) {
             foreach ($spot->photos as $media) {
                 if (!in_array($media->file_name, $request->input('photos', []))) {

@@ -9,6 +9,7 @@ use App\Http\Requests\StoreSpotRequest;
 use App\Http\Requests\UpdateSpotRequest;
 use App\Models\Country;
 use App\Models\Location;
+use App\Models\Item;
 use App\Models\Spot;
 use Gate;
 use Illuminate\Http\Request;
@@ -91,15 +92,25 @@ class SpotController extends Controller
                 return implode(' ', $links);
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'location', 'country', 'photos']);
+            $table->editColumn('item', function ($row) {
+                $labels = [];
+                foreach ($row->items as $item) {
+                    $labels[] = sprintf('<span class="label label-info label-many">%s</span>', $item->name);
+                }
+
+                return implode(' ', $labels);
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'location', 'country', 'photos', 'item']);
 
             return $table->make(true);
         }
 
         $locations = Location::get();
         $countries = Country::get();
+        $items     = Item::get();
 
-        return view('admin.spots.index', compact('locations', 'countries'));
+        return view('admin.spots.index', compact('locations', 'countries', 'items'));
     }
 
     public function create()
@@ -110,13 +121,15 @@ class SpotController extends Controller
 
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.spots.create', compact('countries', 'locations'));
+        $items = Item::pluck('name', 'id');
+
+        return view('admin.spots.create', compact('countries', 'locations', 'items'));
     }
 
     public function store(StoreSpotRequest $request)
     {
         $spot = Spot::create($request->all());
-
+        $spot->items()->sync($request->input('items', []));
         foreach ($request->input('photos', []) as $file) {
             $spot->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('photos');
         }
@@ -136,15 +149,17 @@ class SpotController extends Controller
 
         $countries = Country::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $spot->load('location', 'country');
+        $items = Item::pluck('name', 'id');
 
-        return view('admin.spots.edit', compact('countries', 'locations', 'spot'));
+        $spot->load('location', 'country', 'items');
+
+        return view('admin.spots.edit', compact('countries', 'locations', 'spot', 'items'));
     }
 
     public function update(UpdateSpotRequest $request, Spot $spot)
     {
         $spot->update($request->all());
-
+        $spot->items()->sync($request->input('items', []));
         if (count($spot->photos) > 0) {
             foreach ($spot->photos as $media) {
                 if (! in_array($media->file_name, $request->input('photos', []))) {
@@ -166,7 +181,7 @@ class SpotController extends Controller
     {
         abort_if(Gate::denies('spot_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $spot->load('location', 'country');
+        $spot->load('location', 'country', 'items');
 
         return view('admin.spots.show', compact('spot'));
     }

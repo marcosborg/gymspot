@@ -55,6 +55,9 @@
                         {{ trans('cruds.spot.fields.photos') }}
                     </th>
                     <th>
+                        {{ trans('cruds.spot.fields.item') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -102,6 +105,14 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($items as $key => $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                     </td>
@@ -169,6 +180,7 @@
 { data: 'email', name: 'email' },
 { data: 'phone', name: 'phone' },
 { data: 'photos', name: 'photos', sortable: false, searchable: false },
+{ data: 'item', name: 'items.name' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

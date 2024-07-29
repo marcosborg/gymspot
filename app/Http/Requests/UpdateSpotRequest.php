@@ -53,6 +53,12 @@ class UpdateSpotRequest extends FormRequest
             'photos' => [
                 'array',
             ],
+            'items.*' => [
+                'integer',
+            ],
+            'items' => [
+                'array',
+            ],
         ];
     }
 }

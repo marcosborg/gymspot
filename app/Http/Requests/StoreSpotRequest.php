@@ -53,6 +53,12 @@ class StoreSpotRequest extends FormRequest
             'photos' => [
                 'array',
             ],
+            'items.*' => [
+                'integer',
+            ],
+            'items' => [
+                'array',
+            ],
         ];
     }
 }

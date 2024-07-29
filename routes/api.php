@@ -82,6 +82,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Personal Trainer
     Route::post('personal-trainers/media', 'PersonalTrainerApiController@storeMedia')->name('personal-trainers.storeMedia');
     Route::apiResource('personal-trainers', 'PersonalTrainerApiController');
+
+    // Items
+    Route::post('items/media', 'ItemsApiController@storeMedia')->name('items.storeMedia');
+    Route::apiResource('items', 'ItemsApiController');
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
