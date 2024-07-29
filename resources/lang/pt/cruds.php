@@ -607,5 +607,31 @@ return [
             'deleted_at_helper' => ' ',
         ],
     ],
+    'rentedSlotMenu' => [
+        'title'          => 'Rented Slot',
+        'title_singular' => 'Rented Slot',
+    ],
+    'rentedSlot' => [
+        'title'          => 'Rented Slot',
+        'title_singular' => 'Rented Slot',
+        'fields'         => [
+            'id'                     => 'ID',
+            'id_helper'              => ' ',
+            'spot'                   => 'Spot',
+            'spot_helper'            => ' ',
+            'start_date_time'        => 'Start datetime',
+            'start_date_time_helper' => ' ',
+            'end_date_time'          => 'End Date Time',
+            'end_date_time_helper'   => ' ',
+            'client'                 => 'Client',
+            'client_helper'          => ' ',
+            'created_at'             => 'Created at',
+            'created_at_helper'      => ' ',
+            'updated_at'             => 'Updated at',
+            'updated_at_helper'      => ' ',
+            'deleted_at'             => 'Deleted at',
+            'deleted_at_helper'      => ' ',
+        ],
+    ],
 
 ];

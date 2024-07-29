@@ -138,6 +138,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::post('items/ckmedia', 'ItemsController@storeCKEditorImages')->name('items.storeCKEditorImages');
     Route::resource('items', 'ItemsController');
 
+    // Rented Slot
+    Route::delete('rented-slots/destroy', 'RentedSlotController@massDestroy')->name('rented-slots.massDestroy');
+    Route::resource('rented-slots', 'RentedSlotController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

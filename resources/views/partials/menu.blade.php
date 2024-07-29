@@ -313,6 +313,28 @@
                 </a>
             </li>
         @endcan
+        @can('rented_slot_menu_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/rented-slots*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-calendar-alt c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.rentedSlotMenu.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('rented_slot_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.rented-slots.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/rented-slots") || request()->is("admin/rented-slots/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-calendar c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.rentedSlot.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">
