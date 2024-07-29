@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use \Carbon\Carbon;
 use \App\Models\Spot;
+use App\Models\RentedSlot;
 
 class CalendarController extends Controller
 {
@@ -47,7 +48,7 @@ class CalendarController extends Controller
             if ($date->toDateString() === $today->toDateString()) {
                 $status = 'active';
             } elseif ($date->lt($today)) {
-                $status = 'inactive'; //
+                $status = 'inactive';
             } else {
                 $status = $date->month === $currentMonth ? 'active' : 'inactive';
             }
@@ -86,7 +87,7 @@ class CalendarController extends Controller
 
         $inputDate = Carbon::createFromDate($year, $currentMonth, $dayNumber)->startOfDay();
 
-        $slots = $this->generateDaySlots($inputDate);
+        $slots = $this->generateDaySlots($spot_id, $inputDate);
 
         // Calculando o próximo dia
         $nextDay = $inputDate->copy()->addDay();
@@ -112,20 +113,30 @@ class CalendarController extends Controller
         return $day;
     }
 
-
-
-    private function generateDaySlots(Carbon $day)
+    private function generateDaySlots($spot_id, Carbon $day)
     {
-        $slots = [];
+        $rented_slots = RentedSlot::where('spot_id', $spot_id)
+            ->whereDate('start_date_time', $day->format('Y-m-d'))
+            ->get();
 
+        $slots = [];
         $startSlot = $day->copy()->startOfDay();
 
         for ($slot = 0; $slot < 48; $slot++) {
             $endSlot = $startSlot->copy()->addMinutes(30);
 
+            $isOccupied = $rented_slots->contains(function ($rentedSlot) use ($startSlot, $endSlot) {
+                $rentedStart = Carbon::parse($rentedSlot->start_date_time);
+                $rentedEnd = Carbon::parse($rentedSlot->end_date_time);
+                return ($startSlot->lt($rentedEnd) && $endSlot->gt($rentedStart));
+            });
+
             $slots[] = [
                 'start' => $startSlot->format('H:i'),
                 'end' => $endSlot->format('H:i'),
+                'timestamp' => $startSlot->format('Y-m-d H:i:s'),
+                'spot_id' => $spot_id,
+                'state' => $isOccupied ? 'occupied' : 'free'
             ];
 
             $startSlot->addMinutes(30);
@@ -133,6 +144,4 @@ class CalendarController extends Controller
 
         return $slots;
     }
-
-
 }
