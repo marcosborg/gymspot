@@ -48,9 +48,9 @@ class CalendarController extends Controller
             if ($date->toDateString() === $today->toDateString()) {
                 $status = 'active';
             } elseif ($date->lt($today)) {
-                $status = 'inactive';
+                $status = 'occupied';
             } else {
-                $status = $date->month === $currentMonth ? 'active' : 'inactive';
+                $status = $date->month === $currentMonth ? 'active' : 'occupied';
             }
 
             $daysWithWeekday[] = [
@@ -121,22 +121,33 @@ class CalendarController extends Controller
 
         $slots = [];
         $startSlot = $day->copy()->startOfDay();
+        $now = Carbon::now();
+
+        // Arredondar a hora atual para a próxima meia hora
+        $roundedNow = $now->copy()->addMinutes(90 - ($now->minute % 30))->second(0);
 
         for ($slot = 0; $slot < 48; $slot++) {
             $endSlot = $startSlot->copy()->addMinutes(30);
 
-            $isOccupied = $rented_slots->contains(function ($rentedSlot) use ($startSlot, $endSlot) {
-                $rentedStart = Carbon::parse($rentedSlot->start_date_time);
-                $rentedEnd = Carbon::parse($rentedSlot->end_date_time);
-                return ($startSlot->lt($rentedEnd) && $endSlot->gt($rentedStart));
-            });
+            // Verificar se o slot é antes da hora arredondada atual
+            if ($endSlot->lt($roundedNow)) {
+                $state = 'occupied';
+            } else {
+                $isOccupied = $rented_slots->contains(function ($rentedSlot) use ($startSlot, $endSlot) {
+                    $rentedStart = Carbon::parse($rentedSlot->start_date_time);
+                    $rentedEnd = Carbon::parse($rentedSlot->end_date_time);
+                    return ($startSlot->lt($rentedEnd) && $endSlot->gt($rentedStart));
+                });
+
+                $state = $isOccupied ? 'occupied' : 'free';
+            }
 
             $slots[] = [
                 'start' => $startSlot->format('H:i'),
                 'end' => $endSlot->format('H:i'),
                 'timestamp' => $startSlot->format('Y-m-d H:i:s'),
                 'spot_id' => $spot_id,
-                'state' => $isOccupied ? 'occupied' : 'free'
+                'state' => $state
             ];
 
             $startSlot->addMinutes(30);
