@@ -115,6 +115,9 @@ class CalendarController extends Controller
 
     private function generateDaySlots($spot_id, Carbon $day)
     {
+
+        $spot = Spot::find($spot_id);
+
         $rented_slots = RentedSlot::where('spot_id', $spot_id)
             ->whereDate('start_date_time', $day->format('Y-m-d'))
             ->get();
@@ -146,7 +149,7 @@ class CalendarController extends Controller
                 'start' => $startSlot->format('H:i'),
                 'end' => $endSlot->format('H:i'),
                 'timestamp' => $startSlot->format('Y-m-d H:i:s'),
-                'spot_id' => $spot_id,
+                'spot' => $spot,
                 'state' => $state
             ];
 
