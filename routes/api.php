@@ -123,7 +123,7 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     // Spot
     Route::apiResource('spots', 'SpotApiController');
 
-    Route::prefix('calendar')->group(function(){
+    Route::prefix('calendar')->group(function () {
         Route::get('month/{year?}/{month?}', 'CalendarController@month');
         Route::post('day', 'CalendarController@day');
     });
@@ -131,4 +131,8 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     // Personal Trainer
     Route::post('personal-trainers/media', 'PersonalTrainerApiController@storeMedia')->name('personal-trainers.storeMedia');
     Route::apiResource('personal-trainers', 'PersonalTrainerApiController');
+
 });
+
+Route::post('register', 'Api\AuthController@register');
+Route::post('login', 'Api\AuthController@login');
