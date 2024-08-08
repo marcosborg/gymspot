@@ -13,9 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Client;
 use App\Models\PersonalTrainer;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class UsersApiController extends Controller
 {
+
+    use InteractsWithMedia;
+
     public function index()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -238,5 +242,10 @@ class UsersApiController extends Controller
         }
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function deletePhoto($photo_id)
+    {
+        return $this->deleteMedia($photo_id);
     }
 }
