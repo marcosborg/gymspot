@@ -192,15 +192,24 @@ class UsersApiController extends Controller
         $personal_trainer = PersonalTrainer::find($request->personal_trainer_id);
 
         if ($personal_trainer && $request->has('profile_photo')) {
+            // Remove existing profile photo if it exists
+            $mediaItems = $personal_trainer->getMedia('photos');
+            if ($mediaItems->isNotEmpty()) {
+                $mediaItems[0]->delete();
+            }
+
             $profilePhoto = $request->input('profile_photo');
 
+            // Remove the 'data:image/jpeg;base64,' part if it exists
             $profilePhoto = str_replace('data:image/jpeg;base64,', '', $profilePhoto);
             $profilePhoto = str_replace(' ', '+', $profilePhoto);
             $photoName = 'profile_' . time() . '.jpg';
             $filePath = 'public/profile_photos/' . $photoName;
 
+            // Save the decoded base64 image to the storage
             Storage::disk('local')->put($filePath, base64_decode($profilePhoto));
 
+            // Add the photo to the media library
             $personal_trainer->addMedia(storage_path('app/' . $filePath))->toMediaCollection('photos');
         }
 
