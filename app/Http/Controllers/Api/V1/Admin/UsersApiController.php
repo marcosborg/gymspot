@@ -221,17 +221,17 @@ class UsersApiController extends Controller
     {
         $personal_trainer = PersonalTrainer::find($request->personal_trainer_id);
 
-        if ($personal_trainer && $request->has('profile_photo')) {
-            $profilePhoto = $request->input('profile_photo');
+        if ($personal_trainer && $request->has('photo')) {
+            $photo = $request->input('photo');
 
             // Remove the 'data:image/jpeg;base64,' part if it exists
-            $profilePhoto = str_replace('data:image/jpeg;base64,', '', $profilePhoto);
-            $profilePhoto = str_replace(' ', '+', $profilePhoto);
+            $photo = str_replace('data:image/jpeg;base64,', '', $photo);
+            $photo = str_replace(' ', '+', $photo);
             $photoName = 'profile_' . time() . '.jpg';
             $filePath = 'public/profile_photos/' . $photoName;
 
             // Save the decoded base64 image to the storage
-            Storage::disk('local')->put($filePath, base64_decode($profilePhoto));
+            Storage::disk('local')->put($filePath, base64_decode($photo));
 
             // Add the photo to the media library
             $personal_trainer->addMedia(storage_path('app/' . $filePath))->toMediaCollection('photos');
