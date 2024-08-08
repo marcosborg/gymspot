@@ -15,7 +15,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::post('update-professional-data', 'UsersApiController@updateProfessionalData');
     Route::post('save-profile-photo', 'UsersApiController@saveProfilePhoto');
     Route::post('save-other-photo', 'UsersApiController@saveOtherPhoto');
-    Route::post('delete-photo', 'UsersApiController@deletePhoto');
+    Route::post('delete-photo/{photo_id}', 'UsersApiController@deletePhoto');
 
     // Content Category
     Route::apiResource('content-categories', 'ContentCategoryApiController');
