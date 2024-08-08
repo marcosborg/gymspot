@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\Client;
 use App\Models\PersonalTrainer;
+use Illuminate\Support\Facades\Storage;
 
 class UsersApiController extends Controller
 {
@@ -183,5 +184,27 @@ class UsersApiController extends Controller
             $personal_trainer->spots()->sync($request->input('spots', []));
         }
         return $personal_trainer;
+    }
+
+    public function saveProfilePhoto(Request $request)
+    {
+
+        $personal_trainer = PersonalTrainer::find($request->personal_trainer_id);
+
+        if ($personal_trainer && $request->has('profile_photo')) {
+            $profilePhoto = $request->input('profile_photo');
+
+            $profilePhoto = str_replace('data:image/jpeg;base64,', '', $profilePhoto);
+            $profilePhoto = str_replace(' ', '+', $profilePhoto);
+            $photoName = 'profile_' . time() . '.jpg';
+            $filePath = 'public/profile_photos/' . $photoName;
+
+            Storage::disk('local')->put($filePath, base64_decode($profilePhoto));
+
+            $personal_trainer->addMedia(storage_path('app/' . $filePath))->toMediaCollection('photos');
+        }
+
+        return response()->json(['status' => 'success']);
+
     }
 }
