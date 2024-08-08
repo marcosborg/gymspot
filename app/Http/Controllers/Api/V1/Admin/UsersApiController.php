@@ -13,9 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Client;
 use App\Models\PersonalTrainer;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class UsersApiController extends Controller
+class UsersApiController extends Controller implements HasMedia
 {
 
     use InteractsWithMedia;
