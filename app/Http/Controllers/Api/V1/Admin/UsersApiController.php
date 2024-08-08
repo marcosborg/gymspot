@@ -13,10 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Client;
 use App\Models\PersonalTrainer;
 use Illuminate\Support\Facades\Storage;
-use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class UsersApiController extends Controller implements HasMedia
+class UsersApiController extends Controller
 {
 
     use InteractsWithMedia;
@@ -247,6 +247,15 @@ class UsersApiController extends Controller implements HasMedia
 
     public function deletePhoto($photo_id)
     {
-        return $this->deleteMedia($photo_id);
+        // Find the media item by ID
+        $mediaItem = Media::find($photo_id);
+
+        if ($mediaItem) {
+            // Delete the media item
+            $mediaItem->delete();
+            return response()->json(['status' => 'success', 'message' => 'Photo deleted successfully']);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'Photo not found'], 404);
     }
 }
