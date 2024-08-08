@@ -46,6 +46,7 @@ class PersonalTrainer extends Model implements HasMedia
         'certificate_type',
         'professional_certificate',
         'expiration',
+        'user_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -82,5 +83,10 @@ class PersonalTrainer extends Model implements HasMedia
     public function setExpirationAttribute($value)
     {
         $this->attributes['expiration'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

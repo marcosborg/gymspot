@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\User;
 
 class PersonalTrainerController extends Controller
 {
@@ -100,7 +101,11 @@ class PersonalTrainerController extends Controller
                 return $row->professional_certificate ? $row->professional_certificate : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'photos', 'spots']);
+            $table->addColumn('user_name', function ($row) {
+                return $row->user ? $row->user->name : '';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'photos', 'spots', 'user']);
 
             return $table->make(true);
         }
@@ -114,7 +119,9 @@ class PersonalTrainerController extends Controller
 
         $spots = Spot::pluck('name', 'id');
 
-        return view('admin.personalTrainers.create', compact('spots'));
+        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.personalTrainers.create', compact('spots', 'users'));
     }
 
     public function store(StorePersonalTrainerRequest $request)
@@ -138,9 +145,11 @@ class PersonalTrainerController extends Controller
 
         $spots = Spot::pluck('name', 'id');
 
-        $personalTrainer->load('spots');
+        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.personalTrainers.edit', compact('personalTrainer', 'spots'));
+        $personalTrainer->load('spots', 'user');
+
+        return view('admin.personalTrainers.edit', compact('personalTrainer', 'spots', 'users'));
     }
 
     public function update(UpdatePersonalTrainerRequest $request, PersonalTrainer $personalTrainer)
@@ -168,7 +177,7 @@ class PersonalTrainerController extends Controller
     {
         abort_if(Gate::denies('personal_trainer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $personalTrainer->load('spots');
+        $personalTrainer->load('spots', 'user');
 
         return view('admin.personalTrainers.show', compact('personalTrainer'));
     }

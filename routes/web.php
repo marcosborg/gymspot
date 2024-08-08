@@ -12,6 +12,7 @@ Route::get('/home', function () {
 });
 
 Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
+Route::get('welcome', 'WebsiteController@welcome')->name('welcome');
 Auth::routes();
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']], function () {

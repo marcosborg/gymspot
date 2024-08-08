@@ -9,6 +9,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Users
     Route::apiResource('users', 'UsersApiController');
+    Route::get('user', 'UsersApiController@user');
+    Route::post('update-user', 'UsersApiController@updateUser');
+    Route::post('update-client', 'UsersApiController@updateClient');
+    Route::post('update-professional-data', 'UsersApiController@updateProfessionalData');
 
     // Content Category
     Route::apiResource('content-categories', 'ContentCategoryApiController');

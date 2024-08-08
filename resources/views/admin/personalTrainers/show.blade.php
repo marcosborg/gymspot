@@ -119,6 +119,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.personalTrainer.fields.certificate_type') }}
+                        </th>
+                        <td>
+                            {{ App\Models\PersonalTrainer::CERTIFICATE_TYPE_RADIO[$personalTrainer->certificate_type] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.personalTrainer.fields.professional_certificate') }}
                         </th>
                         <td>
@@ -131,6 +139,14 @@
                         </th>
                         <td>
                             {{ $personalTrainer->expiration }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.personalTrainer.fields.user') }}
+                        </th>
+                        <td>
+                            {{ $personalTrainer->user->name ?? '' }}
                         </td>
                     </tr>
                 </tbody>

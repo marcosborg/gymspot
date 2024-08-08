@@ -587,6 +587,8 @@ return [
             'expiration_helper'               => ' ',
             'certificate_type'                => 'Certificate Type',
             'certificate_type_helper'         => ' ',
+            'user'                            => 'User',
+            'user_helper'                     => ' ',
         ],
     ],
     'item' => [

@@ -21,9 +21,9 @@ class PersonalTrainerApiController extends Controller
 
         if(request()->query('limit')){
             $limit = request()->query('limit');
-            $personal_trainers = new PersonalTrainerResource(PersonalTrainer::with(['spots'])->inRandomOrder()->limit($limit)->get());
+            $personal_trainers = new PersonalTrainerResource(PersonalTrainer::with(['spots', 'user'])->inRandomOrder()->limit($limit)->get());
         } else {
-            $personal_trainers = new PersonalTrainerResource(PersonalTrainer::with(['spots'])->inRandomOrder()->get());
+            $personal_trainers = new PersonalTrainerResource(PersonalTrainer::with(['spots', 'user'])->inRandomOrder()->get());
         }
 
         
@@ -48,7 +48,7 @@ class PersonalTrainerApiController extends Controller
     {
         //abort_if(Gate::denies('personal_trainer_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PersonalTrainerResource($personalTrainer->load(['spots']));
+        return new PersonalTrainerResource($personalTrainer->load(['spots', 'user']));
     }
 
     public function update(UpdatePersonalTrainerRequest $request, PersonalTrainer $personalTrainer)

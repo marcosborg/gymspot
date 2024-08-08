@@ -18,4 +18,9 @@ class WebsiteController extends Controller
         
         return view('website.content_page', compact('content_page'));
     }
+
+    public function welcome()
+    {
+        return view('website.welcome');
+    }
 }

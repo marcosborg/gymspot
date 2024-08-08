@@ -124,4 +124,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function client()
+    {
+        return $this->hasOne(Client::class);
+    }
+
+    public function personal_trainer()
+    {
+        return $this->hasOne(PersonalTrainer::class);
+    }
 }
