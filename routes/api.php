@@ -1,6 +1,7 @@
 <?php
 
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
+    
     // Permissions
     Route::apiResource('permissions', 'PermissionsApiController');
 
@@ -96,6 +97,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Rented Slot
     Route::apiResource('rented-slots', 'RentedSlotApiController');
+
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
@@ -143,3 +145,7 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
+
+Route::prefix('callback')->group(function() {
+    Route::get('multibanco', 'Api\PaymentsController@calbackMultibanco');
+});
