@@ -25,10 +25,50 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.payment.fields.name') }}
+                            {{ trans('cruds.payment.fields.client') }}
                         </th>
                         <td>
-                            {{ $payment->name }}
+                            {{ $payment->client->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.payment.fields.method') }}
+                        </th>
+                        <td>
+                            {{ App\Models\Payment::METHOD_RADIO[$payment->method] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.payment.fields.cart') }}
+                        </th>
+                        <td>
+                            {{ $payment->cart }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.payment.fields.amount') }}
+                        </th>
+                        <td>
+                            {{ $payment->amount }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.payment.fields.request') }}
+                        </th>
+                        <td>
+                            {{ $payment->request }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.payment.fields.paid') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $payment->paid ? 'checked' : '' }}>
                         </td>
                     </tr>
                 </tbody>

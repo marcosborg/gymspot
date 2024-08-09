@@ -25,7 +25,19 @@
                         {{ trans('cruds.payment.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.payment.fields.name') }}
+                        {{ trans('cruds.payment.fields.client') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.payment.fields.method') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.payment.fields.request') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.payment.fields.amount') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.payment.fields.paid') }}
                     </th>
                     <th>
                         &nbsp;
@@ -38,7 +50,28 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($clients as $key => $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <select class="search" strict="true">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach(App\Models\Payment::METHOD_RADIO as $key => $item)
+                                <option value="{{ $key }}">{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -96,7 +129,11 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
-{ data: 'name', name: 'name' },
+{ data: 'client_name', name: 'client.name' },
+{ data: 'method', name: 'method' },
+{ data: 'request', name: 'request' },
+{ data: 'amount', name: 'amount' },
+{ data: 'paid', name: 'paid' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

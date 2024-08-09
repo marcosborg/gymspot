@@ -1,7 +1,7 @@
 <?php
 
 Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
-    
+
     // Permissions
     Route::apiResource('permissions', 'PermissionsApiController');
 
@@ -146,6 +146,11 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
 
-Route::prefix('callback')->group(function() {
+Route::prefix('callback')->group(function () {
     Route::get('multibanco', 'Api\PaymentsController@calbackMultibanco');
+});
+
+Route::prefix('payments')->middleware('auth:sanctum')->group(function () {
+    Route::post('mbway', 'Api\PaymentsController@mbway');
+    Route::get('check-mbway-status/{requestId}', 'Api\PaymentsController@checkMbwayStatus');
 });

@@ -17,8 +17,17 @@ class StorePaymentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'string',
+            'client_id' => [
+                'required',
+                'integer',
+            ],
+            'method' => [
+                'required',
+            ],
+            'cart' => [
+                'required',
+            ],
+            'amount' => [
                 'required',
             ],
         ];

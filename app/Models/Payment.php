@@ -19,8 +19,18 @@ class Payment extends Model
         'deleted_at',
     ];
 
+    public const METHOD_RADIO = [
+        'mbway'      => 'MBWAY',
+        'multibanco' => 'Multibanco',
+    ];
+
     protected $fillable = [
-        'name',
+        'client_id',
+        'method',
+        'cart',
+        'amount',
+        'request',
+        'paid',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -29,5 +39,10 @@ class Payment extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id');
     }
 }
