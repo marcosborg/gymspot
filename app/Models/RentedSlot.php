@@ -27,6 +27,7 @@ class RentedSlot extends Model
         'start_date_time',
         'end_date_time',
         'client_id',
+        'keypass',
         'created_at',
         'updated_at',
         'deleted_at',

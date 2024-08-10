@@ -40,6 +40,9 @@
                         {{ trans('cruds.client.fields.vat') }}
                     </th>
                     <th>
+                        {{ trans('cruds.rentedSlot.fields.keypass') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -72,6 +75,9 @@
                         </select>
                     </td>
                     <td>
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
                     </td>
@@ -134,6 +140,7 @@
 { data: 'end_date_time', name: 'end_date_time' },
 { data: 'client_name', name: 'client.name' },
 { data: 'client.vat', name: 'client.vat' },
+{ data: 'keypass', name: 'keypass' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

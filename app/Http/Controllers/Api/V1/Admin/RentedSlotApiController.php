@@ -10,6 +10,7 @@ use App\Models\RentedSlot;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\Client;
 
 class RentedSlotApiController extends Controller
 {
@@ -52,5 +53,13 @@ class RentedSlotApiController extends Controller
         $rentedSlot->delete();
 
         return response(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function rentedSlots(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $client = Client::where('user_id', $user_id)->first();
+        $rented_slots = RentedSlot::where('client_id', $client->id)->get()->load('spot');
+        return $rented_slots;
     }
 }

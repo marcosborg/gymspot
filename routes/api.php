@@ -97,6 +97,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Rented Slot
     Route::apiResource('rented-slots', 'RentedSlotApiController');
+    Route::get('rented-slots', 'RentedSlotApiController@rentedSlots');
 
 });
 
@@ -153,4 +154,5 @@ Route::prefix('callback')->group(function () {
 Route::prefix('payments')->middleware('auth:sanctum')->group(function () {
     Route::post('mbway', 'Api\PaymentsController@mbway');
     Route::get('check-mbway-status/{requestId}', 'Api\PaymentsController@checkMbwayStatus');
+    Route::post('multibanco', 'Api\PaymentsController@multibanco');
 });

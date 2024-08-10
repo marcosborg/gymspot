@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\RentAndPassTrait;
 use App\Models\RentedSlot;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Client;
@@ -12,10 +14,24 @@ use App\Http\Controllers\Traits\IfthenPaymentsTrait;
 class PaymentsController extends Controller
 {
     use IfthenPaymentsTrait;
+    use RentAndPassTrait;
 
     public function calbackMultibanco(Request $request)
     {
-        return $request;
+
+        if ($request->key !== env('ANTI_PHISHING_KEY')) {
+            return response()->json([
+                'error' => 'Chave anti-phishing inválida.',
+            ], 403); // 403 Forbidden
+        }
+        $payment = Payment::where('request', $request->requestId)->first();
+        $payment->paid = true;
+        $payment->save();
+
+        //AGRUPAR E GRAVAR
+        $cart = json_decode($payment->cart, true);
+        $this->groupAdjacentSlots($cart, $payment->client_id);
+        
     }
 
     public function mbway(Request $request)
@@ -45,9 +61,6 @@ class PaymentsController extends Controller
 
     public function checkMbwayStatus($requestId)
     {
-
-        /*
-
         $mbway_status = $this->mbwayStatus($requestId);
 
         if ($mbway_status['Status'] == '000') {
@@ -56,17 +69,13 @@ class PaymentsController extends Controller
             $payment->paid = true;
             $payment->save();
 
-            //AGRUPAR
+            //AGRUPAR E GRAVAR
             $cart = json_decode($payment->cart, true);
-            return $this->groupAdjacentSlots($cart, $payment->client_id);
+            $this->groupAdjacentSlots($cart, $payment->client_id);
             return $mbway_status;
         } else {
             return $mbway_status;
         }
-        */
-        $payment = Payment::where('request', $requestId)->first();
-        $cart = json_decode($payment->cart, true);
-        return $this->groupAdjacentSlots($cart, $payment->client_id);
     }
 
     private function groupAdjacentSlots(array $slots, $client_id)
@@ -115,7 +124,12 @@ class PaymentsController extends Controller
             $rented_slot->spot_id = $slot['spot_id'];
             $rented_slot->start_date_time = $slot['start_date_time'];
             $rented_slot->end_date_time = $slot['end_date_time'];
+            $rented_slot->keypass = mt_rand(100000, 999999);
             $rented_slot->save();
+            // CRIAR PASS
+            $start_date_time = Carbon::parse($rented_slot->start_date_time)->subHour()->timestamp;
+            $end_date_time = Carbon::parse($rented_slot->end_date_time)->subHour()->timestamp;
+            $this->sendKeycode($rented_slot->keypass, $rented_slot->id, $start_date_time, $end_date_time);
         }
 
         return $groupedSlots;
@@ -129,5 +143,29 @@ class PaymentsController extends Controller
         return $dateTime->format('Y-m-d H:i:s');
     }
 
+    public function multibanco(Request $request)
+    {
+
+        $user_id = $request->user()->id;
+        $client = Client::where('user_id', $user_id)->first();
+        $client_id = $client->id;
+        $cart = $request->cart;
+        $amount = $request->amount;
+
+        $payment = new Payment;
+        $payment->client_id = $client_id;
+        $payment->method = 'multibanco';
+        $payment->cart = $cart;
+        $payment->amount = $amount;
+        $payment->save();
+
+        $payment_multibanco = $this->paymentMultibanco($payment->id, $amount);
+        $payment->request = $payment_multibanco['RequestId'];
+        $payment->save();
+
+
+        return $payment_multibanco;
+
+    }
 
 }

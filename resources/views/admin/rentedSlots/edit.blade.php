@@ -59,6 +59,16 @@
                 <span class="help-block">{{ trans('cruds.rentedSlot.fields.client_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="keypass">{{ trans('cruds.rentedSlot.fields.keypass') }}</label>
+                <input class="form-control {{ $errors->has('keypass') ? 'is-invalid' : '' }}" type="text" name="keypass" id="keypass" value="{{ old('keypass', $rentedSlot->keypass) }}">
+                @if($errors->has('keypass'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('keypass') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.rentedSlot.fields.keypass_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

@@ -55,6 +55,14 @@
                             {{ $rentedSlot->client->name ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.rentedSlot.fields.keypass') }}
+                        </th>
+                        <td>
+                            {{ $rentedSlot->keypass }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

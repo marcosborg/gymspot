@@ -33,6 +33,10 @@ class UpdateRentedSlotRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'keypass' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }

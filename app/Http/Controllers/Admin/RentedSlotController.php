@@ -57,6 +57,10 @@ class RentedSlotController extends Controller
                 return $row->client ? (is_string($row->client) ? $row->client : $row->client->vat) : '';
             });
 
+            $table->editColumn('keypass', function ($row) {
+                return $row->keypass ? $row->keypass : '';
+            });
+
             $table->rawColumns(['actions', 'placeholder', 'spot', 'client']);
 
             return $table->make(true);

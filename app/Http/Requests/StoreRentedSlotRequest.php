@@ -33,6 +33,10 @@ class StoreRentedSlotRequest extends FormRequest
                 'required',
                 'integer',
             ],
+            'keypass' => [
+                'string',
+                'nullable',
+            ],
         ];
     }
 }
