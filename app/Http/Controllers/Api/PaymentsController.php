@@ -165,7 +165,7 @@ class PaymentsController extends Controller
         $payment->request = $payment_multibanco['RequestId'];
         $payment->save();
 
-        Notification::route('mail', $client->email)
+        Notification::route('mail', $request->user()->email)
             ->notify(new MulbancoReference($payment_multibanco));
 
         return $payment_multibanco;
