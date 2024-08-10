@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Client;
 use App\Http\Controllers\Traits\IfthenPaymentsTrait;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\MulbancoReference;
 
 class PaymentsController extends Controller
 {
@@ -31,7 +33,7 @@ class PaymentsController extends Controller
         //AGRUPAR E GRAVAR
         $cart = json_decode($payment->cart, true);
         $this->groupAdjacentSlots($cart, $payment->client_id);
-        
+
     }
 
     public function mbway(Request $request)
@@ -163,6 +165,8 @@ class PaymentsController extends Controller
         $payment->request = $payment_multibanco['RequestId'];
         $payment->save();
 
+        Notification::route('mail', 'taylor@example.com')
+            ->notify(new MulbancoReference($payment_multibanco));
 
         return $payment_multibanco;
 
