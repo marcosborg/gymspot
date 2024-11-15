@@ -103,11 +103,11 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
 }
 
 .btn-main, .btn-small, .btn-transparent {
-  background: linear-gradient(90deg, rgb(245, 99, 75) 0%, #fe9418 100%);
+  background: #6A4BE1;
   color: #fff;
 }
 .btn-main:hover, .btn-small:hover, .btn-transparent:hover {
-  background: linear-gradient(90deg, #fe9418 0%, rgb(245, 99, 75) 100%);
+  background: #6a4be17d;
   color: #fff !important;
   transform: translateY(-5px);
 }
@@ -240,7 +240,7 @@ input[type=email]:focus, input[type=password]:focus, input[type=text]:focus, inp
 }
 
 .text-color {
-  color: rgb(245, 99, 75);
+  color: #6A4BE1;
 }
 
 .text-black {
@@ -452,8 +452,8 @@ section.section.about {
   width: 100%;
   height: 0px;
   transition: all 600ms ease;
-  background: linear-gradient(90deg, rgb(245, 99, 75) 0%, #fe9418 100%);
-  border-color: rgb(245, 99, 75);
+  background: #6A4BE1;
+  border-color: #6A4BE1;
 }
 .hover-style-1 h3, .hover-style-1 p, .hover-style-1 a, .hover-style-1 i, .hover-style-1 h4 {
   position: relative;
@@ -561,7 +561,7 @@ section.section.about {
 
 .divider {
   margin: 0 auto;
-  background: rgb(245, 99, 75);
+  background: #6A4BE1;
   width: 45px;
   height: 4px;
 }
