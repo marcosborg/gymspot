@@ -102,6 +102,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Client Data
     Route::apiResource('client-datas', 'ClientDataApiController');
     Route::get('get-client-data/{client_id}', 'ClientDataApiController@getClientData');
+    Route::post('client-datas/create', 'ClientDataApiController@createClientData');
+    Route::post('client-datas/update', 'ClientDataApiController@updateClientData');
 
 });
 

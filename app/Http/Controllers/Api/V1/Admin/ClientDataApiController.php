@@ -54,12 +54,52 @@ class ClientDataApiController extends Controller
         return response(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function getClientData($client_id)
+    public function createClientData(Request $request)
     {
-        $client_datas = ClientData::where([
-            'client_id' => $client_id
-        ])->first();
 
-        return $client_datas;
+        $request->validate([
+            'age' => 'required|max:2',
+            'primary_objective' => 'required',
+            'fitness_level' => 'required'
+        ], [], [
+            'age' => 'Idade',
+            'primary_objective' => 'Objetivo principal',
+            'fitness_level' => 'Qual é o seu nível de experiência com exercícios físicos?'
+        ]);
+
+        $client_data = new ClientData;
+        $client_data->client_id = $request->user()->client->id;
+        $client_data->age = $request->age;
+        $client_data->gender = $request->gender;
+        $client_data->primary_objective = $request->primary_objective;
+        $client_data->fitness_level = $request->fitness_level;
+        $client_data->condition = $request->condition;
+        $client_data->condition_obs = $request->condition_obs;
+        $client_data->save();
+    }
+
+    public function updateClientData(Request $request)
+    {
+        $request->validate([
+            'age' => 'required|max:2',
+            'primary_objective' => 'required',
+            'fitness_level' => 'required'
+        ], [], [
+            'age' => 'Idade',
+            'primary_objective' => 'Objetivo principal',
+            'fitness_level' => 'Qual é o seu nível de experiência com exercícios físicos?'
+        ]);
+
+        $client_data = ClientData::where([
+            'client_id' => $request->user()->client->id
+        ])->first();
+        $client_data->client_id = $request->user()->client->id;
+        $client_data->age = $request->age;
+        $client_data->gender = $request->gender;
+        $client_data->primary_objective = $request->primary_objective;
+        $client_data->fitness_level = $request->fitness_level;
+        $client_data->condition = $request->condition;
+        $client_data->condition_obs = $request->condition_obs;
+        $client_data->save();
     }
 }

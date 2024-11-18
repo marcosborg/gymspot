@@ -72,4 +72,9 @@ class Client extends Model implements HasMedia
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function client_data()
+    {
+        return $this->hasOne(ClientData::class, 'client_id');
+    }
 }

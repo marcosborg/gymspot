@@ -66,7 +66,7 @@ class UsersApiController extends Controller
 
     public function user(Request $request)
     {
-        return $request->user()->load('client', 'personal_trainer.spots');
+        return $request->user()->load('client.client_data', 'personal_trainer.spots');
     }
 
     public function updateUser(Request $request)
