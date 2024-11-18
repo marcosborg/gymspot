@@ -33,6 +33,7 @@ class ClientData extends Model
 
     protected $fillable = [
         'client_id',
+        'age',
         'gender',
         'primary_objective',
         'fitness_level',
@@ -51,7 +52,7 @@ class ClientData extends Model
 
     public const CONDITION_RADIO = [
         'Problemas cardíacos'   => 'Problemas cardíacos',
-        'Problemas articulares' => 'problemas articulares',
+        'Problemas articulares' => 'Problemas articulares',
         'Diabetes'              => 'Diabetes',
         'Hipertensão'           => 'Hipertensão',
     ];

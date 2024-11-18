@@ -28,6 +28,9 @@
                         {{ trans('cruds.clientData.fields.client') }}
                     </th>
                     <th>
+                        {{ trans('cruds.clientData.fields.age') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.clientData.fields.gender') }}
                     </th>
                     <th>
@@ -100,6 +103,7 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'client_name', name: 'client.name' },
+{ data: 'age', name: 'age' },
 { data: 'gender', name: 'gender' },
 { data: 'primary_objective', name: 'primary_objective' },
 { data: 'fitness_level', name: 'fitness_level' },

@@ -99,6 +99,10 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::apiResource('rented-slots', 'RentedSlotApiController');
     Route::get('rented-slots', 'RentedSlotApiController@rentedSlots');
 
+    // Client Data
+    Route::apiResource('client-datas', 'ClientDataApiController');
+    Route::get('get-client-data/{client_id}', 'ClientDataApiController@getClientData');
+
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {

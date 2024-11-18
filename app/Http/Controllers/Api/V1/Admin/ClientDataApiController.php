@@ -53,4 +53,13 @@ class ClientDataApiController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
+
+    public function getClientData($client_id)
+    {
+        $client_datas = ClientData::where([
+            'client_id' => $client_id
+        ])->first();
+
+        return $client_datas;
+    }
 }

@@ -25,6 +25,16 @@
                 <span class="help-block">{{ trans('cruds.clientData.fields.client_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="age">{{ trans('cruds.clientData.fields.age') }}</label>
+                <input class="form-control {{ $errors->has('age') ? 'is-invalid' : '' }}" type="text" name="age" id="age" value="{{ old('age', $clientData->age) }}" required>
+                @if($errors->has('age'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('age') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clientData.fields.age_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label>{{ trans('cruds.clientData.fields.gender') }}</label>
                 @foreach(App\Models\ClientData::GENDER_RADIO as $key => $label)
                     <div class="form-check {{ $errors->has('gender') ? 'is-invalid' : '' }}">

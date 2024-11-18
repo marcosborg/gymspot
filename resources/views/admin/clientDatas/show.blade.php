@@ -33,6 +33,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.clientData.fields.age') }}
+                        </th>
+                        <td>
+                            {{ $clientData->age }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.clientData.fields.gender') }}
                         </th>
                         <td>

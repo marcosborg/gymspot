@@ -673,6 +673,8 @@ return [
             'condition_helper'         => ' ',
             'condition_obs'            => 'Condition Obs',
             'condition_obs_helper'     => ' ',
+            'age'                      => 'Idade',
+            'age_helper'               => ' ',
         ],
     ],
 
