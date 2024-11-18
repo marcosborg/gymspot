@@ -43,6 +43,18 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.item.fields.video') }}
+                        </th>
+                        <td>
+                            @if($item->video)
+                                <a href="{{ $item->video->getUrl() }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

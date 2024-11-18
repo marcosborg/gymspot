@@ -31,6 +31,9 @@
                         {{ trans('cruds.item.fields.icon') }}
                     </th>
                     <th>
+                        {{ trans('cruds.item.fields.video') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -89,6 +92,7 @@
 { data: 'id', name: 'id' },
 { data: 'name', name: 'name' },
 { data: 'icon', name: 'icon', sortable: false, searchable: false },
+{ data: 'video', name: 'video', sortable: false, searchable: false },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

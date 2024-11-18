@@ -18,6 +18,7 @@ class Item extends Model implements HasMedia
 
     protected $appends = [
         'icon',
+        'video',
     ];
 
     protected $dates = [
@@ -54,5 +55,10 @@ class Item extends Model implements HasMedia
         }
 
         return $file;
+    }
+
+    public function getVideoAttribute()
+    {
+        return $this->getMedia('video')->last();
     }
 }

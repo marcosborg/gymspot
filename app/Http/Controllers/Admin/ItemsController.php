@@ -61,8 +61,11 @@ class ItemsController extends Controller
 
                 return '';
             });
+            $table->editColumn('video', function ($row) {
+                return $row->video ? '<a href="' . $row->video->getUrl() . '" target="_blank">' . trans('global.downloadFile') . '</a>' : '';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'icon']);
+            $table->rawColumns(['actions', 'placeholder', 'icon', 'video']);
 
             return $table->make(true);
         }
@@ -83,6 +86,10 @@ class ItemsController extends Controller
 
         if ($request->input('icon', false)) {
             $item->addMedia(storage_path('tmp/uploads/' . basename($request->input('icon'))))->toMediaCollection('icon');
+        }
+
+        if ($request->input('video', false)) {
+            $item->addMedia(storage_path('tmp/uploads/' . basename($request->input('video'))))->toMediaCollection('video');
         }
 
         if ($media = $request->input('ck-media', false)) {
@@ -112,6 +119,17 @@ class ItemsController extends Controller
             }
         } elseif ($item->icon) {
             $item->icon->delete();
+        }
+
+        if ($request->input('video', false)) {
+            if (! $item->video || $request->input('video') !== $item->video->file_name) {
+                if ($item->video) {
+                    $item->video->delete();
+                }
+                $item->addMedia(storage_path('tmp/uploads/' . basename($request->input('video'))))->toMediaCollection('video');
+            }
+        } elseif ($item->video) {
+            $item->video->delete();
         }
 
         return redirect()->route('admin.items.index');
