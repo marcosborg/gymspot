@@ -143,6 +143,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('rented-slots/destroy', 'RentedSlotController@massDestroy')->name('rented-slots.massDestroy');
     Route::resource('rented-slots', 'RentedSlotController');
 
+    // Client Data
+    Route::delete('client-datas/destroy', 'ClientDataController@massDestroy')->name('client-datas.massDestroy');
+    Route::resource('client-datas', 'ClientDataController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

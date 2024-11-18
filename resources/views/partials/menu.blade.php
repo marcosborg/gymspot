@@ -132,7 +132,7 @@
             </li>
         @endcan
         @can('clients_menu_access')
-            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/clients*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/companies*") ? "c-show" : "" }}">
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/clients*") ? "c-show" : "" }} {{ request()->is("admin/countries*") ? "c-show" : "" }} {{ request()->is("admin/companies*") ? "c-show" : "" }} {{ request()->is("admin/client-datas*") ? "c-show" : "" }}">
                 <a class="c-sidebar-nav-dropdown-toggle" href="#">
                     <i class="fa-fw fas fa-user-friends c-sidebar-nav-icon">
 
@@ -167,6 +167,16 @@
 
                                 </i>
                                 {{ trans('cruds.company.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('client_data_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.client-datas.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/client-datas") || request()->is("admin/client-datas/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-database c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.clientData.title') }}
                             </a>
                         </li>
                     @endcan

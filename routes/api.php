@@ -142,6 +142,9 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     Route::post('personal-trainers/media', 'PersonalTrainerApiController@storeMedia')->name('personal-trainers.storeMedia');
     Route::apiResource('personal-trainers', 'PersonalTrainerApiController');
 
+    // Client Data
+    Route::apiResource('client-datas', 'ClientDataApiController');
+
 });
 
 Route::post('register', 'Api\AuthController@register');
