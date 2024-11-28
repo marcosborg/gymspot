@@ -3,7 +3,7 @@
 <nav class="navbar navbar-expand-lg navigation fixed-top" id="navbar">
     <div class="container-fluid">
         <a class="navbar-brand" href="\">
-            <img src="/assets/website/images/logo-dark-v2.png?v2" alt="gymspot" class="logo">
+            <img src="/assets/website/images/logo-dark-v3.png?v2" alt="gymspot" class="logo">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsid"
             aria-controls="navbarsid" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,8 +18,8 @@
                 @endforeach
             </ul>
             <div class="my-md-0 ml-lg-4 mt-4 mt-lg-0 ml-auto text-lg-right mb-3 mb-lg-0">
-                <a href="tel:+351965624584">
-                    <h3 class="text-color mb-0"><i class="ti-mobile mr-2"></i>+351 965 624 584</h3>
+                <a href="mailto:pm@gymspot.pt">
+                    <h4 class="text-color mb-0">pm@gymspot.pt</h4>
                 </a>
             </div>
         </div>

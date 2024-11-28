@@ -12,7 +12,6 @@ Home
 <x-intro></x-intro>
 <x-about></x-about>
 <x-call></x-call>
-<x-services></x-services>
 <x-gallery></x-gallery>
 <x-testimonial></x-testimonial>
 <x-course></x-course>

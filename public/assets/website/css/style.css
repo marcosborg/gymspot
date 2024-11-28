@@ -270,7 +270,7 @@ a {
 }
 
 a:hover, a:focus {
-  color: rgb(245, 99, 75) !important;
+  color: #6A4BE1 !important;
   text-decoration: none !important;
   outline: 0;
 }
@@ -299,7 +299,7 @@ a:hover, a:focus {
   transition: all 0.25s ease;
 }
 .navbar-nav .nav-link:hover, .navbar-nav .nav-link:focus {
-  color: rgb(245, 99, 75);
+  color: #6A4BE1;
 }
 
 .top-header {

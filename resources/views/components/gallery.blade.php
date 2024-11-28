@@ -1,6 +1,6 @@
 @if ($galleries->count() > 0)
 <!-- Section Gallery Start -->
-<section class="gallery">
+<section class="gallery mt-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
