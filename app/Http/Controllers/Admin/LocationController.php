@@ -64,8 +64,11 @@ class LocationController extends Controller
 
                 return '';
             });
+            $table->editColumn('soon', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->soon ? 'checked' : null) . '>';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'image']);
+            $table->rawColumns(['actions', 'placeholder', 'image', 'soon']);
 
             return $table->make(true);
         }

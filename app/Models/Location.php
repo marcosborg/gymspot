@@ -29,6 +29,7 @@ class Location extends Model implements HasMedia
     protected $fillable = [
         'title',
         'subtitle',
+        'soon',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -55,10 +56,5 @@ class Location extends Model implements HasMedia
         }
 
         return $file;
-    }
-
-    public function spots()
-    {
-        return $this->hasMany(Spot::class);
     }
 }

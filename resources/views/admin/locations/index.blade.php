@@ -34,6 +34,9 @@
                         {{ trans('cruds.location.fields.image') }}
                     </th>
                     <th>
+                        {{ trans('cruds.location.fields.soon') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -48,6 +51,8 @@
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -110,6 +115,7 @@
 { data: 'title', name: 'title' },
 { data: 'subtitle', name: 'subtitle' },
 { data: 'image', name: 'image', sortable: false, searchable: false },
+{ data: 'soon', name: 'soon' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

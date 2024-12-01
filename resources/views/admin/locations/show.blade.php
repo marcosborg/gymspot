@@ -51,6 +51,14 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.location.fields.soon') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $location->soon ? 'checked' : '' }}>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">
