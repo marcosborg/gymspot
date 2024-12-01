@@ -8,8 +8,8 @@ use App\Http\Requests\MassDestroySpotRequest;
 use App\Http\Requests\StoreSpotRequest;
 use App\Http\Requests\UpdateSpotRequest;
 use App\Models\Country;
-use App\Models\Location;
 use App\Models\Item;
+use App\Models\Location;
 use App\Models\Spot;
 use Gate;
 use Illuminate\Http\Request;
@@ -26,7 +26,7 @@ class SpotController extends Controller
         abort_if(Gate::denies('spot_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Spot::with(['location', 'country'])->select(sprintf('%s.*', (new Spot)->table));
+            $query = Spot::with(['location', 'country', 'items'])->select(sprintf('%s.*', (new Spot)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -70,10 +70,12 @@ class SpotController extends Controller
             $table->editColumn('price', function ($row) {
                 return $row->price ? $row->price : '';
             });
+            $table->editColumn('sale', function ($row) {
+                return $row->sale ? $row->sale : '';
+            });
             $table->editColumn('capacity', function ($row) {
                 return $row->capacity ? $row->capacity : '';
             });
-
             $table->editColumn('email', function ($row) {
                 return $row->email ? $row->email : '';
             });
@@ -91,7 +93,6 @@ class SpotController extends Controller
 
                 return implode(' ', $links);
             });
-
             $table->editColumn('item', function ($row) {
                 $labels = [];
                 foreach ($row->items as $item) {
@@ -100,8 +101,11 @@ class SpotController extends Controller
 
                 return implode(' ', $labels);
             });
+            $table->editColumn('soon', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->soon ? 'checked' : null) . '>';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'location', 'country', 'photos', 'item']);
+            $table->rawColumns(['actions', 'placeholder', 'location', 'country', 'photos', 'item', 'soon']);
 
             return $table->make(true);
         }
@@ -123,7 +127,7 @@ class SpotController extends Controller
 
         $items = Item::pluck('name', 'id');
 
-        return view('admin.spots.create', compact('countries', 'locations', 'items'));
+        return view('admin.spots.create', compact('countries', 'items', 'locations'));
     }
 
     public function store(StoreSpotRequest $request)
@@ -153,7 +157,7 @@ class SpotController extends Controller
 
         $spot->load('location', 'country', 'items');
 
-        return view('admin.spots.edit', compact('countries', 'locations', 'spot', 'items'));
+        return view('admin.spots.edit', compact('countries', 'items', 'locations', 'spot'));
     }
 
     public function update(UpdateSpotRequest $request, Spot $spot)

@@ -43,6 +43,9 @@
                         {{ trans('cruds.spot.fields.price') }}
                     </th>
                     <th>
+                        {{ trans('cruds.spot.fields.sale') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.spot.fields.capacity') }}
                     </th>
                     <th>
@@ -56,6 +59,9 @@
                     </th>
                     <th>
                         {{ trans('cruds.spot.fields.item') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.spot.fields.soon') }}
                     </th>
                     <th>
                         &nbsp;
@@ -105,6 +111,9 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
                     </td>
                     <td>
                         <select class="search">
@@ -113,6 +122,8 @@
                                 <option value="{{ $item->name }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -176,11 +187,13 @@
 { data: 'location_title', name: 'location.title' },
 { data: 'country_name', name: 'country.name' },
 { data: 'price', name: 'price' },
+{ data: 'sale', name: 'sale' },
 { data: 'capacity', name: 'capacity' },
 { data: 'email', name: 'email' },
 { data: 'phone', name: 'phone' },
 { data: 'photos', name: 'photos', sortable: false, searchable: false },
 { data: 'item', name: 'items.name' },
+{ data: 'soon', name: 'soon' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

@@ -341,6 +341,10 @@ return [
             'capacity_helper'    => '(utilizadores em simultâneo)',
             'item'               => 'Item',
             'item_helper'        => ' ',
+            'sale'               => 'Sale',
+            'sale_helper'        => ' ',
+            'soon'               => 'Soon',
+            'soon_helper'        => ' ',
         ],
     ],
     'slot' => [

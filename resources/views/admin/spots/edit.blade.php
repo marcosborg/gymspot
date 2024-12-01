@@ -89,6 +89,16 @@
                 <span class="help-block">{{ trans('cruds.spot.fields.price_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="sale">{{ trans('cruds.spot.fields.sale') }}</label>
+                <input class="form-control {{ $errors->has('sale') ? 'is-invalid' : '' }}" type="number" name="sale" id="sale" value="{{ old('sale', $spot->sale) }}" step="0.01">
+                @if($errors->has('sale'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('sale') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.spot.fields.sale_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="capacity">{{ trans('cruds.spot.fields.capacity') }}</label>
                 <input class="form-control {{ $errors->has('capacity') ? 'is-invalid' : '' }}" type="number" name="capacity" id="capacity" value="{{ old('capacity', $spot->capacity) }}" step="1" required>
                 @if($errors->has('capacity'))
@@ -146,6 +156,19 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.spot.fields.item_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('soon') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="soon" value="0">
+                    <input class="form-check-input" type="checkbox" name="soon" id="soon" value="1" {{ $spot->soon || old('soon', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="soon">{{ trans('cruds.spot.fields.soon') }}</label>
+                </div>
+                @if($errors->has('soon'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('soon') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.spot.fields.soon_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

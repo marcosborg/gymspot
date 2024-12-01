@@ -81,6 +81,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.spot.fields.sale') }}
+                        </th>
+                        <td>
+                            {{ $spot->sale }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.spot.fields.capacity') }}
                         </th>
                         <td>
@@ -113,6 +121,24 @@
                                     <img src="{{ $media->getUrl('thumb') }}">
                                 </a>
                             @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.spot.fields.item') }}
+                        </th>
+                        <td>
+                            @foreach($spot->items as $key => $item)
+                                <span class="label label-info">{{ $item->name }}</span>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.spot.fields.soon') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $spot->soon ? 'checked' : '' }}>
                         </td>
                     </tr>
                 </tbody>
