@@ -127,7 +127,7 @@ class CalendarController extends Controller
         $now = Carbon::now();
 
         // Arredondar a hora atual para a próxima meia hora
-        $roundedNow = $now->copy()->addMinutes(90 - ($now->minute % 30))->second(0);
+        $roundedNow = $now->copy()->addMinutes(30 - ($now->minute % 30))->second(0);
 
         for ($slot = 0; $slot < 48; $slot++) {
             $endSlot = $startSlot->copy()->addMinutes(30);
