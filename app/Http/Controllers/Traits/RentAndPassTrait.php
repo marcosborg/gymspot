@@ -51,7 +51,7 @@ trait RentAndPassTrait
     }
 
     private function generateCustomCodeAndSendIt($token, $keypass, $rented_slot_id, $start_date_time, $end_date_time)
-    {    
+    {
 
         $clientId = env('RENT_AND_PASS_CLIENT_ID');
         $lockid = env('RENT_AND_PASS_LOCK_ID');
