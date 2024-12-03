@@ -129,8 +129,8 @@ class PaymentsController extends Controller
             $rented_slot->keypass = mt_rand(100000, 999999);
             $rented_slot->save();
             // CRIAR PASS
-            $start_date_time = Carbon::parse($rented_slot->start_date_time)->addHour()->timestamp;
-            $end_date_time = Carbon::parse($rented_slot->end_date_time)->addHour()->timestamp;
+            $start_date_time = Carbon::parse($rented_slot->start_date_time)->addHour(2)->timestamp;
+            $end_date_time = Carbon::parse($rented_slot->end_date_time)->addHour(2)->timestamp;
             $this->sendKeycode($rented_slot->keypass, $rented_slot->id, $start_date_time, $end_date_time);
         }
 
