@@ -59,7 +59,7 @@ class RentedSlotApiController extends Controller
     {
         $user_id = $request->user()->id;
         $client = Client::where('user_id', $user_id)->first();
-        $rented_slots = RentedSlot::where('client_id', $client->id)->get()->load('spot');
+        $rented_slots = RentedSlot::where('client_id', $client->id)->orderBy('id', 'desc')->get()->load('spot');
         return $rented_slots;
     }
 }
