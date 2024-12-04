@@ -61,7 +61,7 @@ trait RentAndPassTrait
         curl_setopt_array(
             $curl,
             array(
-                CURLOPT_URL => 'https://api.rentandpass.com/api/password?clientId=' . $clientId . '&token=' . $token . '&ID=' . $lockid . '&password=' . $keypass . '&name=Gymspot-' . $rented_slot_id . '&startDate=' . $start_date_time . '000&endDate=' . $end_date_time . '000&type=2&reference=hotelfit',
+                CURLOPT_URL => 'https://api.rentandpass.com/api/password?clientId=' . $clientId . '&token=' . $token . '&ID=' . $lockid . '&password=' . $keypass . '&name=Gymspot-' . $rented_slot_id . '&startDate=' . $start_date_time . '000&endDate=' . $end_date_time . '000&type=2&reference=gymspot-1',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
