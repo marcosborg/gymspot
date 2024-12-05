@@ -45,7 +45,7 @@
                 <div class="footer-widget">
                     <h4 class="mb-4 text-white letter-spacing text-uppercase">Sede</h4>
                     <p>Lisboa | Porto</p>
-                    <span class="text-white">+351 965 624 584</span>
+                    
                     <span class="text-white">pm@gymspot.pt</span>
                 </div>
             </div>
