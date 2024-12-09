@@ -104,7 +104,6 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::get('get-client-data/{client_id}', 'ClientDataApiController@getClientData');
     Route::post('client-datas/create', 'ClientDataApiController@createClientData');
     Route::post('client-datas/update', 'ClientDataApiController@updateClientData');
-
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
@@ -150,7 +149,6 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
     // Client Data
     Route::apiResource('client-datas', 'ClientDataApiController');
-
 });
 
 Route::post('register', 'Api\AuthController@register');
@@ -164,4 +162,10 @@ Route::prefix('payments')->middleware('auth:sanctum')->group(function () {
     Route::post('mbway', 'Api\PaymentsController@mbway');
     Route::get('check-mbway-status/{requestId}', 'Api\PaymentsController@checkMbwayStatus');
     Route::post('multibanco', 'Api\PaymentsController@multibanco');
+});
+
+//GUIA FITNESS
+Route::prefix('guia-fitness')->middleware('auth:sanctum')->group(function () {
+    Route::post('start-conversation', 'Api\GuiaFitnessController@startConversation');
+    Route::post('send-message', 'Api\GuiaFitnessController@sendMessage');
 });
