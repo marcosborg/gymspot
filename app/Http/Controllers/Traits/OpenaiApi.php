@@ -50,8 +50,6 @@ trait OpenaiApi
 
         $result = json_decode($response, true);
 
-        return $result;
-
         $thread_id = $result['thread_id'];
         $run_id = $result['id'];
 
