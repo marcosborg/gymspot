@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\DeleteAccountNotification;
 
 class AuthController extends Controller
 {
@@ -60,5 +62,12 @@ class AuthController extends Controller
         return [
             'access_token' => $access_token,
         ];
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        $user = $request->user();
+        Notification::route('mail', 'pm@gymspot.pt')
+            ->notify(new DeleteAccountNotification($user));
     }
 }

@@ -153,6 +153,7 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
+Route::post('delete-account', 'Api\AuthController@deleteAccount')->middleware(['auth:sanctum']);
 
 Route::prefix('callback')->group(function () {
     Route::get('multibanco', 'Api\PaymentsController@calbackMultibanco');
