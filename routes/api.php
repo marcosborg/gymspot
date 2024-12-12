@@ -170,3 +170,5 @@ Route::prefix('guia-fitness')->middleware('auth:sanctum')->group(function () {
     Route::post('start-conversation', 'Api\GuiaFitnessController@startConversation');
     Route::post('send-message', 'Api\GuiaFitnessController@sendMessage');
 });
+
+Route::post('save-token', 'Api\AuthController@saveToken');

@@ -43,6 +43,7 @@ class User extends Authenticatable
         'verified_at',
         'verification_token',
         'remember_token',
+        'fcm_token',
         'created_at',
         'updated_at',
         'deleted_at',

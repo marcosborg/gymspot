@@ -70,4 +70,13 @@ class AuthController extends Controller
         Notification::route('mail', 'pm@gymspot.pt')
             ->notify(new DeleteAccountNotification($user));
     }
+
+    public function saveToken(Request $request)
+    {
+        $user = $request->user();
+        $user->fcm_token = $request->fcm_token;
+        $user->save();
+
+        return response()->json(['message' => 'Token salvo com sucesso.']);
+    }
 }
