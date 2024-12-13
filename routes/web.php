@@ -1,6 +1,6 @@
 <?php
 
-Route::get('/', 'WebsiteController@index');
+Route::get('/', 'WebsiteController@index')->middleware(App\Http\Middleware\RedirectToAppStore::class);
 
 Route::get('/cms/{content_page_id}/{slug}', 'WebsiteController@contentPage');
 
