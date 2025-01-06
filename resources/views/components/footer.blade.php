@@ -22,8 +22,8 @@
             </div>
             <div class="col-lg-3 col-md-5">
                 <div class="footer-widget">
-                    <h4 class="mb-4 text-white letter-spacing text-uppercase">Sede</h4>
-                    <p>Lisboa | Porto</p>
+                    <h4 class="mb-4 text-white letter-spacing text-uppercase">Localização</h4>
+                    <p>Via do Oriente, n.º 14 Parque das Nações<br>Lisboa | Porto</p>
                     
                     <span class="text-white">pm@gymspot.pt</span>
                 </div>
@@ -45,4 +45,3 @@
     </div>
 </footer>
 <!-- Section Footer End -->
-<script>console.log({!! $uteis !!})</script>
