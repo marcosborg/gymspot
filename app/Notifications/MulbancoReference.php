@@ -41,7 +41,9 @@ class MulbancoReference extends Notification
             ->line('Entidade: ' . $this->payment_multibanco['Entity'])
             ->line('Referência: ' . $this->payment_multibanco['Reference'])
             ->line('Montante: ' . number_format($this->payment_multibanco['Amount'], 2, ',', '.') . ' €')
-            ->line('A reserva ficará disponível no separador RESERVAS da app GymSpot após pagamento.');
+            ->line('A reserva ficará disponível no separador RESERVAS da app GymSpot após pagamento.')
+            ->line('Por favor, efetue o pagamento até 24 horas após a geração desta referência.')
+            ->line('A reserva só será efetivada após a confirmação do pagamento.');
     }
 
     /**
