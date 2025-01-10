@@ -37,6 +37,25 @@ class PaymentsController extends Controller
 
     }
 
+    public function calbackMbway(Request $request)
+    {
+
+        if ($request->key !== env('ANTI_PHISHING_KEY')) {
+            return response()->json([
+                'error' => 'Chave anti-phishing inválida.',
+            ], 403); // 403 Forbidden
+        }
+        $payment = Payment::where('request', $request->requestId)->first();
+        $payment->paid = true;
+        $payment->save();
+
+        //AGRUPAR E GRAVAR
+        $cart = json_decode($payment->cart, true);
+
+        return $this->groupAdjacentSlots($cart, $payment->client_id);
+
+    }
+
     public function mbway(Request $request)
     {
         $user_id = $request->user()->id;

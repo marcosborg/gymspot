@@ -157,6 +157,7 @@ Route::post('delete-account', 'Api\AuthController@deleteAccount')->middleware(['
 
 Route::prefix('callback')->group(function () {
     Route::get('multibanco', 'Api\PaymentsController@calbackMultibanco');
+    Route::get('mbway', 'Api\PaymentsController@calbackMbway');
 });
 
 Route::prefix('payments')->middleware('auth:sanctum')->group(function () {

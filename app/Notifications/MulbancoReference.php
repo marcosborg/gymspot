@@ -41,7 +41,8 @@ class MulbancoReference extends Notification
             ->line('<strong>Entidade: </strong> ' . $this->payment_multibanco['Entity'] . '<br>')
             ->line('<strong>Referência: </strong> ' . $this->payment_multibanco['Reference'] . '<br>')
             ->line('<strong>Montante: </strong> ' . number_format($this->payment_multibanco['Amount'], 2, ',', '.') . ' €')
-            ->line('A reserva ficará disponível após pagamento.');
+            ->line('A reserva ficará disponível após pagamento.')
+            ->markdown('mail.payment.multibanco', ['payment_multibanco' => $this->payment_multibanco]);
     }
 
     /**
