@@ -40,6 +40,9 @@
                         {{ trans('cruds.payment.fields.paid') }}
                     </th>
                     <th>
+                        {{ trans('cruds.payment.fields.created_at') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -70,6 +73,8 @@
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -134,6 +139,7 @@
 { data: 'request', name: 'request' },
 { data: 'amount', name: 'amount' },
 { data: 'paid', name: 'paid' },
+{ data: 'created_at', name: 'created_at' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

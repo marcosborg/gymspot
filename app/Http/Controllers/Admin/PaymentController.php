@@ -61,6 +61,10 @@ class PaymentController extends Controller
                 return '<input type="checkbox" disabled ' . ($row->paid ? 'checked' : null) . '>';
             });
 
+            $table->editColumn('created_at', function ($row) {
+                return $row->created_at ? $row->created_at : '';
+            });
+
             $table->rawColumns(['actions', 'placeholder', 'client', 'paid']);
 
             return $table->make(true);
