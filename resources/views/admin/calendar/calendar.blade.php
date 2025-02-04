@@ -28,8 +28,7 @@
             $('#calendar').fullCalendar({
                 // put your options and callbacks here
                 events: events,
-
-
+                timeFormat: 'H:mm'
             })
         });
 </script>
