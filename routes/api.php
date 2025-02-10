@@ -104,6 +104,13 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     Route::get('get-client-data/{client_id}', 'ClientDataApiController@getClientData');
     Route::post('client-datas/create', 'ClientDataApiController@createClientData');
     Route::post('client-datas/update', 'ClientDataApiController@updateClientData');
+
+    // Packs
+    Route::post('packs/media', 'PacksApiController@storeMedia')->name('packs.storeMedia');
+    Route::apiResource('packs', 'PacksApiController');
+
+    // Pack Purchase
+    Route::apiResource('pack-purchases', 'PackPurchaseApiController');
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {

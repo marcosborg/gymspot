@@ -345,6 +345,38 @@
                 </ul>
             </li>
         @endcan
+        @can('pack_menu_access')
+            <li class="c-sidebar-nav-dropdown {{ request()->is("admin/packs*") ? "c-show" : "" }} {{ request()->is("admin/pack-purchases*") ? "c-show" : "" }}">
+                <a class="c-sidebar-nav-dropdown-toggle" href="#">
+                    <i class="fa-fw fas fa-th-large c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.packMenu.title') }}
+                </a>
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @can('pack_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.packs.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/packs") || request()->is("admin/packs/*") ? "c-active" : "" }}">
+                                <i class="fa-fw fas fa-th-large c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.pack.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                    @can('pack_purchase_access')
+                        <li class="c-sidebar-nav-item">
+                            <a href="{{ route("admin.pack-purchases.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/pack-purchases") || request()->is("admin/pack-purchases/*") ? "c-active" : "" }}">
+                                <i class="fa-fw far fa-credit-card c-sidebar-nav-icon">
+
+                                </i>
+                                {{ trans('cruds.packPurchase.title') }}
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </li>
+        @endcan
         <li class="c-sidebar-nav-item">
             <a href="{{ route("admin.systemCalendar") }}" class="c-sidebar-nav-link {{ request()->is("admin/system-calendar") || request()->is("admin/system-calendar/*") ? "c-active" : "" }}">
                 <i class="c-sidebar-nav-icon fa-fw fas fa-calendar">

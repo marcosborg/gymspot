@@ -151,6 +151,16 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('client-datas/destroy', 'ClientDataController@massDestroy')->name('client-datas.massDestroy');
     Route::resource('client-datas', 'ClientDataController');
 
+    // Packs
+    Route::delete('packs/destroy', 'PacksController@massDestroy')->name('packs.massDestroy');
+    Route::post('packs/media', 'PacksController@storeMedia')->name('packs.storeMedia');
+    Route::post('packs/ckmedia', 'PacksController@storeCKEditorImages')->name('packs.storeCKEditorImages');
+    Route::resource('packs', 'PacksController');
+
+    // Pack Purchase
+    Route::delete('pack-purchases/destroy', 'PackPurchaseController@massDestroy')->name('pack-purchases.massDestroy');
+    Route::resource('pack-purchases', 'PackPurchaseController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {
