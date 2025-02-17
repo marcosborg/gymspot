@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyPackPurchaseRequest;
 use App\Http\Requests\StorePackPurchaseRequest;
 use App\Http\Requests\UpdatePackPurchaseRequest;
+use App\Models\Client;
 use App\Models\Pack;
 use App\Models\PackPurchase;
-use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ class PackPurchaseController extends Controller
         abort_if(Gate::denies('pack_purchase_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = PackPurchase::with(['user', 'pack'])->select(sprintf('%s.*', (new PackPurchase)->table));
+            $query = PackPurchase::with(['client', 'pack'])->select(sprintf('%s.*', (new PackPurchase)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -45,8 +45,8 @@ class PackPurchaseController extends Controller
             $table->editColumn('id', function ($row) {
                 return $row->id ? $row->id : '';
             });
-            $table->addColumn('user_name', function ($row) {
-                return $row->user ? $row->user->name : '';
+            $table->addColumn('client_name', function ($row) {
+                return $row->client ? $row->client->name : '';
             });
 
             $table->addColumn('pack_name', function ($row) {
@@ -60,26 +60,26 @@ class PackPurchaseController extends Controller
                 return $row->available ? $row->available : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user', 'pack']);
+            $table->rawColumns(['actions', 'placeholder', 'client', 'pack']);
 
             return $table->make(true);
         }
 
-        $users = User::get();
+        $clients = Client::get();
         $packs = Pack::get();
 
-        return view('admin.packPurchases.index', compact('users', 'packs'));
+        return view('admin.packPurchases.index', compact('clients', 'packs'));
     }
 
     public function create()
     {
         abort_if(Gate::denies('pack_purchase_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clients = Client::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $packs = Pack::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.packPurchases.create', compact('packs', 'users'));
+        return view('admin.packPurchases.create', compact('packs', 'clients'));
     }
 
     public function store(StorePackPurchaseRequest $request)
@@ -93,13 +93,13 @@ class PackPurchaseController extends Controller
     {
         abort_if(Gate::denies('pack_purchase_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+        $clients = Client::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $packs = Pack::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $packPurchase->load('user', 'pack');
+        $packPurchase->load('client', 'pack');
 
-        return view('admin.packPurchases.edit', compact('packPurchase', 'packs', 'users'));
+        return view('admin.packPurchases.edit', compact('packPurchase', 'packs', 'clients'));
     }
 
     public function update(UpdatePackPurchaseRequest $request, PackPurchase $packPurchase)
@@ -113,7 +113,7 @@ class PackPurchaseController extends Controller
     {
         abort_if(Gate::denies('pack_purchase_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $packPurchase->load('user', 'pack');
+        $packPurchase->load('client', 'pack');
 
         return view('admin.packPurchases.show', compact('packPurchase'));
     }

@@ -25,7 +25,7 @@
                         {{ trans('cruds.packPurchase.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.packPurchase.fields.user') }}
+                        {{ trans('cruds.packPurchase.fields.client') }}
                     </th>
                     <th>
                         {{ trans('cruds.packPurchase.fields.pack') }}
@@ -52,7 +52,7 @@
                     <td>
                         <select class="search">
                             <option value>{{ trans('global.all') }}</option>
-                            @foreach($users as $key => $item)
+                            @foreach($clients as $key => $item)
                                 <option value="{{ $item->name }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
@@ -129,7 +129,7 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
-{ data: 'user_name', name: 'user.name' },
+{ data: 'client_name', name: 'client.name' },
 { data: 'pack_name', name: 'pack.name' },
 { data: 'quantity', name: 'quantity' },
 { data: 'available', name: 'available' },

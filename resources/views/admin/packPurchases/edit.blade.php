@@ -11,18 +11,18 @@
             @method('PUT')
             @csrf
             <div class="form-group">
-                <label class="required" for="user_id">{{ trans('cruds.packPurchase.fields.user') }}</label>
-                <select class="form-control select2 {{ $errors->has('user') ? 'is-invalid' : '' }}" name="user_id" id="user_id" required>
-                    @foreach($users as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('user_id') ? old('user_id') : $packPurchase->user->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                <label class="required" for="client_id">{{ trans('cruds.packPurchase.fields.client') }}</label>
+                <select class="form-control select2 {{ $errors->has('client') ? 'is-invalid' : '' }}" name="client_id" id="client_id" required>
+                    @foreach($clients as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('client_id') ? old('client_id') : $packPurchase->client->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
                     @endforeach
                 </select>
-                @if($errors->has('user'))
+                @if($errors->has('client'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('user') }}
+                        {{ $errors->first('client') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.packPurchase.fields.user_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.packPurchase.fields.client_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required" for="pack_id">{{ trans('cruds.packPurchase.fields.pack') }}</label>

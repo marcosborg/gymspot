@@ -25,10 +25,10 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.packPurchase.fields.user') }}
+                            {{ trans('cruds.packPurchase.fields.client') }}
                         </th>
                         <td>
-                            {{ $packPurchase->user->name ?? '' }}
+                            {{ $packPurchase->client->name ?? '' }}
                         </td>
                     </tr>
                     <tr>

@@ -17,7 +17,7 @@ class PackPurchaseApiController extends Controller
     {
         abort_if(Gate::denies('pack_purchase_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PackPurchaseResource(PackPurchase::with(['user', 'pack'])->get());
+        return new PackPurchaseResource(PackPurchase::with(['client', 'pack'])->get());
     }
 
     public function store(StorePackPurchaseRequest $request)
@@ -33,7 +33,7 @@ class PackPurchaseApiController extends Controller
     {
         abort_if(Gate::denies('pack_purchase_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PackPurchaseResource($packPurchase->load(['user', 'pack']));
+        return new PackPurchaseResource($packPurchase->load(['client', 'pack']));
     }
 
     public function update(UpdatePackPurchaseRequest $request, PackPurchase $packPurchase)

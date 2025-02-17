@@ -17,7 +17,7 @@ class UpdatePackPurchaseRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => [
+            'client_id' => [
                 'required',
                 'integer',
             ],

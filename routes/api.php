@@ -156,6 +156,13 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
     // Client Data
     Route::apiResource('client-datas', 'ClientDataApiController');
+
+    // Packs
+    Route::post('packs/media', 'PacksApiController@storeMedia')->name('packs.storeMedia');
+    Route::apiResource('packs', 'PacksApiController');
+
+    // Pack Purchase
+    Route::apiResource('pack-purchases', 'PackPurchaseApiController');
 });
 
 Route::post('register', 'Api\AuthController@register');

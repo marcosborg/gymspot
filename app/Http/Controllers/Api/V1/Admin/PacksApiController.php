@@ -18,7 +18,7 @@ class PacksApiController extends Controller
 
     public function index()
     {
-        abort_if(Gate::denies('pack_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('pack_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new PackResource(Pack::with(['spot'])->get());
     }
@@ -38,7 +38,7 @@ class PacksApiController extends Controller
 
     public function show(Pack $pack)
     {
-        abort_if(Gate::denies('pack_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('pack_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new PackResource($pack->load(['spot']));
     }

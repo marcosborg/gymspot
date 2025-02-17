@@ -22,7 +22,7 @@ class PackPurchase extends Model
     ];
 
     protected $fillable = [
-        'user_id',
+        'client_id',
         'pack_id',
         'quantity',
         'available',
@@ -37,9 +37,9 @@ class PackPurchase extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function user()
+    public function client()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Client::class, 'client_id');
     }
 
     public function pack()

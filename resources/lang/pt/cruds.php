@@ -727,8 +727,8 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'id_helper'         => ' ',
-            'user'              => 'User',
-            'user_helper'       => ' ',
+            'client'            => 'Client',
+            'client_helper'     => ' ',
             'pack'              => 'Pack',
             'pack_helper'       => ' ',
             'quantity'          => 'Quantity',

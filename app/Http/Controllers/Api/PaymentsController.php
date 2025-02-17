@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Client;
 use App\Http\Controllers\Traits\IfthenPaymentsTrait;
+use App\Models\PackPurchase;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\MulbancoReference;
 
@@ -34,7 +35,6 @@ class PaymentsController extends Controller
         $cart = json_decode($payment->cart, true);
 
         return $this->groupAdjacentSlots($cart, $payment->client_id);
-
     }
 
     public function calbackMbway(Request $request)
@@ -45,15 +45,22 @@ class PaymentsController extends Controller
                 'error' => 'Chave anti-phishing inválida.',
             ], 403); // 403 Forbidden
         }
-        $payment = Payment::where('request', $request->requestId)->first();
-        $payment->paid = true;
-        $payment->save();
 
-        //AGRUPAR E GRAVAR
+        $payment = Payment::where('request', $request->requestId)->first();
+
         $cart = json_decode($payment->cart, true);
 
-        return $this->groupAdjacentSlots($cart, $payment->client_id);
+        if ($payment->paid == false) {
+            $payment->paid = true;
+            $payment->save();
 
+            if (isset($cart['price'])) {
+                return $this->newPackPurchase($payment, $cart);
+            } else {
+                return $this->groupAdjacentSlots($cart, $payment->client_id);
+            }
+        }
+        
     }
 
     public function mbway(Request $request)
@@ -78,7 +85,6 @@ class PaymentsController extends Controller
         $payment->save();
 
         return $payment_mbway;
-
     }
 
     public function checkMbwayStatus($requestId)
@@ -190,7 +196,17 @@ class PaymentsController extends Controller
             ->notify(new MulbancoReference($payment_multibanco));
 
         return $payment_multibanco;
-
     }
 
+    private function newPackPurchase($payment, array $cart)
+    {
+
+        $pack_purchase = new PackPurchase;
+        $pack_purchase->client_id = $payment->client_id;
+        $pack_purchase->pack_id = $cart['id'];
+        $pack_purchase->quantity = $cart['quantity'];
+        $pack_purchase->available = $cart['quantity'];
+        $pack_purchase->limit_date = Carbon::now()->addWeeks(10)->format('Y-m-d');
+        $pack_purchase->save();
+    }
 }
