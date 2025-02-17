@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePackPurchaseRequest;
 use App\Http\Requests\UpdatePackPurchaseRequest;
 use App\Http\Resources\Admin\PackPurchaseResource;
+use App\Models\Client;
 use App\Models\PackPurchase;
 use Gate;
 use Illuminate\Http\Request;
@@ -13,11 +14,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PackPurchaseApiController extends Controller
 {
+
+    public function myPacks(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $client = Client::where('user_id', $user_id)->first();
+        $pack_purchases = PackPurchase::where('client_id', $client->id)->get()->load('pack');
+        return $pack_purchases;
+    }
+
     public function index()
     {
         abort_if(Gate::denies('pack_purchase_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PackPurchaseResource(PackPurchase::with(['client', 'pack'])->get());
+        return new PackPurchaseResource(PackPurchase::with(['user', 'pack'])->get());
     }
 
     public function store(StorePackPurchaseRequest $request)
@@ -33,7 +43,7 @@ class PackPurchaseApiController extends Controller
     {
         abort_if(Gate::denies('pack_purchase_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PackPurchaseResource($packPurchase->load(['client', 'pack']));
+        return new PackPurchaseResource($packPurchase->load(['user', 'pack']));
     }
 
     public function update(UpdatePackPurchaseRequest $request, PackPurchase $packPurchase)

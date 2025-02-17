@@ -28,13 +28,20 @@ class PaymentsController extends Controller
             ], 403); // 403 Forbidden
         }
         $payment = Payment::where('request', $request->requestId)->first();
-        $payment->paid = true;
-        $payment->save();
 
-        //AGRUPAR E GRAVAR
-        $cart = json_decode($payment->cart, true);
+        if ($payment->paid == false) {
+            $payment->paid = true;
+            $payment->save();
 
-        return $this->groupAdjacentSlots($cart, $payment->client_id);
+
+            $cart = json_decode($payment->cart, true);
+
+            if (isset($cart['price'])) {
+                return $this->newPackPurchase($payment, $cart);
+            } else {
+                return $this->groupAdjacentSlots($cart, $payment->client_id);
+            }
+        }
     }
 
     public function calbackMbway(Request $request)
@@ -60,7 +67,6 @@ class PaymentsController extends Controller
                 return $this->groupAdjacentSlots($cart, $payment->client_id);
             }
         }
-        
     }
 
     public function mbway(Request $request)
@@ -197,6 +203,43 @@ class PaymentsController extends Controller
 
         return $payment_multibanco;
     }
+
+    public function payByBudget(Request $request)
+    {
+        $user_id = $request->user()->id;
+        $client = Client::where('user_id', $user_id)->first();
+        $client_id = $client->id;
+
+        // Obter os pacotes disponíveis do cliente, ordenados pelo mais antigo primeiro
+        $pack_purchases = PackPurchase::where([
+            'client_id' => $client_id,
+            ['available', '>', 0]
+        ])->orderBy('created_at')->get();
+
+        // Decodificar os slots do carrinho
+        $cart = json_decode($request->cart, true);
+        $total_slots = count($cart);
+
+        foreach ($pack_purchases as $pack) {
+            if ($total_slots <= 0) {
+                break;
+            }
+
+            $deduct = min($pack->available, $total_slots);
+            $pack->available -= $deduct;
+            $pack->save();
+
+            $total_slots -= $deduct;
+        }
+
+        if ($total_slots > 0) {
+            return response()->json(['error' => 'Not enough available slots'], 400);
+        }
+
+        return $this->groupAdjacentSlots($cart, $client_id);
+
+    }
+
 
     private function newPackPurchase($payment, array $cart)
     {

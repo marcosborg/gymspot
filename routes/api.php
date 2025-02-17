@@ -111,6 +111,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
 
     // Pack Purchase
     Route::apiResource('pack-purchases', 'PackPurchaseApiController');
+    Route::get('my-packs', 'PackPurchaseApiController@myPacks');
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
@@ -178,6 +179,7 @@ Route::prefix('payments')->middleware('auth:sanctum')->group(function () {
     Route::post('mbway', 'Api\PaymentsController@mbway');
     Route::get('check-mbway-status/{requestId}', 'Api\PaymentsController@checkMbwayStatus');
     Route::post('multibanco', 'Api\PaymentsController@multibanco');
+    Route::post('pay-by-budget', 'Api\PaymentsController@payByBudget');
 });
 
 //GUIA FITNESS
