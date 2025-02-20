@@ -33,7 +33,6 @@ class PaymentsController extends Controller
             $payment->paid = true;
             $payment->save();
 
-
             $cart = json_decode($payment->cart, true);
 
             if (isset($cart['price'])) {
