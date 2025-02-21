@@ -75,11 +75,15 @@ class ClientDataApiController extends Controller
         $client_data->fitness_level = $request->fitness_level;
         $client_data->condition = $request->condition;
         $client_data->condition_obs = $request->condition_obs;
+        $client_data->primary_type = $request->primary_type;
+        $client_data->training_time = $request->training_time;
+        $client_data->training_frequency = $request->training_frequency;
         $client_data->save();
     }
 
     public function updateClientData(Request $request)
     {
+
         $request->validate([
             'age' => 'required|max:2',
             'primary_objective' => 'required',
@@ -100,6 +104,10 @@ class ClientDataApiController extends Controller
         $client_data->fitness_level = $request->fitness_level;
         $client_data->condition = $request->condition;
         $client_data->condition_obs = $request->condition_obs;
+        $client_data->primary_type = $request->primary_type;
+        $client_data->training_time = $request->training_time;
+        $client_data->training_frequency = $request->training_frequency;
         $client_data->save();
+
     }
 }

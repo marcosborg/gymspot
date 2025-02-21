@@ -27,6 +27,12 @@ class UpdateClientDataRequest extends FormRequest
             'fitness_level' => [
                 'required',
             ],
+            'training_frequency' => [
+                'nullable',
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
             'condition_obs' => [
                 'string',
                 'nullable',

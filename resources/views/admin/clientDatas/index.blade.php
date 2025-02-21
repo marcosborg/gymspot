@@ -40,6 +40,15 @@
                         {{ trans('cruds.clientData.fields.fitness_level') }}
                     </th>
                     <th>
+                        {{ trans('cruds.clientData.fields.primary_type') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.clientData.fields.training_time') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.clientData.fields.training_frequency') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.clientData.fields.condition') }}
                     </th>
                     <th>
@@ -107,6 +116,9 @@
 { data: 'gender', name: 'gender' },
 { data: 'primary_objective', name: 'primary_objective' },
 { data: 'fitness_level', name: 'fitness_level' },
+{ data: 'primary_type', name: 'primary_type' },
+{ data: 'training_time', name: 'training_time' },
+{ data: 'training_frequency', name: 'training_frequency' },
 { data: 'condition', name: 'condition' },
 { data: 'condition_obs', name: 'condition_obs' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }

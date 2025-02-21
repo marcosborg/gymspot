@@ -128,6 +128,9 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
     // Content Page
     Route::apiResource('content-pages', 'ContentPageApiController');
 
+    // Content Category
+    Route::apiResource('content-categories', 'ContentCategoryApiController');
+
     // About
     Route::apiResource('abouts', 'AboutApiController');
 

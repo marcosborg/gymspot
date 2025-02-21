@@ -17,6 +17,7 @@ class ClientDataController extends Controller
 {
     public function index(Request $request)
     {
+
         abort_if(Gate::denies('client_data_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
@@ -48,6 +49,9 @@ class ClientDataController extends Controller
                 return $row->client ? $row->client->name : '';
             });
 
+            $table->editColumn('age', function ($row) {
+                return $row->age ? $row->age : '';
+            });
             $table->editColumn('gender', function ($row) {
                 return $row->gender ? ClientData::GENDER_RADIO[$row->gender] : '';
             });
@@ -56,6 +60,15 @@ class ClientDataController extends Controller
             });
             $table->editColumn('fitness_level', function ($row) {
                 return $row->fitness_level ? ClientData::FITNESS_LEVEL_RADIO[$row->fitness_level] : '';
+            });
+            $table->editColumn('primary_type', function ($row) {
+                return $row->primary_type ? ClientData::PRIMARY_TYPE_RADIO[$row->primary_type] : '';
+            });
+            $table->editColumn('training_time', function ($row) {
+                return $row->training_time ? ClientData::TRAINING_TIME_RADIO[$row->training_time] : '';
+            });
+            $table->editColumn('training_frequency', function ($row) {
+                return $row->training_frequency ? $row->training_frequency : '';
             });
             $table->editColumn('condition', function ($row) {
                 return $row->condition ? ClientData::CONDITION_RADIO[$row->condition] : '';

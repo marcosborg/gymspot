@@ -681,6 +681,12 @@ return [
             'condition_obs_helper'     => ' ',
             'age'                      => 'Idade',
             'age_helper'               => ' ',
+            'primary_type'              => 'Tipo de Treino Preferido',
+            'primary_type_helper'       => ' ',
+            'training_time'             => 'Duração do Treino',
+            'training_time_helper'      => ' ',
+            'training_frequency'        => 'O número de treinos por semana',
+            'training_frequency_helper' => ' ',
         ],
     ],
     'packMenu' => [

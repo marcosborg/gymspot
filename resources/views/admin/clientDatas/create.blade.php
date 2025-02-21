@@ -79,6 +79,46 @@
                 <span class="help-block">{{ trans('cruds.clientData.fields.fitness_level_helper') }}</span>
             </div>
             <div class="form-group">
+                <label>{{ trans('cruds.clientData.fields.primary_type') }}</label>
+                @foreach(App\Models\ClientData::PRIMARY_TYPE_RADIO as $key => $label)
+                    <div class="form-check {{ $errors->has('primary_type') ? 'is-invalid' : '' }}">
+                        <input class="form-check-input" type="radio" id="primary_type_{{ $key }}" name="primary_type" value="{{ $key }}" {{ old('primary_type', '') === (string) $key ? 'checked' : '' }}>
+                        <label class="form-check-label" for="primary_type_{{ $key }}">{{ $label }}</label>
+                    </div>
+                @endforeach
+                @if($errors->has('primary_type'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('primary_type') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clientData.fields.primary_type_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label>{{ trans('cruds.clientData.fields.training_time') }}</label>
+                @foreach(App\Models\ClientData::TRAINING_TIME_RADIO as $key => $label)
+                    <div class="form-check {{ $errors->has('training_time') ? 'is-invalid' : '' }}">
+                        <input class="form-check-input" type="radio" id="training_time_{{ $key }}" name="training_time" value="{{ $key }}" {{ old('training_time', '30') === (string) $key ? 'checked' : '' }}>
+                        <label class="form-check-label" for="training_time_{{ $key }}">{{ $label }}</label>
+                    </div>
+                @endforeach
+                @if($errors->has('training_time'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('training_time') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clientData.fields.training_time_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="training_frequency">{{ trans('cruds.clientData.fields.training_frequency') }}</label>
+                <input class="form-control {{ $errors->has('training_frequency') ? 'is-invalid' : '' }}" type="number" name="training_frequency" id="training_frequency" value="{{ old('training_frequency', '3') }}" step="1">
+                @if($errors->has('training_frequency'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('training_frequency') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.clientData.fields.training_frequency_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label>{{ trans('cruds.clientData.fields.condition') }}</label>
                 @foreach(App\Models\ClientData::CONDITION_RADIO as $key => $label)
                     <div class="form-check {{ $errors->has('condition') ? 'is-invalid' : '' }}">

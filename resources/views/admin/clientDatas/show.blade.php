@@ -65,6 +65,30 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.clientData.fields.primary_type') }}
+                        </th>
+                        <td>
+                            {{ App\Models\ClientData::PRIMARY_TYPE_RADIO[$clientData->primary_type] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.clientData.fields.training_time') }}
+                        </th>
+                        <td>
+                            {{ App\Models\ClientData::TRAINING_TIME_RADIO[$clientData->training_time] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.clientData.fields.training_frequency') }}
+                        </th>
+                        <td>
+                            {{ $clientData->training_frequency }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.clientData.fields.condition') }}
                         </th>
                         <td>

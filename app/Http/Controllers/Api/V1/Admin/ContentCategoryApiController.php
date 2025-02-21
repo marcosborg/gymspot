@@ -15,9 +15,9 @@ class ContentCategoryApiController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('content_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('content_category_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new ContentCategoryResource(ContentCategory::all());
+        return new ContentCategoryResource(ContentCategory::all()->load('pages'));
     }
 
     public function store(StoreContentCategoryRequest $request)
@@ -31,9 +31,9 @@ class ContentCategoryApiController extends Controller
 
     public function show(ContentCategory $contentCategory)
     {
-        abort_if(Gate::denies('content_category_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        //abort_if(Gate::denies('content_category_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new ContentCategoryResource($contentCategory);
+        return new ContentCategoryResource($contentCategory->load('pages'));
     }
 
     public function update(UpdateContentCategoryRequest $request, ContentCategory $contentCategory)
