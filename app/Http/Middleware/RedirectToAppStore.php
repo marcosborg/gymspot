@@ -18,7 +18,7 @@ class RedirectToAppStore
 
         // Verifica se é um dispositivo Android
         if (stripos($userAgent, 'Android') !== false) {
-            return redirect()->away('market://details?id=com.gymspot.app');
+            return redirect()->away('market://details?id=pt.gymspot.app');
         }
 
         // Caso não seja um dispositivo mobile, prosseguir normalmente
