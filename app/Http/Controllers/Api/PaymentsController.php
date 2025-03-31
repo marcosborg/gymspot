@@ -13,6 +13,8 @@ use App\Http\Controllers\Traits\IfthenPaymentsTrait;
 use App\Models\PackPurchase;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\MulbancoReference;
+use App\Models\User;
+use App\Notifications\RentedSlotNotification;
 
 class PaymentsController extends Controller
 {
@@ -162,8 +164,10 @@ class PaymentsController extends Controller
             // CRIAR PASS
             $start_date_time = Carbon::parse($rented_slot->start_date_time)->subHour()->timestamp;
             $end_date_time = Carbon::parse($rented_slot->end_date_time)->subHour()->timestamp;
-
             $this->sendKeycode($rented_slot->keypass, $rented_slot->id, $start_date_time, $end_date_time);
+
+            $rented_slot->load('client');
+            User::find(1)->notify(new RentedSlotNotification($rented_slot));
         }
 
         return $groupedSlots;
