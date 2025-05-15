@@ -161,6 +161,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'mi
     Route::delete('pack-purchases/destroy', 'PackPurchaseController@massDestroy')->name('pack-purchases.massDestroy');
     Route::resource('pack-purchases', 'PackPurchaseController');
 
+    // Promo Code Item
+    Route::delete('promo-code-items/destroy', 'PromoCodeItemController@massDestroy')->name('promo-code-items.massDestroy');
+    Route::resource('promo-code-items', 'PromoCodeItemController');
+
+    // Promo Code Usage
+    Route::delete('promo-code-usages/destroy', 'PromoCodeUsageController@massDestroy')->name('promo-code-usages.massDestroy');
+    Route::resource('promo-code-usages', 'PromoCodeUsageController');
+
     Route::get('system-calendar', 'SystemCalendarController@index')->name('systemCalendar');
 });
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'namespace' => 'Auth', 'middleware' => ['auth']], function () {

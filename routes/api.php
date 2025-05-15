@@ -167,6 +167,12 @@ Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], 
 
     // Pack Purchase
     Route::apiResource('pack-purchases', 'PackPurchaseApiController');
+
+    // Promo Code Item
+    Route::apiResource('promo-code-items', 'PromoCodeItemApiController');
+
+    // Promo Code Usage
+    Route::apiResource('promo-code-usages', 'PromoCodeUsageApiController');
 });
 
 Route::post('register', 'Api\AuthController@register');
