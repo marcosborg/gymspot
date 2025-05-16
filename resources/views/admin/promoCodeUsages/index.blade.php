@@ -34,13 +34,22 @@
                         {{ trans('cruds.promoCodeUsage.fields.client') }}
                     </th>
                     <th>
-                        {{ trans('cruds.promoCodeUsage.fields.item') }}
+                        {{ trans('cruds.promoCodeUsage.fields.payment') }}
                     </th>
                     <th>
-                        {{ trans('cruds.promoCodeUsage.fields.inicial_value') }}
+                        {{ trans('cruds.payment.fields.method') }}
                     </th>
                     <th>
-                        {{ trans('cruds.promoCodeUsage.fields.final_value') }}
+                        {{ trans('cruds.payment.fields.cart') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.payment.fields.amount') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.promoCodeUsage.fields.value') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.promoCodeUsage.fields.used') }}
                     </th>
                     <th>
                         &nbsp;
@@ -71,13 +80,23 @@
                         </select>
                     </td>
                     <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($payments as $key => $item)
+                                <option value="{{ $item->paid }}">{{ $item->paid }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
                     </td>
@@ -138,9 +157,12 @@
 { data: 'promo_code_item_name', name: 'promo_code_item.name' },
 { data: 'promo_code_item.code', name: 'promo_code_item.code' },
 { data: 'client_name', name: 'client.name' },
-{ data: 'item', name: 'item' },
-{ data: 'inicial_value', name: 'inicial_value' },
-{ data: 'final_value', name: 'final_value' },
+{ data: 'payment_paid', name: 'payment.paid' },
+{ data: 'payment.method', name: 'payment.method' },
+{ data: 'payment.cart', name: 'payment.cart' },
+{ data: 'payment.amount', name: 'payment.amount' },
+{ data: 'value', name: 'value' },
+{ data: 'used', name: 'used' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

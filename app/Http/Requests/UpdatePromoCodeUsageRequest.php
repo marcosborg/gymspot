@@ -25,14 +25,11 @@ class UpdatePromoCodeUsageRequest extends FormRequest
                 'required',
                 'integer',
             ],
-            'item' => [
-                'string',
+            'payment_id' => [
                 'required',
+                'integer',
             ],
-            'inicial_value' => [
-                'required',
-            ],
-            'final_value' => [
+            'value' => [
                 'required',
             ],
         ];

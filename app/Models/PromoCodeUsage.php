@@ -22,9 +22,9 @@ class PromoCodeUsage extends Model
     protected $fillable = [
         'promo_code_item_id',
         'client_id',
-        'item',
-        'inicial_value',
-        'final_value',
+        'payment_id',
+        'value',
+        'used',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -43,5 +43,10 @@ class PromoCodeUsage extends Model
     public function client()
     {
         return $this->belongsTo(Client::class, 'client_id');
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'payment_id');
     }
 }

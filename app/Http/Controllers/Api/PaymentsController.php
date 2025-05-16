@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\MulbancoReference;
 use App\Models\User;
 use App\Notifications\RentedSlotNotification;
+use App\Models\PromoCodeItem;
 
 class PaymentsController extends Controller
 {
@@ -72,6 +73,7 @@ class PaymentsController extends Controller
 
     public function mbway(Request $request)
     {
+
         $user_id = $request->user()->id;
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
@@ -90,6 +92,12 @@ class PaymentsController extends Controller
 
         $payment->request = $payment_mbway->RequestId;
         $payment->save();
+
+        if ($request->promoCode && $request->promoCode->validPromoCode) {
+            $promo_code_item = PromoCodeItem::where('code', $request->promoCode->code)->first();
+            $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
+            $promo_code_item->save();
+        }
 
         return $payment_mbway;
     }
@@ -201,6 +209,12 @@ class PaymentsController extends Controller
         $payment->request = $payment_multibanco['RequestId'];
         $payment->save();
 
+        if ($request->promoCode && $request->promoCode->validPromoCode) {
+            $promo_code_item = PromoCodeItem::where('code', $request->promoCode->code)->first();
+            $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
+            $promo_code_item->save();
+        }
+
         Notification::route('mail', $request->user()->email)
             ->notify(new MulbancoReference($payment_multibanco));
 
@@ -240,7 +254,6 @@ class PaymentsController extends Controller
         }
 
         return $this->groupAdjacentSlots($cart, $client_id);
-
     }
 
 

@@ -41,26 +41,26 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.promoCodeUsage.fields.item') }}
+                            {{ trans('cruds.promoCodeUsage.fields.payment') }}
                         </th>
                         <td>
-                            {{ $promoCodeUsage->item }}
+                            {{ $promoCodeUsage->payment->paid ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.promoCodeUsage.fields.inicial_value') }}
+                            {{ trans('cruds.promoCodeUsage.fields.value') }}
                         </th>
                         <td>
-                            {{ $promoCodeUsage->inicial_value }}
+                            {{ $promoCodeUsage->value }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.promoCodeUsage.fields.final_value') }}
+                            {{ trans('cruds.promoCodeUsage.fields.used') }}
                         </th>
                         <td>
-                            {{ $promoCodeUsage->final_value }}
+                            <input type="checkbox" disabled="disabled" {{ $promoCodeUsage->used ? 'checked' : '' }}>
                         </td>
                     </tr>
                 </tbody>

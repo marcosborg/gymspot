@@ -39,34 +39,41 @@
                 <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.client_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="item">{{ trans('cruds.promoCodeUsage.fields.item') }}</label>
-                <input class="form-control {{ $errors->has('item') ? 'is-invalid' : '' }}" type="text" name="item" id="item" value="{{ old('item', $promoCodeUsage->item) }}" required>
-                @if($errors->has('item'))
+                <label class="required" for="payment_id">{{ trans('cruds.promoCodeUsage.fields.payment') }}</label>
+                <select class="form-control select2 {{ $errors->has('payment') ? 'is-invalid' : '' }}" name="payment_id" id="payment_id" required>
+                    @foreach($payments as $id => $entry)
+                        <option value="{{ $id }}" {{ (old('payment_id') ? old('payment_id') : $promoCodeUsage->payment->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('payment'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('item') }}
+                        {{ $errors->first('payment') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.item_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.payment_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="inicial_value">{{ trans('cruds.promoCodeUsage.fields.inicial_value') }}</label>
-                <input class="form-control {{ $errors->has('inicial_value') ? 'is-invalid' : '' }}" type="number" name="inicial_value" id="inicial_value" value="{{ old('inicial_value', $promoCodeUsage->inicial_value) }}" step="0.01" required>
-                @if($errors->has('inicial_value'))
+                <label class="required" for="value">{{ trans('cruds.promoCodeUsage.fields.value') }}</label>
+                <input class="form-control {{ $errors->has('value') ? 'is-invalid' : '' }}" type="number" name="value" id="value" value="{{ old('value', $promoCodeUsage->value) }}" step="0.01" required>
+                @if($errors->has('value'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('inicial_value') }}
+                        {{ $errors->first('value') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.inicial_value_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.value_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="final_value">{{ trans('cruds.promoCodeUsage.fields.final_value') }}</label>
-                <input class="form-control {{ $errors->has('final_value') ? 'is-invalid' : '' }}" type="number" name="final_value" id="final_value" value="{{ old('final_value', $promoCodeUsage->final_value) }}" step="0.01" required>
-                @if($errors->has('final_value'))
+                <div class="form-check {{ $errors->has('used') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="used" value="0">
+                    <input class="form-check-input" type="checkbox" name="used" id="used" value="1" {{ $promoCodeUsage->used || old('used', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="used">{{ trans('cruds.promoCodeUsage.fields.used') }}</label>
+                </div>
+                @if($errors->has('used'))
                     <div class="invalid-feedback">
-                        {{ $errors->first('final_value') }}
+                        {{ $errors->first('used') }}
                     </div>
                 @endif
-                <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.final_value_helper') }}</span>
+                <span class="help-block">{{ trans('cruds.promoCodeUsage.fields.used_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

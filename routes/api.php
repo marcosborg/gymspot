@@ -112,6 +112,11 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', '
     // Pack Purchase
     Route::apiResource('pack-purchases', 'PackPurchaseApiController');
     Route::get('my-packs', 'PackPurchaseApiController@myPacks');
+
+    // Promo Code Item
+    Route::prefix('promo-codes')->group(function () {
+        Route::post('validate-promo-code', 'PromoCodeItemApiController@validatePromoCode');
+    });
 });
 
 Route::group(['prefix' => 'v2', 'as' => 'api.', 'namespace' => 'Api\V1\Admin'], function () {
