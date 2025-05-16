@@ -185,8 +185,8 @@ Route::post('login', 'Api\AuthController@login');
 Route::post('delete-account', 'Api\AuthController@deleteAccount')->middleware(['auth:sanctum']);
 
 Route::prefix('callback')->group(function () {
-    Route::get('multibanco', 'Api\PaymentsController@calbackMultibanco');
-    Route::get('mbway', 'Api\PaymentsController@calbackMbway');
+    Route::get('multibanco', 'Api\PaymentsController@callbackMultibanco');
+    Route::get('mbway', 'Api\PaymentsController@callbackMbway');
 });
 
 Route::prefix('payments')->middleware('auth:sanctum')->group(function () {

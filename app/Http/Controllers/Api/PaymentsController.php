@@ -16,13 +16,14 @@ use App\Notifications\MulbancoReference;
 use App\Models\User;
 use App\Notifications\RentedSlotNotification;
 use App\Models\PromoCodeItem;
+use App\Models\PromoCodeUsage;
 
 class PaymentsController extends Controller
 {
     use IfthenPaymentsTrait;
     use RentAndPassTrait;
 
-    public function calbackMultibanco(Request $request)
+    public function callbackMultibanco(Request $request)
     {
 
         if ($request->key !== env('ANTI_PHISHING_KEY')) {
@@ -38,6 +39,17 @@ class PaymentsController extends Controller
 
             $cart = json_decode($payment->cart, true);
 
+            $promo_code_usage = PromoCodeUsage::where('payment_id', $payment->id)->first();
+
+            if ($promo_code_usage) {
+                $promo_code_usage->used = 1;
+                $promo_code_usage->save();
+                $promo_code_item = PromoCodeItem::find($promo_code_usage->promo_code_item_id);
+                $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
+                $promo_code_item->save();
+                return $promo_code_item;
+            }
+
             if (isset($cart['price'])) {
                 return $this->newPackPurchase($payment, $cart);
             } else {
@@ -46,7 +58,7 @@ class PaymentsController extends Controller
         }
     }
 
-    public function calbackMbway(Request $request)
+    public function callbackMbway(Request $request)
     {
 
         if ($request->key !== env('ANTI_PHISHING_KEY')) {
@@ -62,6 +74,17 @@ class PaymentsController extends Controller
         if ($payment->paid == false) {
             $payment->paid = true;
             $payment->save();
+
+            $promo_code_usage = PromoCodeUsage::where('payment_id', $payment->id)->first();
+
+            if ($promo_code_usage) {
+                $promo_code_usage->used = 1;
+                $promo_code_usage->save();
+                $promo_code_item = PromoCodeItem::find($promo_code_usage->promo_code_item_id);
+                $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
+                $promo_code_item->save();
+                return $promo_code_item;
+            }
 
             if (isset($cart['price'])) {
                 return $this->newPackPurchase($payment, $cart);
@@ -93,10 +116,14 @@ class PaymentsController extends Controller
         $payment->request = $payment_mbway->RequestId;
         $payment->save();
 
-        if ($request->promoCode && $request->promoCode->validPromoCode) {
-            $promo_code_item = PromoCodeItem::where('code', $request->promoCode->code)->first();
-            $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
-            $promo_code_item->save();
+        if ($request->promoCode['code'] !== '' && $request->promoCode['validPromoCode'] !== false) {
+            $promo_code_item = PromoCodeItem::where('code', $request->promoCode['code'])->first();
+            $promo_code_usage = new PromoCodeUsage;
+            $promo_code_usage->promo_code_item_id = $promo_code_item->id;
+            $promo_code_usage->client_id = $client_id;
+            $promo_code_usage->payment_id = $payment->id;
+            $promo_code_usage->value = $amount;
+            $promo_code_usage->save();
         }
 
         return $payment_mbway;
@@ -209,10 +236,14 @@ class PaymentsController extends Controller
         $payment->request = $payment_multibanco['RequestId'];
         $payment->save();
 
-        if ($request->promoCode && $request->promoCode->validPromoCode) {
-            $promo_code_item = PromoCodeItem::where('code', $request->promoCode->code)->first();
-            $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
-            $promo_code_item->save();
+        if ($request->promoCode['code'] !== '' && $request->promoCode['validPromoCode'] !== false) {
+            $promo_code_item = PromoCodeItem::where('code', $request->promoCode['code'])->first();
+            $promo_code_usage = new PromoCodeUsage;
+            $promo_code_usage->promo_code_item_id = $promo_code_item->id;
+            $promo_code_usage->client_id = $client_id;
+            $promo_code_usage->payment_id = $payment->id;
+            $promo_code_usage->value = $amount;
+            $promo_code_usage->save();
         }
 
         Notification::route('mail', $request->user()->email)

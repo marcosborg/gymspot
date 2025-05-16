@@ -40,9 +40,6 @@
                         {{ trans('cruds.payment.fields.method') }}
                     </th>
                     <th>
-                        {{ trans('cruds.payment.fields.cart') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.payment.fields.amount') }}
                     </th>
                     <th>
@@ -86,8 +83,6 @@
                                 <option value="{{ $item->paid }}">{{ $item->paid }}</option>
                             @endforeach
                         </select>
-                    </td>
-                    <td>
                     </td>
                     <td>
                     </td>
@@ -159,7 +154,6 @@
 { data: 'client_name', name: 'client.name' },
 { data: 'payment_paid', name: 'payment.paid' },
 { data: 'payment.method', name: 'payment.method' },
-{ data: 'payment.cart', name: 'payment.cart' },
 { data: 'payment.amount', name: 'payment.amount' },
 { data: 'value', name: 'value' },
 { data: 'used', name: 'used' },
