@@ -36,6 +36,9 @@ class UpdatePromoCodeItemRequest extends FormRequest
                 'numeric',
                 'required',
             ],
+            'min_value' => [
+                'required',
+            ],
             'start_date' => [
                 'required',
                 'date_format:' . config('panel.date_format'),

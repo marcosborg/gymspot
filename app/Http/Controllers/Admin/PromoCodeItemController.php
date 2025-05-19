@@ -54,6 +54,9 @@ class PromoCodeItemController extends Controller
             $table->editColumn('name', function ($row) {
                 return $row->name ? $row->name : '';
             });
+            $table->editColumn('description', function ($row) {
+                return $row->description ? $row->description : '';
+            });
             $table->editColumn('code', function ($row) {
                 return $row->code ? $row->code : '';
             });
@@ -62,6 +65,9 @@ class PromoCodeItemController extends Controller
             });
             $table->editColumn('amount', function ($row) {
                 return $row->amount ? $row->amount : '';
+            });
+            $table->editColumn('min_value', function ($row) {
+                return $row->min_value ? $row->min_value : '';
             });
 
             $table->editColumn('qty', function ($row) {

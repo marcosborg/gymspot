@@ -30,9 +30,11 @@ class PromoCodeItem extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'description',
         'code',
         'type',
         'amount',
+        'min_value',
         'start_date',
         'end_date',
         'qty',

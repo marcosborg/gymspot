@@ -41,6 +41,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.promoCodeItem.fields.description') }}
+                        </th>
+                        <td>
+                            {{ $promoCodeItem->description }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.promoCodeItem.fields.code') }}
                         </th>
                         <td>
@@ -61,6 +69,14 @@
                         </th>
                         <td>
                             {{ $promoCodeItem->amount }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.promoCodeItem.fields.min_value') }}
+                        </th>
+                        <td>
+                            {{ $promoCodeItem->min_value }}
                         </td>
                     </tr>
                     <tr>

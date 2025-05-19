@@ -34,6 +34,16 @@
                 <span class="help-block">{{ trans('cruds.promoCodeItem.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label for="description">{{ trans('cruds.promoCodeItem.fields.description') }}</label>
+                <textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description" id="description">{{ old('description') }}</textarea>
+                @if($errors->has('description'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('description') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.promoCodeItem.fields.description_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="code">{{ trans('cruds.promoCodeItem.fields.code') }}</label>
                 <input class="form-control {{ $errors->has('code') ? 'is-invalid' : '' }}" type="text" name="code" id="code" value="{{ old('code', '') }}" required>
                 @if($errors->has('code'))
@@ -67,6 +77,16 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.promoCodeItem.fields.amount_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="min_value">{{ trans('cruds.promoCodeItem.fields.min_value') }}</label>
+                <input class="form-control {{ $errors->has('min_value') ? 'is-invalid' : '' }}" type="number" name="min_value" id="min_value" value="{{ old('min_value', '') }}" step="0.01" required>
+                @if($errors->has('min_value'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('min_value') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.promoCodeItem.fields.min_value_helper') }}</span>
             </div>
             <div class="form-group">
                 <label class="required" for="start_date">{{ trans('cruds.promoCodeItem.fields.start_date') }}</label>

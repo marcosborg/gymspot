@@ -41,12 +41,14 @@ class PromoCodeItemApiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Código válido!',
+            'description' => $promoCode->description,
             'data' => [
                 'type'   => $promoCode->type,
                 'value'  => $promoCode->amount,
                 'name'   => $promoCode->name,
                 'code'   => $promoCode->code,
                 'valid_until' => $promoCode->end_date,
+                'min_value' => $promoCode->min_value,
             ],
         ]);
     }

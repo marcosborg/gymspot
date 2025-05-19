@@ -785,6 +785,10 @@ return [
             'deleted_at_helper' => ' ',
             'qty_remain'        => 'Qty Remain',
             'qty_remain_helper' => ' ',
+            'description'        => 'Description',
+            'description_helper' => ' ',
+            'min_value'          => 'Min Value',
+            'min_value_helper'   => ' ',
         ],
     ],
     'promoCodeUsage' => [

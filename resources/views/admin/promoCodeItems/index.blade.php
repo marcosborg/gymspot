@@ -34,6 +34,9 @@
                         {{ trans('cruds.promoCodeItem.fields.name') }}
                     </th>
                     <th>
+                        {{ trans('cruds.promoCodeItem.fields.description') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.promoCodeItem.fields.code') }}
                     </th>
                     <th>
@@ -41,6 +44,9 @@
                     </th>
                     <th>
                         {{ trans('cruds.promoCodeItem.fields.amount') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.promoCodeItem.fields.min_value') }}
                     </th>
                     <th>
                         {{ trans('cruds.promoCodeItem.fields.start_date') }}
@@ -81,12 +87,18 @@
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
                         <select class="search" strict="true">
                             <option value>{{ trans('global.all') }}</option>
                             @foreach(App\Models\PromoCodeItem::TYPE_RADIO as $key => $item)
                                 <option value="{{ $key }}">{{ $item }}</option>
                             @endforeach
                         </select>
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
@@ -160,9 +172,11 @@
 { data: 'user_name', name: 'user.name' },
 { data: 'user.email', name: 'user.email' },
 { data: 'name', name: 'name' },
+{ data: 'description', name: 'description' },
 { data: 'code', name: 'code' },
 { data: 'type', name: 'type' },
 { data: 'amount', name: 'amount' },
+{ data: 'min_value', name: 'min_value' },
 { data: 'start_date', name: 'start_date' },
 { data: 'end_date', name: 'end_date' },
 { data: 'qty', name: 'qty' },
