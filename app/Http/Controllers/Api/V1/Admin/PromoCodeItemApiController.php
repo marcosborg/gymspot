@@ -49,6 +49,8 @@ class PromoCodeItemApiController extends Controller
                 'code'   => $promoCode->code,
                 'valid_until' => $promoCode->end_date,
                 'min_value' => $promoCode->min_value,
+                'promo' => $promoCode->promo,
+                'pack_id' => $promoCode->pack_id,
             ],
         ]);
     }
