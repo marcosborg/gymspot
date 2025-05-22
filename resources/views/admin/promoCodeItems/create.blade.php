@@ -129,6 +129,35 @@
                 <span class="help-block">{{ trans('cruds.promoCodeItem.fields.qty_remain_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required">{{ trans('cruds.promoCodeItem.fields.promo') }}</label>
+                @foreach(App\Models\PromoCodeItem::PROMO_RADIO as $key => $label)
+                    <div class="form-check {{ $errors->has('promo') ? 'is-invalid' : '' }}">
+                        <input class="form-check-input" type="radio" id="promo_{{ $key }}" name="promo" value="{{ $key }}" {{ old('promo', 'slots') === (string) $key ? 'checked' : '' }} required>
+                        <label class="form-check-label" for="promo_{{ $key }}">{{ $label }}</label>
+                    </div>
+                @endforeach
+                @if($errors->has('promo'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('promo') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.promoCodeItem.fields.promo_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label for="pack_id">{{ trans('cruds.promoCodeItem.fields.pack') }}</label>
+                <select class="form-control select2 {{ $errors->has('pack') ? 'is-invalid' : '' }}" name="pack_id" id="pack_id">
+                    @foreach($packs as $id => $entry)
+                        <option value="{{ $id }}" {{ old('pack_id') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                    @endforeach
+                </select>
+                @if($errors->has('pack'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('pack') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.promoCodeItem.fields.pack_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <button class="btn btn-danger" type="submit">
                     {{ trans('global.save') }}
                 </button>

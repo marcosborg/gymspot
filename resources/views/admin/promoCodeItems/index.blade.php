@@ -61,6 +61,12 @@
                         {{ trans('cruds.promoCodeItem.fields.qty_remain') }}
                     </th>
                     <th>
+                        {{ trans('cruds.promoCodeItem.fields.promo') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.promoCodeItem.fields.pack') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -112,6 +118,22 @@
                     </td>
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
+                    </td>
+                    <td>
+                        <select class="search" strict="true">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach(App\Models\PromoCodeItem::PROMO_RADIO as $key => $item)
+                                <option value="{{ $key }}">{{ $item }}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <select class="search">
+                            <option value>{{ trans('global.all') }}</option>
+                            @foreach($packs as $key => $item)
+                                <option value="{{ $item->name }}">{{ $item->name }}</option>
+                            @endforeach
+                        </select>
                     </td>
                     <td>
                     </td>
@@ -181,6 +203,8 @@
 { data: 'end_date', name: 'end_date' },
 { data: 'qty', name: 'qty' },
 { data: 'qty_remain', name: 'qty_remain' },
+{ data: 'promo', name: 'promo' },
+{ data: 'pack_name', name: 'pack.name' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

@@ -111,6 +111,22 @@
                             {{ $promoCodeItem->qty_remain }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.promoCodeItem.fields.promo') }}
+                        </th>
+                        <td>
+                            {{ App\Models\PromoCodeItem::PROMO_RADIO[$promoCodeItem->promo] ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.promoCodeItem.fields.pack') }}
+                        </th>
+                        <td>
+                            {{ $promoCodeItem->pack->name ?? '' }}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

@@ -14,6 +14,11 @@ class PromoCodeItem extends Model
 
     public $table = 'promo_code_items';
 
+    public const PROMO_RADIO = [
+        'slots' => 'Slots',
+        'packs' => 'Packs',
+    ];
+
     public const TYPE_RADIO = [
         'amount'  => 'Amount',
         'percent' => 'Percent',
@@ -39,6 +44,8 @@ class PromoCodeItem extends Model
         'end_date',
         'qty',
         'qty_remain',
+        'promo',
+        'pack_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -72,5 +79,10 @@ class PromoCodeItem extends Model
     public function setEndDateAttribute($value)
     {
         $this->attributes['end_date'] = $value ? Carbon::createFromFormat(config('panel.date_format'), $value)->format('Y-m-d') : null;
+    }
+
+    public function pack()
+    {
+        return $this->belongsTo(Pack::class, 'pack_id');
     }
 }

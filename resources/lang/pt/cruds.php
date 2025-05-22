@@ -789,6 +789,10 @@ return [
             'description_helper' => ' ',
             'min_value'          => 'Min Value',
             'min_value_helper'   => ' ',
+            'promo'              => 'Promo',
+            'promo_helper'       => ' ',
+            'pack'               => 'Pack',
+            'pack_helper'        => ' ',
         ],
     ],
     'promoCodeUsage' => [

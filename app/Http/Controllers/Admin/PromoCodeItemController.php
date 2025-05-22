@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroyPromoCodeItemRequest;
 use App\Http\Requests\StorePromoCodeItemRequest;
 use App\Http\Requests\UpdatePromoCodeItemRequest;
+use App\Models\Pack;
 use App\Models\PromoCodeItem;
 use App\Models\User;
 use Gate;
@@ -20,7 +21,7 @@ class PromoCodeItemController extends Controller
         abort_if(Gate::denies('promo_code_item_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = PromoCodeItem::with(['user'])->select(sprintf('%s.*', (new PromoCodeItem)->table));
+            $query = PromoCodeItem::with(['user', 'pack'])->select(sprintf('%s.*', (new PromoCodeItem)->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -76,15 +77,22 @@ class PromoCodeItemController extends Controller
             $table->editColumn('qty_remain', function ($row) {
                 return $row->qty_remain ? $row->qty_remain : '';
             });
+            $table->editColumn('promo', function ($row) {
+                return $row->promo ? PromoCodeItem::PROMO_RADIO[$row->promo] : '';
+            });
+            $table->addColumn('pack_name', function ($row) {
+                return $row->pack ? $row->pack->name : '';
+            });
 
-            $table->rawColumns(['actions', 'placeholder', 'user']);
+            $table->rawColumns(['actions', 'placeholder', 'user', 'pack']);
 
             return $table->make(true);
         }
 
         $users = User::get();
+        $packs = Pack::get();
 
-        return view('admin.promoCodeItems.index', compact('users'));
+        return view('admin.promoCodeItems.index', compact('users', 'packs'));
     }
 
     public function create()
@@ -93,7 +101,9 @@ class PromoCodeItemController extends Controller
 
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.promoCodeItems.create', compact('users'));
+        $packs = Pack::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.promoCodeItems.create', compact('packs', 'users'));
     }
 
     public function store(StorePromoCodeItemRequest $request)
@@ -109,9 +119,11 @@ class PromoCodeItemController extends Controller
 
         $users = User::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $promoCodeItem->load('user');
+        $packs = Pack::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.promoCodeItems.edit', compact('promoCodeItem', 'users'));
+        $promoCodeItem->load('user', 'pack');
+
+        return view('admin.promoCodeItems.edit', compact('packs', 'promoCodeItem', 'users'));
     }
 
     public function update(UpdatePromoCodeItemRequest $request, PromoCodeItem $promoCodeItem)
@@ -125,7 +137,7 @@ class PromoCodeItemController extends Controller
     {
         abort_if(Gate::denies('promo_code_item_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $promoCodeItem->load('user');
+        $promoCodeItem->load('user', 'pack');
 
         return view('admin.promoCodeItems.show', compact('promoCodeItem'));
     }
