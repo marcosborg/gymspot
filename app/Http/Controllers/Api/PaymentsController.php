@@ -47,7 +47,6 @@ class PaymentsController extends Controller
                 $promo_code_item = PromoCodeItem::find($promo_code_usage->promo_code_item_id);
                 $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
                 $promo_code_item->save();
-                return $promo_code_item;
             }
 
             if (isset($cart['price'])) {
@@ -83,7 +82,6 @@ class PaymentsController extends Controller
                 $promo_code_item = PromoCodeItem::find($promo_code_usage->promo_code_item_id);
                 $promo_code_item->qty_remain = $promo_code_item->qty_remain - 1;
                 $promo_code_item->save();
-                return $promo_code_item;
             }
 
             if (isset($cart['price'])) {
