@@ -200,7 +200,7 @@ class PaymentsController extends Controller
             $this->sendKeycode($rented_slot->keypass, $rented_slot->id, $start_date_time, $end_date_time);
 
             $rented_slot->load('client');
-            User::find(1)->notify(new RentedSlotNotification($rented_slot));
+            User::find(15)->notify(new RentedSlotNotification($rented_slot));
         }
 
         return $groupedSlots;
