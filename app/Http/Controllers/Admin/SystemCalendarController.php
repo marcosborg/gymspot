@@ -30,7 +30,7 @@ class SystemCalendarController extends Controller
                 }
 
                 $events[] = [
-                    'title' => $model->client->name . ' | ' . Carbon::parse($model->start_date_time)->diffInMinutes(Carbon::parse($model->end_date_time)) . ' minutos',
+                    'title' => $model->client ? $model->client->name : '' . ' | ' . Carbon::parse($model->start_date_time)->diffInMinutes(Carbon::parse($model->end_date_time)) . ' minutos',
                     'start' => $crudFieldValue,
                     'url'   => route($source['route'], $model->id),
                 ];
