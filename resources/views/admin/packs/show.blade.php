@@ -107,6 +107,22 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.pack.fields.vality_days') }}
+                        </th>
+                        <td>
+                            {{ $pack->vality_days }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.pack.fields.status') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $pack->status ? 'checked' : '' }}>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

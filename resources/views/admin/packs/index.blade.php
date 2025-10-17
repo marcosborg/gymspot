@@ -58,6 +58,9 @@
                         {{ trans('cruds.pack.fields.vality_days') }}
                     </th>
                     <th>
+                        {{ trans('cruds.pack.fields.status') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -99,8 +102,10 @@
                     <td>
                         <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
-                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     <td>
+                    </td>
+                    <td>
+                        <input class="search" type="text" placeholder="{{ trans('global.search') }}">
                     </td>
                     <td>
                     </td>
@@ -171,6 +176,7 @@
 { data: 'promo_description', name: 'promo_description' },
 { data: 'image', name: 'image', sortable: false, searchable: false },
 { data: 'vality_days', name: 'vality_days' },
+{ data: 'status', name: 'status' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

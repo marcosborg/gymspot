@@ -65,16 +65,6 @@
                 <span class="help-block">{{ trans('cruds.pack.fields.quantity_helper') }}</span>
             </div>
             <div class="form-group">
-                <label class="required" for="vality_days">{{ trans('cruds.pack.fields.vality_days') }}</label>
-                <input class="form-control {{ $errors->has('vality_days') ? 'is-invalid' : '' }}" type="number" name="vality_days" id="vality_days" value="{{ old('vality_days', $pack->vality_days) }}" step="1" required>
-                @if($errors->has('vality_days'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('vality_days') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.pack.fields.vality_days_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <label class="required" for="start_date">{{ trans('cruds.pack.fields.start_date') }}</label>
                 <input class="form-control datetime {{ $errors->has('start_date') ? 'is-invalid' : '' }}" type="text" name="start_date" id="start_date" value="{{ old('start_date', $pack->start_date) }}" required>
                 @if($errors->has('start_date'))
@@ -124,6 +114,29 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.pack.fields.image_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="vality_days">{{ trans('cruds.pack.fields.vality_days') }}</label>
+                <input class="form-control {{ $errors->has('vality_days') ? 'is-invalid' : '' }}" type="number" name="vality_days" id="vality_days" value="{{ old('vality_days', $pack->vality_days) }}" step="1" required>
+                @if($errors->has('vality_days'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('vality_days') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.pack.fields.vality_days_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <div class="form-check {{ $errors->has('status') ? 'is-invalid' : '' }}">
+                    <input type="hidden" name="status" value="0">
+                    <input class="form-check-input" type="checkbox" name="status" id="status" value="1" {{ $pack->status || old('status', 0) === 1 ? 'checked' : '' }}>
+                    <label class="form-check-label" for="status">{{ trans('cruds.pack.fields.status') }}</label>
+                </div>
+                @if($errors->has('status'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('status') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.pack.fields.status_helper') }}</span>
             </div>
             <div class="form-group">
                 <button class="btn btn-danger" type="submit">

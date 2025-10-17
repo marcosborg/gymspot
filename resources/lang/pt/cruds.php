@@ -727,6 +727,8 @@ return [
             'deleted_at_helper'        => ' ',
             'vality_days'              => 'Validity Days',
             'vality_days_helper'       => ' ',
+            'status'                   => 'Status',
+            'status_helper'            => ' ',
         ],
     ],
     'packPurchase' => [
