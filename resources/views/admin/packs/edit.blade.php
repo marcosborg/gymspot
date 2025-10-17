@@ -65,6 +65,16 @@
                 <span class="help-block">{{ trans('cruds.pack.fields.quantity_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="vality_days">{{ trans('cruds.pack.fields.vality_days') }}</label>
+                <input class="form-control {{ $errors->has('vality_days') ? 'is-invalid' : '' }}" type="number" name="vality_days" id="vality_days" value="{{ old('vality_days', $pack->vality_days) }}" step="1" required>
+                @if($errors->has('vality_days'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('vality_days') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.pack.fields.vality_days_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="start_date">{{ trans('cruds.pack.fields.start_date') }}</label>
                 <input class="form-control datetime {{ $errors->has('start_date') ? 'is-invalid' : '' }}" type="text" name="start_date" id="start_date" value="{{ old('start_date', $pack->start_date) }}" required>
                 @if($errors->has('start_date'))

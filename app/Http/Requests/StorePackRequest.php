@@ -50,6 +50,10 @@ class StorePackRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'vality_days' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }

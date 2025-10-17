@@ -725,6 +725,8 @@ return [
             'updated_at_helper'        => ' ',
             'deleted_at'               => 'Deleted at',
             'deleted_at_helper'        => ' ',
+            'vality_days'              => 'Validity Days',
+            'vality_days_helper'       => ' ',
         ],
     ],
     'packPurchase' => [

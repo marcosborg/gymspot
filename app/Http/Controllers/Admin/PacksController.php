@@ -82,6 +82,9 @@ class PacksController extends Controller
 
                 return '';
             });
+            $table->editColumn('vality_days', function ($row) {
+                return $row->vality_days ? $row->vality_days : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder', 'spot', 'image']);
 

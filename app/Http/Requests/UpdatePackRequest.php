@@ -50,6 +50,10 @@ class UpdatePackRequest extends FormRequest
                 'string',
                 'nullable',
             ],
+            'vality_days' => [
+                'required',
+                'integer',
+            ],
         ];
     }
 }

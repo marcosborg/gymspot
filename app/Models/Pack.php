@@ -39,6 +39,7 @@ class Pack extends Model implements HasMedia
         'end_date',
         'promo_title',
         'promo_description',
+        'vality_days',
         'created_at',
         'updated_at',
         'deleted_at',

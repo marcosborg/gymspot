@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Notifications\RentedSlotNotification;
 use App\Models\PromoCodeItem;
 use App\Models\PromoCodeUsage;
+use App\Models\Pack;
 
 class PaymentsController extends Controller
 {
@@ -289,12 +290,14 @@ class PaymentsController extends Controller
     private function newPackPurchase($payment, array $cart)
     {
 
+        $pack = Pack::find($cart['id']);
+
         $pack_purchase = new PackPurchase;
         $pack_purchase->client_id = $payment->client_id;
         $pack_purchase->pack_id = $cart['id'];
         $pack_purchase->quantity = $cart['quantity'];
         $pack_purchase->available = $cart['quantity'];
-        $pack_purchase->limit_date = Carbon::now()->addWeeks(10)->format('Y-m-d');
+        $pack_purchase->limit_date = Carbon::now()->addDays($pack->vality_days)->format('Y-m-d');
         $pack_purchase->save();
     }
 }
