@@ -22,6 +22,7 @@ class PromoCodeItemApiController extends Controller
         $promoCode = PromoCodeItem::where('code', $code)
             ->whereDate('start_date', '<=', Carbon::today())
             ->whereDate('end_date', '>=', Carbon::today())
+            ->where('status', 1)
             ->first();
 
         if (!$promoCode) {

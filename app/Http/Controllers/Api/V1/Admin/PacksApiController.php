@@ -20,7 +20,7 @@ class PacksApiController extends Controller
     {
         //abort_if(Gate::denies('pack_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return new PackResource(Pack::with(['spot'])->get());
+        return new PackResource(Pack::with(['spot'])->where('status', 1)->get());
     }
 
     public function store(StorePackRequest $request)

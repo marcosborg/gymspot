@@ -127,6 +127,14 @@
                             {{ $promoCodeItem->pack->name ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.promoCodeItem.fields.status') }}
+                        </th>
+                        <td>
+                            <input type="checkbox" disabled="disabled" {{ $promoCodeItem->status ? 'checked' : '' }}>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">

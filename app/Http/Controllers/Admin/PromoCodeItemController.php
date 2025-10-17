@@ -84,7 +84,11 @@ class PromoCodeItemController extends Controller
                 return $row->pack ? $row->pack->name : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'user', 'pack']);
+            $table->editColumn('status', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->status ? 'checked' : null) . '>';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'user', 'pack', 'status']);
 
             return $table->make(true);
         }

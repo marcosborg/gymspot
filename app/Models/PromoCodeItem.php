@@ -46,6 +46,7 @@ class PromoCodeItem extends Model
         'qty_remain',
         'promo',
         'pack_id',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',

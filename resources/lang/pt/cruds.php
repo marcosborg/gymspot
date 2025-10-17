@@ -797,6 +797,8 @@ return [
             'promo_helper'       => ' ',
             'pack'               => 'Pack',
             'pack_helper'        => ' ',
+            'status'             => 'Status',
+            'status_helper'      => ' ',
         ],
     ],
     'promoCodeUsage' => [

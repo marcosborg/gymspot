@@ -86,7 +86,11 @@ class PacksController extends Controller
                 return $row->vality_days ? $row->vality_days : '';
             });
 
-            $table->rawColumns(['actions', 'placeholder', 'spot', 'image']);
+            $table->editColumn('status', function ($row) {
+                return '<input type="checkbox" disabled ' . ($row->status ? 'checked' : null) . '>';
+            });
+
+            $table->rawColumns(['actions', 'placeholder', 'spot', 'image', 'status']);
 
             return $table->make(true);
         }

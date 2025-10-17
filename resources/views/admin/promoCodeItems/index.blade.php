@@ -67,6 +67,9 @@
                         {{ trans('cruds.promoCodeItem.fields.pack') }}
                     </th>
                     <th>
+                        {{ trans('cruds.promoCodeItem.fields.status') }}
+                    </th>
+                    <th>
                         &nbsp;
                     </th>
                 </tr>
@@ -134,6 +137,8 @@
                                 <option value="{{ $item->name }}">{{ $item->name }}</option>
                             @endforeach
                         </select>
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -205,6 +210,7 @@
 { data: 'qty_remain', name: 'qty_remain' },
 { data: 'promo', name: 'promo' },
 { data: 'pack_name', name: 'pack.name' },
+{ data: 'status', name: 'status' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
