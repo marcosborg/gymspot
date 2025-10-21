@@ -18,6 +18,7 @@ use App\Notifications\RentedSlotNotification;
 use App\Models\PromoCodeItem;
 use App\Models\PromoCodeUsage;
 use App\Models\Pack;
+use Illuminate\Support\Facades\DB;
 
 class PaymentsController extends Controller
 {
@@ -254,38 +255,144 @@ class PaymentsController extends Controller
     public function payByBudget(Request $request)
     {
         $user_id = $request->user()->id;
-        $client = Client::where('user_id', $user_id)->first();
+        $client  = Client::where('user_id', $user_id)->firstOrFail();
         $client_id = $client->id;
 
-        // Obter os pacotes disponíveis do cliente, ordenados pelo mais antigo primeiro
-        $pack_purchases = PackPurchase::where([
-            'client_id' => $client_id,
-            ['available', '>', 0]
-        ])->orderBy('created_at')->get();
+        // --- 1) Carrinho: array de slots com "timestamp"
+        $cart = $request->input('cart');
+        if (is_string($cart)) {
+            $cart = json_decode($cart, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return response()->json(['error' => 'Carrinho em JSON inválido'], 422);
+            }
+        }
+        if (!is_array($cart) || empty($cart)) {
+            return response()->json(['error' => 'Carrinho inválido ou vazio'], 422);
+        }
 
-        // Decodificar os slots do carrinho
-        $cart = json_decode($request->cart, true);
-        $total_slots = count($cart);
+        // Extrair dias dos slots (YYYY-MM-DD), ordenar asc (cronológico)
+        $slotDays = [];
+        foreach ($cart as $i => $slot) {
+            if (!isset($slot['timestamp'])) {
+                return response()->json(['error' => "Slot {$i} sem 'timestamp'"], 422);
+            }
+            try {
+                $slotDays[] = $this->ymdFromTimestamp($slot['timestamp']);
+            } catch (\Throwable $e) {
+                return response()->json(['error' => "Timestamp inválido no slot {$i}"], 422);
+            }
+        }
+        sort($slotDays, SORT_STRING);
 
-        foreach ($pack_purchases as $pack) {
-            if ($total_slots <= 0) {
-                break;
+        // --- 2) Transação + lock pessimista
+        return DB::transaction(function () use ($client_id, $slotDays, $cart) {
+
+            // Buscar packs do cliente com saldo, em FIFO de criação
+            $packs = PackPurchase::where('client_id', $client_id)
+                ->where('available', '>', 0)
+                ->orderBy('created_at')      // FIFO base
+                ->lockForUpdate()
+                ->get(['id', 'available', 'limit_date', 'created_at']);
+
+            if ($packs->isEmpty()) {
+                return response()->json(['error' => 'Não existem packs disponíveis'], 400);
             }
 
-            $deduct = min($pack->available, $total_slots);
-            $pack->available -= $deduct;
-            $pack->save();
+            // Normalizar packs como na app: SÓ com limit_date válido (YYYY-MM-DD)
+            $usable = [];
+            foreach ($packs as $p) {
+                // usar valor CRU da BD, ignorando accessor
+                $raw = $p->getRawOriginal('limit_date');
+                try {
+                    $expiryYmd = $this->rawLimitYmd($raw);
+                } catch (\Throwable $e) {
+                    $expiryYmd = null; // inválido -> descartar
+                }
+                if (is_null($expiryYmd)) {
+                    continue; // app também ignora packs sem limit_date válido
+                }
+                $usable[] = [
+                    'id'        => $p->id,
+                    'available' => (int)$p->available,
+                    'expiry'    => $expiryYmd,           // YYYY-MM-DD
+                    'created'   => $p->created_at,       // para estabilidade FIFO
+                ];
+            }
 
-            $total_slots -= $deduct;
-        }
+            if (empty($usable)) {
+                return response()->json(['error' => 'Sem packs com validade válida'], 400);
+            }
 
-        if ($total_slots > 0) {
-            return response()->json(['error' => 'Not enough available slots'], 400);
-        }
+            // Ordenar packs por validade asc, depois FIFO de criação (replica o greedy da app)
+            usort($usable, function ($a, $b) {
+                if ($a['expiry'] === $b['expiry']) {
+                    return $a['created'] <=> $b['created'];
+                }
+                return strcmp($a['expiry'], $b['expiry']);
+            });
 
-        return $this->groupAdjacentSlots($cart, $client_id);
+            // --- 3) Alocação gulosa: cada slot precisa de pack com expiry ≥ slotDay
+            // Vamos consumindo 'available' em memória e depois persistimos o delta.
+            $remainingById = [];
+            foreach ($usable as $u) {
+                $remainingById[$u['id']] = $u['available'];
+            }
+
+            foreach ($slotDays as $sDay) {
+                $allocated = false;
+
+                // procurar o primeiro pack com expiry >= sDay e saldo > 0
+                for ($i = 0; $i < count($usable); $i++) {
+                    if ($usable[$i]['expiry'] >= $sDay && $remainingById[$usable[$i]['id']] > 0) {
+                        $remainingById[$usable[$i]['id']]--;
+                        $allocated = true;
+                        break;
+                    }
+                }
+
+                if (!$allocated) {
+                    // falha: não há pack válido para esta data
+                    // opcional: devolver a maior validade disponível p/ mensagem clara
+                    $latestValid = end($usable)['expiry'] ?? null;
+                    return response()->json([
+                        'error'   => 'Não há packs válidos para pelo menos uma das datas',
+                        'details' => [
+                            'slot_date'    => $sDay,
+                            'latest_valid' => $latestValid,
+                        ],
+                    ], 400);
+                }
+            }
+
+            // --- 4) Persistir diferenças (apenas onde consumimos)
+            // Map rápido dos modelos carregados
+            $byId = $packs->keyBy('id');
+            foreach ($remainingById as $id => $remain) {
+                $start = $byId[$id]->available;     // antes
+                $used  = $start - $remain;          // consumido
+                if ($used > 0) {
+                    $byId[$id]->available = $remain;
+                    $byId[$id]->save();
+                }
+            }
+
+            // --- 5) Criar as reservas (mantém a tua lógica)
+            return $this->groupAdjacentSlots($cart, $client_id);
+        });
     }
 
+    private function ymdFromTimestamp(string $ts): string
+    {
+        // "YYYY-MM-DD HH:MM:SS" | ISO → "YYYY-MM-DD"
+        return Carbon::parse($ts)->toDateString();
+    }
+
+    private function rawLimitYmd(?string $raw): ?string
+    {
+        // limit_date cru da BD -> "YYYY-MM-DD" | null
+        if ($raw === null || $raw === '') return null;
+        return Carbon::parse($raw)->toDateString();
+    }
 
     private function newPackPurchase($payment, array $cart)
     {
