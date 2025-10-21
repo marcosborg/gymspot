@@ -1,6 +1,6 @@
 {
-  "minVersion": "1.4.0",
-  "latestVersion": "1.6.2",
+  "minVersion": "1.0.10",
+  "latestVersion": "1.0.10",
   "iosUrl": "https://apps.apple.com/pt/app/gymspot/id6479336982",
   "androidUrl": "https://play.google.com/store/apps/details?id=pt.gymspot.app",
   "message": "Atualização obrigatória com correções de estabilidade."
