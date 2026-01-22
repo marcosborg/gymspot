@@ -51,7 +51,7 @@ class PaymentsController extends Controller
                 $promo_code_item->save();
             }
 
-            if (isset($cart['price'])) {
+            if ($this->isPackCart($cart)) {
                 return $this->newPackPurchase($payment, $cart);
             } else {
                 return $this->groupAdjacentSlots($cart, $payment->client_id);
@@ -86,7 +86,7 @@ class PaymentsController extends Controller
                 $promo_code_item->save();
             }
 
-            if (isset($cart['price'])) {
+            if ($this->isPackCart($cart)) {
                 return $this->newPackPurchase($payment, $cart);
             } else {
                 return $this->groupAdjacentSlots($cart, $payment->client_id);
@@ -100,14 +100,28 @@ class PaymentsController extends Controller
         $user_id = $request->user()->id;
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
-        $cart = $request->cart;
-        $amount = $request->amount;
+        $cart = $this->normalizeCartFromRequest($request);
+        $pack_id = $request->input('pack_id');
+        if (!$pack_id && is_array($cart) && isset($cart['id'])) {
+            $pack_id = $cart['id'];
+        }
+        if (!$pack_id) {
+            return response()->json(['error' => 'pack_id é obrigatório.'], 422);
+        }
+        $pack = Pack::find($pack_id);
+        if (!$pack) {
+            return response()->json(['error' => 'Pack inválido.'], 404);
+        }
+        $base_amount = (float) $pack->price;
+        $promo_code_item = $this->resolvePromoCodeForPack($request, $pack, $base_amount);
+        $amount = $this->calculateFinalAmount($base_amount, $promo_code_item);
         $celphone = $request->celphone;
+        $cart = $this->normalizePackCart($pack, $cart);
 
         $payment = new Payment;
         $payment->client_id = $client_id;
         $payment->method = 'mbway';
-        $payment->cart = $cart;
+        $payment->cart = $this->encodeCart($cart);
         $payment->amount = $amount;
         $payment->save();
 
@@ -116,8 +130,7 @@ class PaymentsController extends Controller
         $payment->request = $payment_mbway->RequestId;
         $payment->save();
 
-        if ($request->promoCode['code'] !== '' && $request->promoCode['validPromoCode'] !== false) {
-            $promo_code_item = PromoCodeItem::where('code', $request->promoCode['code'])->first();
+        if ($promo_code_item) {
             $promo_code_usage = new PromoCodeUsage;
             $promo_code_usage->promo_code_item_id = $promo_code_item->id;
             $promo_code_usage->client_id = $client_id;
@@ -224,13 +237,27 @@ class PaymentsController extends Controller
         $user_id = $request->user()->id;
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
-        $cart = $request->cart;
-        $amount = $request->amount;
+        $cart = $this->normalizeCartFromRequest($request);
+        $pack_id = $request->input('pack_id');
+        if (!$pack_id && is_array($cart) && isset($cart['id'])) {
+            $pack_id = $cart['id'];
+        }
+        if (!$pack_id) {
+            return response()->json(['error' => 'pack_id é obrigatório.'], 422);
+        }
+        $pack = Pack::find($pack_id);
+        if (!$pack) {
+            return response()->json(['error' => 'Pack inválido.'], 404);
+        }
+        $base_amount = (float) $pack->price;
+        $promo_code_item = $this->resolvePromoCodeForPack($request, $pack, $base_amount);
+        $amount = $this->calculateFinalAmount($base_amount, $promo_code_item);
+        $cart = $this->normalizePackCart($pack, $cart);
 
         $payment = new Payment;
         $payment->client_id = $client_id;
         $payment->method = 'multibanco';
-        $payment->cart = $cart;
+        $payment->cart = $this->encodeCart($cart);
         $payment->amount = $amount;
         $payment->save();
 
@@ -238,8 +265,7 @@ class PaymentsController extends Controller
         $payment->request = $payment_multibanco['RequestId'];
         $payment->save();
 
-        if ($request->promoCode['code'] !== '' && $request->promoCode['validPromoCode'] !== false) {
-            $promo_code_item = PromoCodeItem::where('code', $request->promoCode['code'])->first();
+        if ($promo_code_item) {
             $promo_code_usage = new PromoCodeUsage;
             $promo_code_usage->promo_code_item_id = $promo_code_item->id;
             $promo_code_usage->client_id = $client_id;
@@ -399,14 +425,126 @@ class PaymentsController extends Controller
     private function newPackPurchase($payment, array $cart)
     {
 
-        $pack = Pack::find($cart['id']);
+        $pack_id = $cart['pack_id'] ?? ($cart['id'] ?? null);
+        if (!$pack_id) {
+            return;
+        }
+        $pack = Pack::find($pack_id);
+        if (!$pack) {
+            return;
+        }
+        $quantity = $cart['quantity'] ?? $pack->quantity ?? 1;
 
         $pack_purchase = new PackPurchase;
         $pack_purchase->client_id = $payment->client_id;
-        $pack_purchase->pack_id = $cart['id'];
-        $pack_purchase->quantity = $cart['quantity'];
-        $pack_purchase->available = $cart['quantity'];
+        $pack_purchase->pack_id = $pack->id;
+        $pack_purchase->quantity = $quantity;
+        $pack_purchase->available = $quantity;
         $pack_purchase->limit_date = Carbon::now()->addDays($pack->vality_days)->format('Y-m-d');
         $pack_purchase->save();
+    }
+
+    private function isPackCart($cart): bool
+    {
+        if (!is_array($cart)) {
+            return false;
+        }
+        if (isset($cart['pack_id']) || (isset($cart['type']) && $cart['type'] === 'pack')) {
+            return true;
+        }
+        if (isset($cart['id']) && isset($cart['quantity']) && !isset($cart[0])) {
+            return true;
+        }
+        return false;
+    }
+
+    private function normalizeCartFromRequest(Request $request): ?array
+    {
+        $cart = $request->input('cart');
+        if (is_string($cart)) {
+            $decoded = json_decode($cart, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                return $decoded;
+            }
+            return null;
+        }
+        if (is_array($cart)) {
+            return $cart;
+        }
+        return null;
+    }
+
+    private function normalizePackCart(Pack $pack, ?array $cart): array
+    {
+        $quantity = $cart['quantity'] ?? $pack->quantity ?? 1;
+        return [
+            'type' => 'pack',
+            'pack_id' => $pack->id,
+            'id' => $pack->id,
+            'quantity' => $quantity,
+            'price' => (float) $pack->price,
+        ];
+    }
+
+    private function encodeCart($cart): string
+    {
+        if (is_string($cart)) {
+            return $cart;
+        }
+        return json_encode($cart);
+    }
+
+    private function resolvePromoCodeForPack(Request $request, Pack $pack, float $base_amount): ?PromoCodeItem
+    {
+        $code = trim((string) $request->input('promo_code', ''));
+        if ($code === '') {
+            $code = trim((string) $request->input('promoCode.code', ''));
+        }
+        if ($code === '') {
+            return null;
+        }
+
+        $promo_code_item = PromoCodeItem::where('code', $code)
+            ->whereDate('start_date', '<=', Carbon::today())
+            ->whereDate('end_date', '>=', Carbon::today())
+            ->where('status', 1)
+            ->where('promo', 'packs')
+            ->first();
+
+        if (!$promo_code_item) {
+            return null;
+        }
+
+        if (!is_null($promo_code_item->qty_remain) && (int)$promo_code_item->qty_remain <= 0) {
+            return null;
+        }
+
+        if (!is_null($promo_code_item->pack_id) && (int)$promo_code_item->pack_id !== (int)$pack->id) {
+            return null;
+        }
+
+        $min_value = (float) $promo_code_item->min_value;
+        if ($min_value > 0 && $base_amount < $min_value) {
+            return null;
+        }
+
+        return $promo_code_item;
+    }
+
+    private function calculateFinalAmount(float $base_amount, ?PromoCodeItem $promo_code_item): float
+    {
+        $discount = 0.0;
+        if ($promo_code_item) {
+            if ($promo_code_item->type === 'percent') {
+                $discount = $base_amount * ((float) $promo_code_item->amount / 100);
+            } else {
+                $discount = (float) $promo_code_item->amount;
+            }
+        }
+        $final = $base_amount - $discount;
+        if ($final < 0) {
+            $final = 0;
+        }
+        return round($final, 2);
     }
 }
