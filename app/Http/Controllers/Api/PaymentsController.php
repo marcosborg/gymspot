@@ -101,22 +101,33 @@ class PaymentsController extends Controller
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
         $cart = $this->normalizeCartFromRequest($request);
-        $pack_id = $request->input('pack_id');
-        if (!$pack_id && is_array($cart) && isset($cart['id'])) {
-            $pack_id = $cart['id'];
-        }
-        if (!$pack_id) {
-            return response()->json(['error' => 'pack_id é obrigatório.'], 422);
-        }
-        $pack = Pack::find($pack_id);
-        if (!$pack) {
-            return response()->json(['error' => 'Pack inválido.'], 404);
-        }
-        $base_amount = (float) $pack->price;
-        $promo_code_item = $this->resolvePromoCodeForPack($request, $pack, $base_amount);
-        $amount = $this->calculateFinalAmount($base_amount, $promo_code_item);
         $celphone = $request->celphone;
-        $cart = $this->normalizePackCart($pack, $cart);
+        if (!$cart || !is_array($cart)) {
+            return response()->json(['error' => 'Carrinho inválido.'], 422);
+        }
+        $promo_code_item = null;
+        if ($this->isPackCart($cart)) {
+            $pack_id = $request->input('pack_id');
+            if (!$pack_id && isset($cart['id'])) {
+                $pack_id = $cart['id'];
+            }
+            if (!$pack_id) {
+                return response()->json(['error' => 'pack_id é obrigatório.'], 422);
+            }
+            $pack = Pack::find($pack_id);
+            if (!$pack) {
+                return response()->json(['error' => 'Pack inválido.'], 404);
+            }
+            $base_amount = (float) $pack->price;
+            $promo_code_item = $this->resolvePromoCodeForPack($request, $pack, $base_amount);
+            $amount = $this->calculateFinalAmount($base_amount, $promo_code_item);
+            $cart = $this->normalizePackCart($pack, $cart);
+        } else {
+            $amount = (float) $request->input('amount');
+            if ($amount <= 0) {
+                return response()->json(['error' => 'amount é obrigatório.'], 422);
+            }
+        }
 
         $payment = new Payment;
         $payment->client_id = $client_id;
@@ -238,21 +249,32 @@ class PaymentsController extends Controller
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
         $cart = $this->normalizeCartFromRequest($request);
-        $pack_id = $request->input('pack_id');
-        if (!$pack_id && is_array($cart) && isset($cart['id'])) {
-            $pack_id = $cart['id'];
+        if (!$cart || !is_array($cart)) {
+            return response()->json(['error' => 'Carrinho inválido.'], 422);
         }
-        if (!$pack_id) {
-            return response()->json(['error' => 'pack_id é obrigatório.'], 422);
+        $promo_code_item = null;
+        if ($this->isPackCart($cart)) {
+            $pack_id = $request->input('pack_id');
+            if (!$pack_id && isset($cart['id'])) {
+                $pack_id = $cart['id'];
+            }
+            if (!$pack_id) {
+                return response()->json(['error' => 'pack_id é obrigatório.'], 422);
+            }
+            $pack = Pack::find($pack_id);
+            if (!$pack) {
+                return response()->json(['error' => 'Pack inválido.'], 404);
+            }
+            $base_amount = (float) $pack->price;
+            $promo_code_item = $this->resolvePromoCodeForPack($request, $pack, $base_amount);
+            $amount = $this->calculateFinalAmount($base_amount, $promo_code_item);
+            $cart = $this->normalizePackCart($pack, $cart);
+        } else {
+            $amount = (float) $request->input('amount');
+            if ($amount <= 0) {
+                return response()->json(['error' => 'amount é obrigatório.'], 422);
+            }
         }
-        $pack = Pack::find($pack_id);
-        if (!$pack) {
-            return response()->json(['error' => 'Pack inválido.'], 404);
-        }
-        $base_amount = (float) $pack->price;
-        $promo_code_item = $this->resolvePromoCodeForPack($request, $pack, $base_amount);
-        $amount = $this->calculateFinalAmount($base_amount, $promo_code_item);
-        $cart = $this->normalizePackCart($pack, $cart);
 
         $payment = new Payment;
         $payment->client_id = $client_id;
@@ -548,3 +570,6 @@ class PaymentsController extends Controller
         return round($final, 2);
     }
 }
+
+
+
