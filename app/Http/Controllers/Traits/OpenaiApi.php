@@ -8,7 +8,9 @@ trait OpenaiApi
 
     public function createThreadAndRun($message)
     {
-        $instructions = (string) env('OPENAI_GUIDA_FITNESS_INSTRUCTIONS', '');
+        $instructions = $this->buildGuiaFitnessInstructions(
+            (string) env('OPENAI_GUIDA_FITNESS_INSTRUCTIONS', '')
+        );
         $conversation = $this->createConversation($instructions);
         if (!$conversation['ok']) {
             return $this->formatErrorAsMessageList(
@@ -79,6 +81,27 @@ trait OpenaiApi
             $data,
             ['Content-Type: application/json'],
         );
+    }
+
+    private function buildGuiaFitnessInstructions(string $baseInstructions): string
+    {
+        $baseInstructions = trim($baseInstructions);
+
+        $formatting = trim(implode("\n", [
+            'Formato obrigatório das respostas:',
+            '- Responde sempre em Português (PT-PT) e em Markdown.',
+            '- Usa títulos curtos, bullets e espaçamento para leitura rápida.',
+            '- Usa ícones/emoji com moderação (ex.: ✅ ⚡️ 🧠 💪 📌) no início de secções ou bullets importantes.',
+            '- Quando deres passos, usa listas numeradas; quando deres opções, usa bullets.',
+            '- Se fizer sentido, termina com uma secção curta "📌 Próximos passos" (1–3 bullets).',
+            '- Evita texto corrido longo; prefere blocos curtos e objetivos.',
+        ]));
+
+        if ($baseInstructions === '') {
+            return $formatting;
+        }
+
+        return $baseInstructions . "\n\n" . $formatting;
     }
 
     private function createResponse(string $conversationId, string $message): array
