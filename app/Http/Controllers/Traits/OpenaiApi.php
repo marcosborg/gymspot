@@ -4,184 +4,263 @@ namespace App\Http\Controllers\Traits;
 
 trait OpenaiApi
 {
-    private const OPENAI_BETA_HEADER = 'OpenAI-Beta: assistants=v2';
     private const OPENAI_TIMEOUT_SECONDS = 30;
 
     public function createThreadAndRun($message)
     {
-        $data = [
-            "assistant_id" => env('OPENAI_ASSISTANT_ID'),
-            "thread" => [
-                "messages" => [
-                    [
-                        "role" => "user",
-                        "content" => $message,
-                    ],
-                ],
-            ],
-        ];
-
-        $result = $this->openaiRequest(
-            'POST',
-            'https://api.openai.com/v1/threads/runs',
-            $data,
-            ['Content-Type: application/json'],
-        );
-
-        if (!$result['ok']) {
-            return $this->openaiErrorPayload($result);
+        $instructions = (string) env('OPENAI_GUIDA_FITNESS_INSTRUCTIONS', '');
+        $conversation = $this->createConversation($instructions);
+        if (!$conversation['ok']) {
+            return $this->formatErrorAsMessageList(
+                null,
+                (string) $message,
+                $this->openaiErrorPayload($conversation),
+            );
         }
 
-        $body = $result['body'];
-        $thread_id = $body['thread_id'] ?? null;
-        $run_id = $body['id'] ?? null;
-        if (!$thread_id || !$run_id) {
-            return $this->openaiErrorPayload([
+        $conversationId = $conversation['body']['id'] ?? null;
+        if (!$conversationId) {
+            return $this->formatErrorAsMessageList(
+                null,
+                (string) $message,
+                $this->openaiErrorPayload([
                 'ok' => false,
-                'http_code' => $result['http_code'],
-                'body' => $body,
-                'curl_error' => $result['curl_error'],
+                'http_code' => $conversation['http_code'],
+                'body' => $conversation['body'],
+                'curl_error' => $conversation['curl_error'],
                 'error' => [
                     'code' => 'unexpected_response',
-                    'message' => 'OpenAI response did not include thread_id/run id.',
+                    'message' => 'OpenAI response did not include conversation id.',
                 ],
-            ]);
-        }
-
-        return $this->retrieveRun($thread_id, $run_id);
-    }
-
-    private function retrieveRun($thread_id, $run_id)
-    {
-        $status = '';
-        $maxAttempts = 30; // Número máximo de tentativas para evitar loops infinitos
-        $attempts = 0;
-        $lastError = null;
-
-        do {
-            $result = $this->openaiRequest(
-                'GET',
-                'https://api.openai.com/v1/threads/' . $thread_id . '/runs/' . $run_id,
+                ]),
             );
-
-            if (!$result['ok']) {
-                $payload = $this->openaiErrorPayload($result);
-                $payload['_gymspot'] = ($payload['_gymspot'] ?? []) + [
-                    'thread_id' => $thread_id,
-                    'run_id' => $run_id,
-                    'run_status' => $status ?: null,
-                ];
-                return $payload;
-            }
-
-            $body = $result['body'];
-            $status = $body['status'] ?? '';
-            $lastError = $body['last_error'] ?? null;
-
-            $attempts++;
-            sleep(1); // Espera 1 segundo antes da próxima tentativa
-        } while (!in_array($status, ['completed', 'failed', 'cancelled', 'expired', 'requires_action'], true) && $attempts < $maxAttempts);
-
-        $messages = $this->listMessages($thread_id);
-        if (is_array($messages)) {
-            $messages['_gymspot'] = [
-                'thread_id' => $thread_id,
-                'run_id' => $run_id,
-                'run_status' => $status ?: null,
-                'run_last_error' => $lastError,
-                'poll_attempts' => $attempts,
-            ];
         }
 
-        return $messages;
-    }
-
-    private function listMessages($thread_id)
-    {
-        $result = $this->openaiRequest(
-            'GET',
-            'https://api.openai.com/v1/threads/' . $thread_id . '/messages',
-            null,
-            ['Content-Type: application/json'],
-        );
-
-        if (!$result['ok']) {
-            $payload = $this->openaiErrorPayload($result);
-            $payload['_gymspot'] = ($payload['_gymspot'] ?? []) + [
-                'thread_id' => $thread_id,
-            ];
-            return $payload;
+        $response = $this->createResponse($conversationId, (string) $message);
+        if (!$response['ok']) {
+            $payload = $this->openaiErrorPayload($response);
+            return $this->formatErrorAsMessageList($conversationId, (string) $message, $payload);
         }
 
-        return $result['body'];
+        return $this->formatResponseAsMessageList($conversationId, (string) $message, $response['body']);
     }
 
     public function createMessage($thread_id, $message)
     {
-        $data = [
-            "role" => "user",
-            "content" => $message,
-        ];
-
-        $result = $this->openaiRequest(
-            'POST',
-            'https://api.openai.com/v1/threads/' . $thread_id . '/messages',
-            $data,
-            ['Content-Type: application/json'],
-        );
-
-        if (!$result['ok']) {
-            $payload = $this->openaiErrorPayload($result);
-            $payload['_gymspot'] = ($payload['_gymspot'] ?? []) + [
-                'thread_id' => $thread_id,
-            ];
-            return $payload;
+        $conversationId = (string) $thread_id;
+        $response = $this->createResponse($conversationId, (string) $message);
+        if (!$response['ok']) {
+            $payload = $this->openaiErrorPayload($response);
+            return $this->formatErrorAsMessageList($conversationId, (string) $message, $payload);
         }
 
-        return $this->createRun($thread_id);
+        return $this->formatResponseAsMessageList($conversationId, (string) $message, $response['body']);
     }
 
-    private function createRun($thread_id)
+    private function createConversation(string $instructions): array
     {
-        $data = [
-            "assistant_id" => env('OPENAI_ASSISTANT_ID'),
-        ];
+        $items = [];
+        if (trim($instructions) !== '') {
+            $items[] = [
+                'type' => 'message',
+                'role' => 'developer',
+                'content' => $instructions,
+            ];
+        }
 
-        $result = $this->openaiRequest(
+        $data = [];
+        if (!empty($items)) {
+            $data['items'] = $items;
+        }
+
+        return $this->openaiRequest(
             'POST',
-            'https://api.openai.com/v1/threads/' . $thread_id . '/runs',
+            'https://api.openai.com/v1/conversations',
             $data,
             ['Content-Type: application/json'],
         );
+    }
 
-        if (!$result['ok']) {
-            $payload = $this->openaiErrorPayload($result);
-            $payload['_gymspot'] = ($payload['_gymspot'] ?? []) + [
-                'thread_id' => $thread_id,
-            ];
-            return $payload;
-        }
+    private function createResponse(string $conversationId, string $message): array
+    {
+        $model = (string) env('OPENAI_MODEL', 'gpt-4.1-mini');
+        $data = [
+            'model' => $model,
+            'conversation' => $conversationId,
+            'input' => $message,
+            'store' => true,
+        ];
 
-        $run = $result['body'];
-        $run_id = $run['id'] ?? null;
-        if (!$run_id) {
-            $payload = $this->openaiErrorPayload([
-                'ok' => false,
-                'http_code' => $result['http_code'],
-                'body' => $run,
-                'curl_error' => $result['curl_error'],
-                'error' => [
-                    'code' => 'unexpected_response',
-                    'message' => 'OpenAI response did not include run id.',
+        return $this->openaiRequest(
+            'POST',
+            'https://api.openai.com/v1/responses',
+            $data,
+            ['Content-Type: application/json'],
+        );
+    }
+
+    private function formatResponseAsMessageList(string $threadId, string $userMessage, array $responseBody): array
+    {
+        $assistantText = $this->extractAssistantTextFromResponse($responseBody);
+        $now = time();
+
+        $assistantMsg = [
+            'id' => $responseBody['id'] ?? ('msg_assistant_' . $now),
+            'object' => 'thread.message',
+            'created_at' => $now,
+            'assistant_id' => null,
+            'thread_id' => $threadId,
+            'run_id' => null,
+            'role' => 'assistant',
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => [
+                        'value' => $assistantText,
+                        'annotations' => [],
+                    ],
                 ],
-            ]);
-            $payload['_gymspot'] = ($payload['_gymspot'] ?? []) + [
-                'thread_id' => $thread_id,
-            ];
-            return $payload;
+            ],
+            'attachments' => [],
+            'metadata' => [],
+        ];
+
+        $userMsg = [
+            'id' => 'msg_user_' . $now,
+            'object' => 'thread.message',
+            'created_at' => $now,
+            'assistant_id' => null,
+            'thread_id' => $threadId,
+            'run_id' => null,
+            'role' => 'user',
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => [
+                        'value' => $userMessage,
+                        'annotations' => [],
+                    ],
+                ],
+            ],
+            'attachments' => [],
+            'metadata' => [],
+        ];
+
+        return [
+            'object' => 'list',
+            'data' => [$assistantMsg, $userMsg],
+            'first_id' => $assistantMsg['id'],
+            'last_id' => $userMsg['id'],
+            'has_more' => false,
+            '_gymspot' => [
+                'thread_id' => $threadId,
+                'response_id' => $responseBody['id'] ?? null,
+                'response_status' => $responseBody['status'] ?? null,
+                'openai_model' => $responseBody['model'] ?? null,
+            ],
+        ];
+    }
+
+    private function formatErrorAsMessageList(?string $threadId, string $userMessage, array $errorPayload): array
+    {
+        $now = time();
+        $assistantText = 'O Guia Fitness está indisponível neste momento. Tenta novamente mais tarde.';
+        $error = $errorPayload['error'] ?? null;
+        if (is_array($error) && isset($error['code']) && is_string($error['code'])) {
+            $assistantText .= ' (' . $error['code'] . ')';
         }
 
-        return $this->retrieveRun($thread_id, $run_id);
+        $assistantMsg = [
+            'id' => 'msg_error_' . $now,
+            'object' => 'thread.message',
+            'created_at' => $now,
+            'assistant_id' => null,
+            'thread_id' => $threadId,
+            'run_id' => null,
+            'role' => 'assistant',
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => [
+                        'value' => $assistantText,
+                        'annotations' => [],
+                    ],
+                ],
+            ],
+            'attachments' => [],
+            'metadata' => [],
+        ];
+
+        $userMsg = [
+            'id' => 'msg_user_' . $now,
+            'object' => 'thread.message',
+            'created_at' => $now,
+            'assistant_id' => null,
+            'thread_id' => $threadId,
+            'run_id' => null,
+            'role' => 'user',
+            'content' => [
+                [
+                    'type' => 'text',
+                    'text' => [
+                        'value' => $userMessage,
+                        'annotations' => [],
+                    ],
+                ],
+            ],
+            'attachments' => [],
+            'metadata' => [],
+        ];
+
+        return [
+            'object' => 'list',
+            'data' => [$assistantMsg, $userMsg],
+            'first_id' => $assistantMsg['id'],
+            'last_id' => $userMsg['id'],
+            'has_more' => false,
+            '_gymspot' => [
+                'thread_id' => $threadId,
+                'error' => $errorPayload['error'] ?? null,
+                'openai_http_status' => $errorPayload['_gymspot']['openai_http_status'] ?? null,
+            ],
+        ];
+    }
+
+    private function extractAssistantTextFromResponse(array $responseBody): string
+    {
+        $texts = [];
+        $output = $responseBody['output'] ?? [];
+        if (!is_array($output)) {
+            return '';
+        }
+
+        foreach ($output as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            if (($item['type'] ?? null) !== 'message') {
+                continue;
+            }
+            if (($item['role'] ?? null) !== 'assistant') {
+                continue;
+            }
+
+            $content = $item['content'] ?? [];
+            if (!is_array($content)) {
+                continue;
+            }
+
+            foreach ($content as $part) {
+                if (!is_array($part)) {
+                    continue;
+                }
+                if (($part['type'] ?? null) === 'output_text' && isset($part['text']) && is_string($part['text'])) {
+                    $texts[] = $part['text'];
+                }
+            }
+        }
+
+        return trim(implode("\n\n", $texts));
     }
 
     private function openaiRequest(string $method, string $url, ?array $payload = null, array $extraHeaders = []): array
@@ -189,7 +268,6 @@ trait OpenaiApi
         $curl = curl_init();
 
         $headers = array_merge($extraHeaders, [
-            self::OPENAI_BETA_HEADER,
             'Authorization: Bearer ' . env('OPENAI_API_KEY'),
         ]);
 
@@ -262,4 +340,3 @@ trait OpenaiApi
         ];
     }
 }
-
