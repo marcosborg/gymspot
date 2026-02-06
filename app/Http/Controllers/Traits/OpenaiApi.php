@@ -89,12 +89,13 @@ trait OpenaiApi
 
         $formatting = trim(implode("\n", [
             'Formato obrigatório das respostas:',
-            '- Responde sempre em Português (PT-PT) e em Markdown.',
-            '- Usa títulos curtos, bullets e espaçamento para leitura rápida.',
+            '- Responde sempre em Português (PT-PT).',
+            '- NÃO uses Markdown (sem #, **, ---). O cliente mostra texto simples.',
+            '- Usa parágrafos com quebras de linha reais: cada secção deve começar numa nova linha; deixa 1 linha em branco entre secções.',
+            '- Usa bullets com o caracter "•" e listas numeradas no formato "1)".',
             '- Usa ícones/emoji com moderação (ex.: ✅ ⚡️ 🧠 💪 📌) no início de secções ou bullets importantes.',
-            '- Quando deres passos, usa listas numeradas; quando deres opções, usa bullets.',
-            '- Se fizer sentido, termina com uma secção curta "📌 Próximos passos" (1–3 bullets).',
-            '- Evita texto corrido longo; prefere blocos curtos e objetivos.',
+            '- Evita texto corrido longo; prefere linhas curtas e objetivas.',
+            '- Se fizer sentido, termina com "📌 Próximos passos" com 1–3 bullets.',
         ]));
 
         if ($baseInstructions === '') {
@@ -124,7 +125,9 @@ trait OpenaiApi
 
     private function formatResponseAsMessageList(string $threadId, string $userMessage, array $responseBody): array
     {
-        $assistantText = $this->extractAssistantTextFromResponse($responseBody);
+        $assistantText = $this->normalizeAssistantTextForApp(
+            $this->extractAssistantTextFromResponse($responseBody)
+        );
         $now = time();
 
         $assistantMsg = [
@@ -187,11 +190,12 @@ trait OpenaiApi
     private function formatErrorAsMessageList(?string $threadId, string $userMessage, array $errorPayload): array
     {
         $now = time();
-        $assistantText = 'O Guia Fitness está indisponível neste momento. Tenta novamente mais tarde.';
+        $assistantText = 'O Guia Fitness está indisponível neste momento.' . "\n" . 'Tenta novamente mais tarde.';
         $error = $errorPayload['error'] ?? null;
         if (is_array($error) && isset($error['code']) && is_string($error['code'])) {
-            $assistantText .= ' (' . $error['code'] . ')';
+            $assistantText .= "\n" . 'Código: ' . $error['code'];
         }
+        $assistantText = $this->normalizeAssistantTextForApp($assistantText);
 
         $assistantMsg = [
             'id' => 'msg_error_' . $now,
@@ -284,6 +288,26 @@ trait OpenaiApi
         }
 
         return trim(implode("\n\n", $texts));
+    }
+
+    private function normalizeAssistantTextForApp(string $text): string
+    {
+        $text = str_replace(["\r\n", "\r"], "\n", $text);
+
+        // Strip common Markdown constructs (client renders plain text).
+        $text = preg_replace('/^#{1,6}\\s+/m', '', $text) ?? $text; // headings
+        $text = str_replace(['**', '__', '`'], '', $text); // bold/italic/code markers
+        $text = preg_replace('/^---+\\s*$/m', "────────", $text) ?? $text; // hr
+
+        // Normalize bullets like "- " to "• "
+        $text = preg_replace('/^\\s*[-*]\\s+/m', '• ', $text) ?? $text;
+
+        // Keep paragraphs readable.
+        $text = preg_replace("/\\n{3,}/", "\n\n", $text) ?? $text;
+        $text = trim($text);
+
+        // Some clients collapse \n; U+2028 is more reliably rendered as a line break.
+        return str_replace("\n", "\u{2028}", $text);
     }
 
     private function openaiRequest(string $method, string $url, ?array $payload = null, array $extraHeaders = []): array
