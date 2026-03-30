@@ -2,13 +2,31 @@
 
 namespace App\Http\Controllers\Traits;
 
-use Illuminate\Http\Request;
+use App\Models\RentedSlot;
+use App\Support\LockDateTime;
+use Illuminate\Support\Facades\Log;
 
 trait RentAndPassTrait
 {
+    public function syncRentedSlotKeycode(RentedSlot $rentedSlot): ?array
+    {
+        $startDateTime = LockDateTime::toUtcMilliseconds($rentedSlot->start_date_time);
+        $endDateTime = LockDateTime::toUtcMilliseconds($rentedSlot->end_date_time);
+
+        return $this->sendKeycode($rentedSlot->keypass, $rentedSlot->id, $startDateTime, $endDateTime);
+    }
+
     public function sendKeycode($keypass, $rented_slot_id, $start_date_time, $end_date_time)
     {
         $login = $this->obtainLoginToken();
+
+        if (!is_array($login) || empty($login['access_token'])) {
+            Log::error('RentAndPass login failed.', [
+                'rented_slot_id' => $rented_slot_id,
+                'response' => $login,
+            ]);
+            return null;
+        }
 
         $token = $login['access_token'];
 
@@ -43,8 +61,16 @@ trait RentAndPassTrait
         );
 
         $response = curl_exec($curl);
+        $curlError = curl_error($curl);
 
         curl_close($curl);
+
+        if ($curlError) {
+            Log::error('RentAndPass login cURL error.', [
+                'error' => $curlError,
+            ]);
+            return null;
+        }
 
         return json_decode($response, true);
 
@@ -77,10 +103,40 @@ trait RentAndPassTrait
         );
 
         $response = curl_exec($curl);
+        $curlError = curl_error($curl);
 
         curl_close($curl);
 
-        return json_decode($response, true);
+        if ($curlError) {
+            Log::error('RentAndPass keycode sync cURL error.', [
+                'rented_slot_id' => $rented_slot_id,
+                'error' => $curlError,
+                'start_date_time_ms' => $start_date_time,
+                'end_date_time_ms' => $end_date_time,
+            ]);
+            return null;
+        }
+
+        $decoded = json_decode($response, true);
+
+        if (!is_array($decoded)) {
+            Log::error('RentAndPass keycode sync returned invalid JSON.', [
+                'rented_slot_id' => $rented_slot_id,
+                'response' => $response,
+                'start_date_time_ms' => $start_date_time,
+                'end_date_time_ms' => $end_date_time,
+            ]);
+            return null;
+        }
+
+        Log::info('RentAndPass keycode synchronized.', [
+            'rented_slot_id' => $rented_slot_id,
+            'start_date_time_ms' => $start_date_time,
+            'end_date_time_ms' => $end_date_time,
+            'response' => $decoded,
+        ]);
+
+        return $decoded;
 
     }
 }

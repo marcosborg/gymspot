@@ -3,21 +3,23 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use \Carbon\Carbon;
-use \App\Models\Spot;
 use App\Models\RentedSlot;
+use App\Models\Spot;
+use Carbon\Carbon;
+use Carbon\CarbonImmutable;
+use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
     public function month($year = null, $month = null)
     {
+        $timezone = config('app.timezone');
         Carbon::setLocale('pt_PT');
 
         if ($year == null || $month == null) {
-            $now = Carbon::now();
+            $now = Carbon::now($timezone);
         } else {
-            $now = Carbon::create($year, $month, 1, 0, 0, 0);
+            $now = Carbon::create($year, $month, 1, 0, 0, 0, $timezone);
         }
 
         $currentYear = $now->year;
@@ -26,7 +28,7 @@ class CalendarController extends Controller
         $firstDayOfMonth = $now->copy()->startOfMonth();
         $lastDayOfMonth = $now->copy()->endOfMonth();
 
-        $today = Carbon::now();
+        $today = Carbon::now($timezone);
 
         $previousMonthDate = $now->copy()->subMonth();
         $previousMonthLink = $previousMonthDate->format('Y/m');
@@ -58,20 +60,18 @@ class CalendarController extends Controller
                 'year' => $date->format('Y'),
                 'dayNumber' => $date->day,
                 'weekDay' => $date->isoFormat('dddd'),
-                'status' => $status
+                'status' => $status,
             ];
         }
 
-        $month = [
+        return [
             'year' => $currentYear,
             'currentMonth' => $currentMonth,
             'name' => $monthName,
             'previousMonthLink' => $previousMonthLink,
             'nextMonthLink' => $nextMonthLink,
-            'daysWithWeekday' => $daysWithWeekday
+            'daysWithWeekday' => $daysWithWeekday,
         ];
-
-        return $month;
     }
 
     public function day(Request $request)
@@ -85,15 +85,13 @@ class CalendarController extends Controller
 
         Carbon::setLocale('pt_PT');
 
-        $inputDate = Carbon::createFromDate($year, $currentMonth, $dayNumber)->startOfDay();
-
+        $inputDate = CarbonImmutable::create($year, $currentMonth, $dayNumber, 0, 0, 0, config('app.timezone'))->startOfDay();
         $slots = $this->generateDaySlots($spot_id, $inputDate);
 
-        // Calculando o próximo dia
-        $nextDay = $inputDate->copy()->addDay();
-        $pastDay = $inputDate->copy()->subDay();
+        $nextDay = $inputDate->addDay();
+        $pastDay = $inputDate->subDay();
 
-        $day = [
+        return [
             'spot' => $spot,
             'day' => $inputDate->format('Y-m-d'),
             'dayWeek' => $inputDate->translatedFormat('l'),
@@ -101,21 +99,18 @@ class CalendarController extends Controller
             'nextDay' => [
                 'year' => $nextDay->year,
                 'currentMonth' => $nextDay->month,
-                'dayNumber' => $nextDay->day
+                'dayNumber' => $nextDay->day,
             ],
             'pastDay' => [
                 'year' => $pastDay->year,
                 'currentMonth' => $pastDay->month,
-                'dayNumber' => $pastDay->day
+                'dayNumber' => $pastDay->day,
             ],
         ];
-
-        return $day;
     }
 
-    private function generateDaySlots($spot_id, Carbon $day)
+    private function generateDaySlots($spot_id, CarbonImmutable $day)
     {
-
         $spot = Spot::find($spot_id);
 
         $rented_slots = RentedSlot::where('spot_id', $spot_id)
@@ -123,24 +118,22 @@ class CalendarController extends Controller
             ->get();
 
         $slots = [];
-        $startSlot = $day->copy()->startOfDay();
-        //$now = Carbon::now()->addMinutes(60);
-        $now = Carbon::now();
-
-        // Arredondar a hora atual para a próxima meia hora
+        $startSlot = $day->startOfDay();
+        $dayEnd = $day->addDay()->startOfDay();
+        $now = CarbonImmutable::now(config('app.timezone'));
         $roundedNow = $now->copy()->addMinutes(30 - ($now->minute % 30))->second(0);
 
-        for ($slot = 0; $slot < 48; $slot++) {
-            $endSlot = $startSlot->copy()->addMinutes(30);
+        while ($startSlot->lt($dayEnd)) {
+            $endSlot = $startSlot->addMinutes(30);
 
-            // Verificar se o slot é antes da hora arredondada atual
             if ($endSlot->lt($roundedNow)) {
                 $state = 'occupied';
             } else {
                 $isOccupied = $rented_slots->contains(function ($rentedSlot) use ($startSlot, $endSlot) {
-                    $rentedStart = Carbon::parse($rentedSlot->start_date_time);
-                    $rentedEnd = Carbon::parse($rentedSlot->end_date_time);
-                    return ($startSlot->lt($rentedEnd) && $endSlot->gt($rentedStart));
+                    $rentedStart = CarbonImmutable::parse($rentedSlot->start_date_time, config('app.timezone'));
+                    $rentedEnd = CarbonImmutable::parse($rentedSlot->end_date_time, config('app.timezone'));
+
+                    return $startSlot->lt($rentedEnd) && $endSlot->gt($rentedStart);
                 });
 
                 $state = $isOccupied ? 'occupied' : 'free';
@@ -151,10 +144,10 @@ class CalendarController extends Controller
                 'end' => $endSlot->format('H:i'),
                 'timestamp' => $startSlot->format('Y-m-d H:i:s'),
                 'spot' => $spot,
-                'state' => $state
+                'state' => $state,
             ];
 
-            $startSlot->addMinutes(30);
+            $startSlot = $endSlot;
         }
 
         return $slots;

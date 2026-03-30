@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\RentAndPassTrait;
 use App\Http\Requests\StoreRentedSlotRequest;
 use App\Http\Requests\UpdateRentedSlotRequest;
 use App\Http\Resources\Admin\RentedSlotResource;
@@ -14,6 +15,8 @@ use App\Models\Client;
 
 class RentedSlotApiController extends Controller
 {
+    use RentAndPassTrait;
+
     public function index()
     {
         abort_if(Gate::denies('rented_slot_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -23,7 +26,13 @@ class RentedSlotApiController extends Controller
 
     public function store(StoreRentedSlotRequest $request)
     {
-        $rentedSlot = RentedSlot::create($request->all());
+        $data = $request->all();
+        if (empty($data['keypass'])) {
+            $data['keypass'] = mt_rand(100000, 999999);
+        }
+
+        $rentedSlot = RentedSlot::create($data);
+        $this->syncRentedSlotKeycode($rentedSlot);
 
         return (new RentedSlotResource($rentedSlot))
             ->response()
@@ -39,7 +48,13 @@ class RentedSlotApiController extends Controller
 
     public function update(UpdateRentedSlotRequest $request, RentedSlot $rentedSlot)
     {
-        $rentedSlot->update($request->all());
+        $data = $request->all();
+        if (empty($data['keypass'])) {
+            $data['keypass'] = $rentedSlot->keypass ?: mt_rand(100000, 999999);
+        }
+
+        $rentedSlot->update($data);
+        $this->syncRentedSlotKeycode($rentedSlot->fresh());
 
         return (new RentedSlotResource($rentedSlot))
             ->response()

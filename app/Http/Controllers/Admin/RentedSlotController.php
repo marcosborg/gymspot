@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\RentAndPassTrait;
 use App\Http\Requests\MassDestroyRentedSlotRequest;
 use App\Http\Requests\StoreRentedSlotRequest;
 use App\Http\Requests\UpdateRentedSlotRequest;
@@ -16,6 +17,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class RentedSlotController extends Controller
 {
+    use RentAndPassTrait;
+
     public function index(Request $request)
     {
         abort_if(Gate::denies('rented_slot_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
@@ -85,7 +88,13 @@ class RentedSlotController extends Controller
 
     public function store(StoreRentedSlotRequest $request)
     {
-        $rentedSlot = RentedSlot::create($request->all());
+        $data = $request->all();
+        if (empty($data['keypass'])) {
+            $data['keypass'] = mt_rand(100000, 999999);
+        }
+
+        $rentedSlot = RentedSlot::create($data);
+        $this->syncRentedSlotKeycode($rentedSlot);
 
         return redirect()->route('admin.rented-slots.index');
     }
@@ -105,7 +114,13 @@ class RentedSlotController extends Controller
 
     public function update(UpdateRentedSlotRequest $request, RentedSlot $rentedSlot)
     {
-        $rentedSlot->update($request->all());
+        $data = $request->all();
+        if (empty($data['keypass'])) {
+            $data['keypass'] = $rentedSlot->keypass ?: mt_rand(100000, 999999);
+        }
+
+        $rentedSlot->update($data);
+        $this->syncRentedSlotKeycode($rentedSlot->fresh());
 
         return redirect()->route('admin.rented-slots.index');
     }

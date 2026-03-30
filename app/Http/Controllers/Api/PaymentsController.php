@@ -3,22 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\RentAndPassTrait;
-use App\Models\RentedSlot;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Models\Payment;
-use App\Models\Client;
 use App\Http\Controllers\Traits\IfthenPaymentsTrait;
+use App\Http\Controllers\Traits\RentAndPassTrait;
+use App\Models\Client;
+use App\Models\Pack;
 use App\Models\PackPurchase;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\MulbancoReference;
-use App\Models\User;
-use App\Notifications\RentedSlotNotification;
+use App\Models\Payment;
 use App\Models\PromoCodeItem;
 use App\Models\PromoCodeUsage;
-use App\Models\Pack;
+use App\Models\RentedSlot;
+use App\Models\User;
+use App\Notifications\MulbancoReference;
+use App\Notifications\RentedSlotNotification;
+use App\Support\LockDateTime;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class PaymentsController extends Controller
 {
@@ -27,12 +28,12 @@ class PaymentsController extends Controller
 
     public function callbackMultibanco(Request $request)
     {
-
         if ($request->key !== env('ANTI_PHISHING_KEY')) {
             return response()->json([
                 'error' => 'Chave anti-phishing inválida.',
-            ], 403); // 403 Forbidden
+            ], 403);
         }
+
         $payment = Payment::where('request', $request->requestId)->first();
 
         if ($payment->paid == false) {
@@ -53,23 +54,21 @@ class PaymentsController extends Controller
 
             if ($this->isPackCart($cart)) {
                 return $this->newPackPurchase($payment, $cart);
-            } else {
-                return $this->groupAdjacentSlots($cart, $payment->client_id);
             }
+
+            return $this->groupAdjacentSlots($cart, $payment->client_id);
         }
     }
 
     public function callbackMbway(Request $request)
     {
-
         if ($request->key !== env('ANTI_PHISHING_KEY')) {
             return response()->json([
                 'error' => 'Chave anti-phishing inválida.',
-            ], 403); // 403 Forbidden
+            ], 403);
         }
 
         $payment = Payment::where('request', $request->requestId)->first();
-
         $cart = json_decode($payment->cart, true);
 
         if ($payment->paid == false) {
@@ -88,23 +87,24 @@ class PaymentsController extends Controller
 
             if ($this->isPackCart($cart)) {
                 return $this->newPackPurchase($payment, $cart);
-            } else {
-                return $this->groupAdjacentSlots($cart, $payment->client_id);
             }
+
+            return $this->groupAdjacentSlots($cart, $payment->client_id);
         }
     }
 
     public function mbway(Request $request)
     {
-
         $user_id = $request->user()->id;
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
         $cart = $this->normalizeCartFromRequest($request);
         $celphone = $request->celphone;
+
         if (!$cart || !is_array($cart)) {
             return response()->json(['error' => 'Carrinho inválido.'], 422);
         }
+
         $promo_code_item = null;
         if ($this->isPackCart($cart)) {
             $pack_id = $request->input('pack_id');
@@ -158,18 +158,16 @@ class PaymentsController extends Controller
         $mbway_status = $this->mbwayStatus($requestId);
 
         if ($mbway_status['Status'] == '000') {
-            //SUCCESS
             $payment = Payment::where('request', $requestId)->first();
             $payment->paid = true;
             $payment->save();
 
-            //AGRUPAR E GRAVAR
             $cart = json_decode($payment->cart, true);
             $this->groupAdjacentSlots($cart, $payment->client_id);
             return $mbway_status;
-        } else {
-            return $mbway_status;
         }
+
+        return $mbway_status;
     }
 
     private function groupAdjacentSlots(array $slots, $client_id)
@@ -179,21 +177,16 @@ class PaymentsController extends Controller
 
         foreach ($slots as $slot) {
             if (empty($currentGroup)) {
-                // Iniciar um novo grupo
                 $currentGroup[] = $slot;
             } else {
-                // Obter o horário de término do último slot no grupo atual
                 $lastSlotEnd = end($currentGroup)['end'];
 
-                // Verificar se o slot atual começa imediatamente após o último slot do grupo atual
                 if ($slot['start'] === $lastSlotEnd) {
-                    // Se sim, adicionar ao grupo atual
                     $currentGroup[] = $slot;
                 } else {
-                    // Caso contrário, finalizar o grupo atual e iniciar um novo
                     $groupedSlots[] = [
-                        'start_date_time' => $currentGroup[0]['timestamp'], // Ajustado para "start_date_time"
-                        'end_date_time' => $this->calculateEndDateTime(end($currentGroup)['timestamp']),  // Agora calcula o horário correto de término
+                        'start_date_time' => $currentGroup[0]['timestamp'],
+                        'end_date_time' => $this->calculateEndDateTime(end($currentGroup)['timestamp']),
                         'client_id' => $client_id,
                         'spot_id' => $currentGroup[0]['spot']['id'],
                     ];
@@ -202,11 +195,10 @@ class PaymentsController extends Controller
             }
         }
 
-        // Adicionar o último grupo se existir
         if (!empty($currentGroup)) {
             $groupedSlots[] = [
-                'start_date_time' => $currentGroup[0]['timestamp'],  // Ajustado para "start_date_time"
-                'end_date_time' => $this->calculateEndDateTime(end($currentGroup)['timestamp']),   // Agora calcula o horário correto de término
+                'start_date_time' => $currentGroup[0]['timestamp'],
+                'end_date_time' => $this->calculateEndDateTime(end($currentGroup)['timestamp']),
                 'client_id' => $client_id,
                 'spot_id' => $currentGroup[0]['spot']['id'],
             ];
@@ -220,12 +212,8 @@ class PaymentsController extends Controller
             $rented_slot->end_date_time = $slot['end_date_time'];
             $rented_slot->keypass = mt_rand(100000, 999999);
             $rented_slot->save();
-            // CRIAR PASS
-            $start_date_time = Carbon::parse($rented_slot->start_date_time)->timestamp;
-            $end_date_time = Carbon::parse($rented_slot->end_date_time)->timestamp;
-            //$start_date_time = Carbon::parse($rented_slot->start_date_time)->subHour()->timestamp;
-            //$end_date_time = Carbon::parse($rented_slot->end_date_time)->subHour()->timestamp;
-            $this->sendKeycode($rented_slot->keypass, $rented_slot->id, $start_date_time, $end_date_time);
+
+            $this->syncRentedSlotKeycode($rented_slot);
 
             $rented_slot->load('client');
             User::find(15)->notify(new RentedSlotNotification($rented_slot));
@@ -236,22 +224,20 @@ class PaymentsController extends Controller
 
     private function calculateEndDateTime($timestamp)
     {
-        // Adicionar 30 minutos ao timestamp para calcular o horário de término
-        $dateTime = new \DateTime($timestamp);
-        $dateTime->modify('+30 minutes');
-        return $dateTime->format('Y-m-d H:i:s');
+        return LockDateTime::addMinutes($timestamp, 30);
     }
 
     public function multibanco(Request $request)
     {
-
         $user_id = $request->user()->id;
         $client = Client::where('user_id', $user_id)->first();
         $client_id = $client->id;
         $cart = $this->normalizeCartFromRequest($request);
+
         if (!$cart || !is_array($cart)) {
             return response()->json(['error' => 'Carrinho inválido.'], 422);
         }
+
         $promo_code_item = null;
         if ($this->isPackCart($cart)) {
             $pack_id = $request->input('pack_id');
@@ -305,10 +291,9 @@ class PaymentsController extends Controller
     public function payByBudget(Request $request)
     {
         $user_id = $request->user()->id;
-        $client  = Client::where('user_id', $user_id)->firstOrFail();
+        $client = Client::where('user_id', $user_id)->firstOrFail();
         $client_id = $client->id;
 
-        // --- 1) Carrinho: array de slots com "timestamp"
         $cart = $request->input('cart');
         if (is_string($cart)) {
             $cart = json_decode($cart, true);
@@ -320,7 +305,6 @@ class PaymentsController extends Controller
             return response()->json(['error' => 'Carrinho inválido ou vazio'], 422);
         }
 
-        // Extrair dias dos slots (YYYY-MM-DD), ordenar asc (cronológico)
         $slotDays = [];
         foreach ($cart as $i => $slot) {
             if (!isset($slot['timestamp'])) {
@@ -334,13 +318,10 @@ class PaymentsController extends Controller
         }
         sort($slotDays, SORT_STRING);
 
-        // --- 2) Transação + lock pessimista
         return DB::transaction(function () use ($client_id, $slotDays, $cart) {
-
-            // Buscar packs do cliente com saldo, em FIFO de criação
             $packs = PackPurchase::where('client_id', $client_id)
                 ->where('available', '>', 0)
-                ->orderBy('created_at')      // FIFO base
+                ->orderBy('created_at')
                 ->lockForUpdate()
                 ->get(['id', 'available', 'limit_date', 'created_at']);
 
@@ -348,24 +329,22 @@ class PaymentsController extends Controller
                 return response()->json(['error' => 'Não existem packs disponíveis'], 400);
             }
 
-            // Normalizar packs como na app: SÓ com limit_date válido (YYYY-MM-DD)
             $usable = [];
             foreach ($packs as $p) {
-                // usar valor CRU da BD, ignorando accessor
                 $raw = $p->getRawOriginal('limit_date');
                 try {
                     $expiryYmd = $this->rawLimitYmd($raw);
                 } catch (\Throwable $e) {
-                    $expiryYmd = null; // inválido -> descartar
+                    $expiryYmd = null;
                 }
                 if (is_null($expiryYmd)) {
-                    continue; // app também ignora packs sem limit_date válido
+                    continue;
                 }
                 $usable[] = [
-                    'id'        => $p->id,
-                    'available' => (int)$p->available,
-                    'expiry'    => $expiryYmd,           // YYYY-MM-DD
-                    'created'   => $p->created_at,       // para estabilidade FIFO
+                    'id' => $p->id,
+                    'available' => (int) $p->available,
+                    'expiry' => $expiryYmd,
+                    'created' => $p->created_at,
                 ];
             }
 
@@ -373,7 +352,6 @@ class PaymentsController extends Controller
                 return response()->json(['error' => 'Sem packs com validade válida'], 400);
             }
 
-            // Ordenar packs por validade asc, depois FIFO de criação (replica o greedy da app)
             usort($usable, function ($a, $b) {
                 if ($a['expiry'] === $b['expiry']) {
                     return $a['created'] <=> $b['created'];
@@ -381,8 +359,6 @@ class PaymentsController extends Controller
                 return strcmp($a['expiry'], $b['expiry']);
             });
 
-            // --- 3) Alocação gulosa: cada slot precisa de pack com expiry ≥ slotDay
-            // Vamos consumindo 'available' em memória e depois persistimos o delta.
             $remainingById = [];
             foreach ($usable as $u) {
                 $remainingById[$u['id']] = $u['available'];
@@ -391,7 +367,6 @@ class PaymentsController extends Controller
             foreach ($slotDays as $sDay) {
                 $allocated = false;
 
-                // procurar o primeiro pack com expiry >= sDay e saldo > 0
                 for ($i = 0; $i < count($usable); $i++) {
                     if ($usable[$i]['expiry'] >= $sDay && $remainingById[$usable[$i]['id']] > 0) {
                         $remainingById[$usable[$i]['id']]--;
@@ -401,52 +376,47 @@ class PaymentsController extends Controller
                 }
 
                 if (!$allocated) {
-                    // falha: não há pack válido para esta data
-                    // opcional: devolver a maior validade disponível p/ mensagem clara
                     $latestValid = end($usable)['expiry'] ?? null;
                     return response()->json([
-                        'error'   => 'Não há packs válidos para pelo menos uma das datas',
+                        'error' => 'Não há packs válidos para pelo menos uma das datas',
                         'details' => [
-                            'slot_date'    => $sDay,
+                            'slot_date' => $sDay,
                             'latest_valid' => $latestValid,
                         ],
                     ], 400);
                 }
             }
 
-            // --- 4) Persistir diferenças (apenas onde consumimos)
-            // Map rápido dos modelos carregados
             $byId = $packs->keyBy('id');
             foreach ($remainingById as $id => $remain) {
-                $start = $byId[$id]->available;     // antes
-                $used  = $start - $remain;          // consumido
+                $start = $byId[$id]->available;
+                $used = $start - $remain;
                 if ($used > 0) {
                     $byId[$id]->available = $remain;
                     $byId[$id]->save();
                 }
             }
 
-            // --- 5) Criar as reservas (mantém a tua lógica)
             return $this->groupAdjacentSlots($cart, $client_id);
         });
     }
 
     private function ymdFromTimestamp(string $ts): string
     {
-        // "YYYY-MM-DD HH:MM:SS" | ISO → "YYYY-MM-DD"
-        return Carbon::parse($ts)->toDateString();
+        return Carbon::parse($ts, config('app.timezone'))->toDateString();
     }
 
     private function rawLimitYmd(?string $raw): ?string
     {
-        // limit_date cru da BD -> "YYYY-MM-DD" | null
-        if ($raw === null || $raw === '') return null;
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
         return Carbon::parse($raw)->toDateString();
     }
 
     private function newPackPurchase($payment, array $cart)
     {
-
         $pack_id = $cart['pack_id'] ?? ($cart['id'] ?? null);
         if (!$pack_id) {
             return;
@@ -537,11 +507,11 @@ class PaymentsController extends Controller
             return null;
         }
 
-        if (!is_null($promo_code_item->qty_remain) && (int)$promo_code_item->qty_remain <= 0) {
+        if (!is_null($promo_code_item->qty_remain) && (int) $promo_code_item->qty_remain <= 0) {
             return null;
         }
 
-        if (!is_null($promo_code_item->pack_id) && (int)$promo_code_item->pack_id !== (int)$pack->id) {
+        if (!is_null($promo_code_item->pack_id) && (int) $promo_code_item->pack_id !== (int) $pack->id) {
             return null;
         }
 
@@ -570,6 +540,3 @@ class PaymentsController extends Controller
         return round($final, 2);
     }
 }
-
-
-
