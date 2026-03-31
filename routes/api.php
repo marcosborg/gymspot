@@ -190,6 +190,7 @@ Route::prefix('callback')->group(function () {
 });
 
 Route::prefix('payments')->middleware('auth:sanctum')->group(function () {
+    Route::post('validate-cart-slots', 'Api\PaymentsController@validateCartSlots');
     Route::post('mbway', 'Api\PaymentsController@mbway');
     Route::get('check-mbway-status/{requestId}', 'Api\PaymentsController@checkMbwayStatus');
     Route::post('multibanco', 'Api\PaymentsController@multibanco');

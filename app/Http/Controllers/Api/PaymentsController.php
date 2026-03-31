@@ -12,6 +12,7 @@ use App\Models\Payment;
 use App\Models\PromoCodeItem;
 use App\Models\PromoCodeUsage;
 use App\Models\RentedSlot;
+use App\Models\Spot;
 use App\Models\User;
 use App\Notifications\MulbancoReference;
 use App\Notifications\RentedSlotNotification;
@@ -25,6 +26,38 @@ class PaymentsController extends Controller
 {
     use IfthenPaymentsTrait;
     use RentAndPassTrait;
+
+    public function validateCartSlots(Request $request)
+    {
+        $cart = $this->normalizeCartFromRequest($request);
+        if (!$cart || !is_array($cart) || empty($cart)) {
+            return response()->json(['error' => 'Carrinho inválido ou vazio'], 422);
+        }
+
+        if ($this->isPackCart($cart)) {
+            return response()->json(['success' => true]);
+        }
+
+        $ruleViolationResponse = $this->buildCartRuleViolationResponse($cart);
+        if ($ruleViolationResponse) {
+            return $ruleViolationResponse;
+        }
+
+        return DB::transaction(function () use ($cart) {
+            $this->lockSpotRowsForCart($cart);
+            $conflicts = $this->findCartSlotConflicts($cart);
+
+            if (!empty($conflicts)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pelo menos uma das slots já não está disponível.',
+                    'conflicts' => $conflicts,
+                ], 409);
+            }
+
+            return response()->json(['success' => true]);
+        });
+    }
 
     public function callbackMultibanco(Request $request)
     {
@@ -56,7 +89,7 @@ class PaymentsController extends Controller
                 return $this->newPackPurchase($payment, $cart);
             }
 
-            return $this->groupAdjacentSlots($cart, $payment->client_id);
+            return $this->reserveCartSlots($cart, $payment->client_id);
         }
     }
 
@@ -89,7 +122,7 @@ class PaymentsController extends Controller
                 return $this->newPackPurchase($payment, $cart);
             }
 
-            return $this->groupAdjacentSlots($cart, $payment->client_id);
+            return $this->reserveCartSlots($cart, $payment->client_id);
         }
     }
 
@@ -129,6 +162,18 @@ class PaymentsController extends Controller
             }
         }
 
+        if (!$this->isPackCart($cart)) {
+            $ruleViolationResponse = $this->buildCartRuleViolationResponse($cart);
+            if ($ruleViolationResponse) {
+                return $ruleViolationResponse;
+            }
+
+            $conflictResponse = $this->buildSlotConflictResponse($cart);
+            if ($conflictResponse) {
+                return $conflictResponse;
+            }
+        }
+
         $payment = new Payment;
         $payment->client_id = $client_id;
         $payment->method = 'mbway';
@@ -163,11 +208,38 @@ class PaymentsController extends Controller
             $payment->save();
 
             $cart = json_decode($payment->cart, true);
-            $this->groupAdjacentSlots($cart, $payment->client_id);
-            return $mbway_status;
+
+            if ($this->isPackCart($cart)) {
+                return $this->newPackPurchase($payment, $cart);
+            }
+
+            return $this->reserveCartSlots($cart, $payment->client_id);
         }
 
         return $mbway_status;
+    }
+
+    private function reserveCartSlots(array $cart, int $client_id)
+    {
+        return DB::transaction(function () use ($cart, $client_id) {
+            $ruleViolationResponse = $this->buildCartRuleViolationResponse($cart);
+            if ($ruleViolationResponse) {
+                return $ruleViolationResponse;
+            }
+
+            $this->lockSpotRowsForCart($cart);
+            $conflicts = $this->findCartSlotConflicts($cart);
+
+            if (!empty($conflicts)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pelo menos uma das slots já não está disponível.',
+                    'conflicts' => $conflicts,
+                ], 409);
+            }
+
+            return $this->groupAdjacentSlots($cart, $client_id);
+        });
     }
 
     private function groupAdjacentSlots(array $slots, $client_id)
@@ -262,6 +334,18 @@ class PaymentsController extends Controller
             }
         }
 
+        if (!$this->isPackCart($cart)) {
+            $ruleViolationResponse = $this->buildCartRuleViolationResponse($cart);
+            if ($ruleViolationResponse) {
+                return $ruleViolationResponse;
+            }
+
+            $conflictResponse = $this->buildSlotConflictResponse($cart);
+            if ($conflictResponse) {
+                return $conflictResponse;
+            }
+        }
+
         $payment = new Payment;
         $payment->client_id = $client_id;
         $payment->method = 'multibanco';
@@ -317,6 +401,11 @@ class PaymentsController extends Controller
             }
         }
         sort($slotDays, SORT_STRING);
+
+        $ruleViolationResponse = $this->buildCartRuleViolationResponse($cart);
+        if ($ruleViolationResponse) {
+            return $ruleViolationResponse;
+        }
 
         return DB::transaction(function () use ($client_id, $slotDays, $cart) {
             $packs = PackPurchase::where('client_id', $client_id)
@@ -397,8 +486,248 @@ class PaymentsController extends Controller
                 }
             }
 
+            $this->lockSpotRowsForCart($cart);
+            $conflicts = $this->findCartSlotConflicts($cart);
+            if (!empty($conflicts)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pelo menos uma das slots já não está disponível.',
+                    'conflicts' => $conflicts,
+                ], 409);
+            }
+
             return $this->groupAdjacentSlots($cart, $client_id);
         });
+    }
+
+    private function buildSlotConflictResponse(array $cart)
+    {
+        return DB::transaction(function () use ($cart) {
+            $this->lockSpotRowsForCart($cart);
+            $conflicts = $this->findCartSlotConflicts($cart);
+
+            if (empty($conflicts)) {
+                return null;
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Pelo menos uma das slots já não está disponível.',
+                'conflicts' => $conflicts,
+            ], 409);
+        });
+    }
+
+    private function buildCartRuleViolationResponse(array $cart)
+    {
+        $violation = $this->validateCartSelectionRules($cart);
+
+        if (!$violation) {
+            return null;
+        }
+
+        return response()->json([
+            'success' => false,
+            'error' => $violation['message'],
+            'message' => $violation['message'],
+            'rule' => $violation['rule'],
+            'details' => $violation['details'] ?? null,
+        ], 422);
+    }
+
+    private function lockSpotRowsForCart(array $cart): void
+    {
+        $spotIds = collect($cart)
+            ->map(fn ($slot) => $slot['spot']['id'] ?? null)
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+
+        if ($spotIds->isEmpty()) {
+            return;
+        }
+
+        Spot::whereIn('id', $spotIds)->lockForUpdate()->get(['id']);
+    }
+
+    private function findCartSlotConflicts(array $cart): array
+    {
+        $conflicts = [];
+        $now = Carbon::now(config('app.timezone'));
+
+        foreach ($cart as $slot) {
+            $spotId = $slot['spot']['id'] ?? null;
+            $timestamp = $slot['timestamp'] ?? null;
+
+            if (!$spotId || !$timestamp || !isset($slot['end'])) {
+                continue;
+            }
+
+            $start = Carbon::parse($timestamp, config('app.timezone'));
+            $end = $this->buildSlotEndDateTime($slot);
+
+            if ($end->lessThanOrEqualTo($now)) {
+                $conflicts[] = [
+                    'spot_id' => $spotId,
+                    'spot_name' => $slot['spot']['name'] ?? null,
+                    'timestamp' => $timestamp,
+                    'start' => $slot['start'] ?? $start->format('H:i'),
+                    'end' => $slot['end'],
+                    'reason' => 'expired',
+                    'expired_at' => $end->format('Y-m-d H:i:s'),
+                ];
+
+                continue;
+            }
+
+            $existing = RentedSlot::where('spot_id', $spotId)
+                ->where(function ($query) use ($start, $end) {
+                    $query->where('start_date_time', '<', $end->format('Y-m-d H:i:s'))
+                        ->where('end_date_time', '>', $start->format('Y-m-d H:i:s'));
+                })
+                ->first(['id', 'start_date_time', 'end_date_time']);
+
+            if ($existing) {
+                $conflicts[] = [
+                    'spot_id' => $spotId,
+                    'spot_name' => $slot['spot']['name'] ?? null,
+                    'timestamp' => $timestamp,
+                    'start' => $slot['start'] ?? $start->format('H:i'),
+                    'end' => $slot['end'],
+                    'reason' => 'occupied',
+                    'rented_slot_id' => $existing->id,
+                    'occupied_from' => $existing->start_date_time,
+                    'occupied_until' => $existing->end_date_time,
+                ];
+            }
+        }
+
+        return $conflicts;
+    }
+
+    private function buildSlotEndDateTime(array $slot): Carbon
+    {
+        $start = Carbon::parse($slot['timestamp'], config('app.timezone'));
+        $end = $slot['end'] ?? null;
+
+        if (!$end || !is_string($end)) {
+            return $start->copy()->addMinutes(30);
+        }
+
+        [$hours, $minutes] = array_map('intval', explode(':', $end));
+
+        return $start->copy()->setTime($hours, $minutes, 0);
+    }
+
+    private function validateCartSelectionRules(array $cart): ?array
+    {
+        $slotsByDay = [];
+
+        foreach ($cart as $slot) {
+            if (!is_array($slot) || !isset($slot['timestamp'], $slot['start'], $slot['end'])) {
+                continue;
+            }
+
+            $ymd = $this->ymdFromTimestamp($slot['timestamp']);
+            $slotsByDay[$ymd][] = $slot;
+        }
+
+        foreach ($slotsByDay as $ymd => $daySlots) {
+            $violation = $this->validateDaySelectionRules($ymd, $daySlots);
+            if ($violation) {
+                return $violation;
+            }
+        }
+
+        return null;
+    }
+
+    private function validateDaySelectionRules(string $ymd, array $slots): ?array
+    {
+        $blocks = $this->buildBlocksForDay($slots);
+
+        foreach ($blocks as $index => $block) {
+            if ($block['slotsCount'] > 6) {
+                return [
+                    'rule' => 'max_consecutive_slots',
+                    'message' => 'Só pode reservar até 3 horas seguidas por dia (equivalente a 6 slots). Poderá voltar a reservar após 4 horas da sua última sessão.',
+                    'details' => [
+                        'date' => $ymd,
+                        'block_index' => $index,
+                        'slots_count' => $block['slotsCount'],
+                    ],
+                ];
+            }
+        }
+
+        for ($i = 0; $i < count($blocks) - 1; $i++) {
+            $gap = $blocks[$i + 1]['startMin'] - $blocks[$i]['endMin'];
+
+            if ($gap < 240) {
+                return [
+                    'rule' => 'minimum_gap_between_sessions',
+                    'message' => 'Só pode reservar até 3 horas seguidas por dia (equivalente a 6 slots). Poderá voltar a reservar após 4 horas da sua última sessão.',
+                    'details' => [
+                        'date' => $ymd,
+                        'block_index' => $i,
+                        'gap_minutes' => $gap,
+                    ],
+                ];
+            }
+        }
+
+        return null;
+    }
+
+    private function buildBlocksForDay(array $slots): array
+    {
+        $items = collect($slots)
+            ->map(function ($slot) {
+                return [
+                    'startMin' => $this->toMinutes($slot['start']),
+                    'endMin' => $this->toMinutes($slot['end']),
+                ];
+            })
+            ->sortBy('startMin')
+            ->values()
+            ->all();
+
+        $blocks = [];
+
+        foreach ($items as $item) {
+            $lastIndex = count($blocks) - 1;
+
+            if ($lastIndex < 0) {
+                $blocks[] = [
+                    'startMin' => $item['startMin'],
+                    'endMin' => $item['endMin'],
+                    'slotsCount' => 1,
+                ];
+                continue;
+            }
+
+            if ($item['startMin'] === $blocks[$lastIndex]['endMin']) {
+                $blocks[$lastIndex]['endMin'] = $item['endMin'];
+                $blocks[$lastIndex]['slotsCount']++;
+                continue;
+            }
+
+            $blocks[] = [
+                'startMin' => $item['startMin'],
+                'endMin' => $item['endMin'],
+                'slotsCount' => 1,
+            ];
+        }
+
+        return $blocks;
+    }
+
+    private function toMinutes(string $hhmm): int
+    {
+        [$hours, $minutes] = array_map('intval', explode(':', $hhmm));
+
+        return ($hours * 60) + $minutes;
     }
 
     private function ymdFromTimestamp(string $ts): string
