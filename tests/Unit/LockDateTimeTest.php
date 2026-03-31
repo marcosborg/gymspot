@@ -7,22 +7,22 @@ use Tests\TestCase;
 
 class LockDateTimeTest extends TestCase
 {
-    public function test_it_converts_winter_local_time_to_utc_milliseconds(): void
+    public function test_it_converts_winter_local_time_to_lock_timestamp(): void
     {
         config(['app.timezone' => 'Europe/Lisbon']);
 
-        $expected = strtotime('2026-01-15 10:00:00 UTC') * 1000;
+        $expected = strtotime('2026-01-15 10:00:00 UTC');
 
-        $this->assertSame($expected, LockDateTime::toUtcMilliseconds('2026-01-15 10:00:00'));
+        $this->assertSame($expected, LockDateTime::toLockUnixTimestamp('2026-01-15 10:00:00'));
     }
 
-    public function test_it_converts_summer_local_time_to_utc_milliseconds(): void
+    public function test_it_converts_summer_local_time_to_lock_timestamp(): void
     {
         config(['app.timezone' => 'Europe/Lisbon']);
 
-        $expected = strtotime('2026-07-15 09:00:00 UTC') * 1000;
+        $expected = strtotime('2026-07-15 09:00:00 UTC');
 
-        $this->assertSame($expected, LockDateTime::toUtcMilliseconds('2026-07-15 10:00:00'));
+        $this->assertSame($expected, LockDateTime::toLockUnixTimestamp('2026-07-15 10:00:00'));
     }
 
     public function test_it_adds_minutes_across_dst_start_without_drifting(): void

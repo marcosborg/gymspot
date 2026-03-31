@@ -23,10 +23,10 @@ class LockDateTime
             ->format('Y-m-d H:i:s');
     }
 
-    public static function toUtcMilliseconds(string $value): int
+    public static function toLockUnixTimestamp(string $value): int
     {
         return self::fromLocalString($value)
             ->utc()
-            ->getTimestampMs();
+            ->getTimestamp();
     }
 }

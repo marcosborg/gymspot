@@ -24,8 +24,8 @@ trait RentAndPassTrait
 
         $this->deleteExistingRentedSlotPasswords($token, $rentedSlot);
 
-        $startDateTime = LockDateTime::toUtcMilliseconds($rentedSlot->start_date_time);
-        $endDateTime = LockDateTime::toUtcMilliseconds($rentedSlot->end_date_time);
+        $startDateTime = LockDateTime::toLockUnixTimestamp($rentedSlot->start_date_time);
+        $endDateTime = LockDateTime::toLockUnixTimestamp($rentedSlot->end_date_time);
 
         return $this->generateCustomCodeAndSendIt(
             $token,
@@ -208,7 +208,7 @@ trait RentAndPassTrait
         $curl = curl_init();
 
         curl_setopt_array($curl, [
-            CURLOPT_URL => 'https://api.rentandpass.com/api/password?clientId=' . $clientId . '&token=' . $token . '&ID=' . $lockid . '&password=' . $keypass . '&name=' . $this->passwordNameForRentedSlot($rented_slot_id) . '&startDate=' . $start_date_time . '&endDate=' . $end_date_time . '&type=2&reference=' . $this->referenceForRentedSlot($rented_slot_id),
+            CURLOPT_URL => 'https://api.rentandpass.com/api/password?clientId=' . $clientId . '&token=' . $token . '&ID=' . $lockid . '&password=' . $keypass . '&name=' . $this->passwordNameForRentedSlot($rented_slot_id) . '&startDate=' . $start_date_time . '000&endDate=' . $end_date_time . '000&type=2&reference=' . $this->referenceForRentedSlot($rented_slot_id),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -231,8 +231,8 @@ trait RentAndPassTrait
             Log::error('RentAndPass keycode sync cURL error.', [
                 'rented_slot_id' => $rented_slot_id,
                 'error' => $curlError,
-                'start_date_time_ms' => $start_date_time,
-                'end_date_time_ms' => $end_date_time,
+                'start_date_time' => $start_date_time,
+                'end_date_time' => $end_date_time,
             ]);
             return null;
         }
@@ -243,16 +243,16 @@ trait RentAndPassTrait
             Log::error('RentAndPass keycode sync returned invalid JSON.', [
                 'rented_slot_id' => $rented_slot_id,
                 'response' => $response,
-                'start_date_time_ms' => $start_date_time,
-                'end_date_time_ms' => $end_date_time,
+                'start_date_time' => $start_date_time,
+                'end_date_time' => $end_date_time,
             ]);
             return null;
         }
 
         Log::info('RentAndPass keycode synchronized.', [
             'rented_slot_id' => $rented_slot_id,
-            'start_date_time_ms' => $start_date_time,
-            'end_date_time_ms' => $end_date_time,
+            'start_date_time' => $start_date_time,
+            'end_date_time' => $end_date_time,
             'response' => $decoded,
         ]);
 
