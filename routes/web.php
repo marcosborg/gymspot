@@ -15,7 +15,6 @@ Route::get('/home', function () {
     return redirect()->route('admin.home');
 });
 
-Route::get('userVerification/{token}', 'UserVerificationController@approve')->name('userVerification');
 Route::get('welcome', 'WebsiteController@welcome')->name('welcome');
 Auth::routes();
 

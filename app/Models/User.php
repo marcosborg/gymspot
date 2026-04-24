@@ -2,17 +2,14 @@
 
 namespace App\Models;
 
-use App\Notifications\VerifyUserNotification;
 use Carbon\Carbon;
 use DateTimeInterface;
 use Hash;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -63,28 +60,21 @@ class User extends Authenticatable
     {
         parent::__construct($attributes);
         self::created(function (self $user) {
-            if (auth()->check()) {
-                $user->verified    = 1;
-                $user->verified_at = Carbon::now()->format(config('panel.date_format') . ' ' . config('panel.time_format'));
-                $user->save();
-            } elseif (! $user->verification_token) {
-                $token     = Str::random(64);
-                $usedToken = self::where('verification_token', $token)->first();
+            $now = Carbon::now()->format(config('panel.date_format') . ' ' . config('panel.time_format'));
 
-                while ($usedToken) {
-                    $token     = Str::random(64);
-                    $usedToken = self::where('verification_token', $token)->first();
-                }
+            $user->verified = 1;
+            $user->verified_at = $now;
 
-                $user->verification_token = $token;
-                $user->save();
+            if (! $user->email_verified_at) {
+                $user->email_verified_at = $now;
+            }
 
-                $registrationRole = config('panel.registration_default_role');
-                if (! $user->roles()->get()->contains($registrationRole)) {
-                    $user->roles()->attach($registrationRole);
-                }
+            $user->verification_token = null;
+            $user->save();
 
-                $user->notify(new VerifyUserNotification($user));
+            $registrationRole = config('panel.registration_default_role');
+            if (! $user->roles()->get()->contains($registrationRole)) {
+                $user->roles()->attach($registrationRole);
             }
         });
     }

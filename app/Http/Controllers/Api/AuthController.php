@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\DeleteAccountNotification;
 use App\Models\Client;
+use App\Models\User;
+use App\Notifications\DeleteAccountNotification;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
@@ -15,10 +15,9 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'password_confirmation' => 'required|same:password',
-
         ], [], [
             'name' => 'Nome',
             'email' => 'Email',
@@ -33,7 +32,7 @@ class AuthController extends Controller
         ]);
 
         $user->roles()->attach(2);
-        
+
         $client = new Client;
         $client->name = $user->name;
         $client->user_id = $user->id;
@@ -44,10 +43,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         $request->validate([
             'email' => 'email|required',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $credentials = request(['email', 'password']);
@@ -56,9 +54,9 @@ class AuthController extends Controller
                 'message' => 'Os dados fornecidos estão inválidos.',
                 'errors' => [
                     'password' => [
-                        'Credenciais inválidas'
+                        'Credenciais inválidas',
                     ],
-                ]
+                ],
             ], 422);
         }
 
